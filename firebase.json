@@ -1,0 +1,45 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "bookstay-46eb6",
+          "appId": "1:512892847639:android:ca78ad1ee9d6fc951e3e52",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "bookstay-46eb6",
+          "appId": "1:512892847639:ios:429b4b64dc1e8b6b1e3e52",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "bookstay-46eb6",
+          "configurations": {
+            "android": "1:512892847639:android:ca78ad1ee9d6fc951e3e52",
+            "ios": "1:512892847639:ios:429b4b64dc1e8b6b1e3e52",
+            "web": "1:512892847639:web:8ddbdc8f90fb461b1e3e52"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+    "ratedOnGoogle": "Rated {rate} on Google",
+    "@ratedOnGoogle": {
+        "placeholders":{
+            "rate":{
+                "type": "String"
+            }
+        }
+    },
+    "startsFrom": "Starts from",
+    "viewDirections": "View Directions",
+    "reserveNow": "RESERVE NOW",
+    "requestACallBack": "REQUEST A CALLBACK",
+    "directions": "Directions",
+    "amenities": "Amenities",
+    "services": "Services",
+    "exploreNearyBy": "Explore Nearby Properties",
+    "about": "About",
+    "pricing": "Pricing",
+    "scheduleVisit": "Schedule Visit",
+    "noData": "No Data Available",
+    "call": "Call Now"
+}

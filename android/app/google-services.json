@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "512892847639",
+    "project_id": "bookstay-46eb6",
+    "storage_bucket": "bookstay-46eb6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512892847639:android:ca78ad1ee9d6fc951e3e52",
+        "android_client_info": {
+          "package_name": "com.bookstay.store"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKL7FFX4X1gXAYgEMgnIzpXX2YHydbPf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512892847639:android:dd4491390fe7c7c61e3e52",
+        "android_client_info": {
+          "package_name": "com.example.bookstay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKL7FFX4X1gXAYgEMgnIzpXX2YHydbPf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
