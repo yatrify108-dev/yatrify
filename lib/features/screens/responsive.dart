@@ -36,3 +36,15 @@ double getResponsiveHorizontalPadding(BuildContext context){
   if(width >= 900) return 24;
   return 16;
 }
+
+double getResponsiveImageHeight(BuildContext context){
+  if(Responsive.isDesktop(context)) return 120;
+  if(Responsive.isTablet(context)) return 100;
+  return 80;
+}
+
+double getRsponsiveImageWidth(BuildContext context){
+  if(Responsive.isDesktop(context)) return 180;
+  if(Responsive.isTablet(context)) return 160;
+  return 140;
+}

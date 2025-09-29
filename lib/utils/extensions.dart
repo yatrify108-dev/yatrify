@@ -1,8 +1,9 @@
 import 'package:bookstay/core/models/pg.dart';
+import 'package:bookstay/l10n/app_localizations.dart';
+import 'package:bookstay/l10n/app_localizations_en.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 extension BuildContextExtension on BuildContext {
   ThemeData get theme => Theme.of(this);
@@ -37,4 +38,30 @@ extension PriceDetailsExtensions on List<PriceDetails> {
 
 extension FormatePrice on num{
   String get formated => NumberFormat('#,##0').format(this);
+}
+
+
+extension UrlLauncher on String?{
+  Future<void> launch() async{
+    final url = this;
+    if(url == null || url.isEmpty){
+      debugPrint("empty or null URL");
+      return;
+    }
+    try {
+      final Uri uri = Uri.parse(url);
+      if(await canLaunchUrl(uri)){
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
+      else{
+        debugPrint("Could not launch $url");
+      }
+    } catch (e) {
+      debugPrint("Invalid URL: $url");
+    }
+  }
+}
+
+extension StringNullCheckExtension on String?{
+  bool get isNotNullOrEmpty  => this?.isNotEmpty ?? false;
 }

@@ -1,4 +1,3 @@
-import 'package:bookstay/features/screens/pg_details_view.dart';
 import 'package:bookstay/utils/color.schemes.g.dart';
 import 'package:bookstay/utils/extensions.dart';
 import 'package:flutter/material.dart';

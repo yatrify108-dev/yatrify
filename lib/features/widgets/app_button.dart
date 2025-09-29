@@ -27,29 +27,39 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = type == AppButtonType.filled ? whiteColor : primaryColor;
-    final bgColor = type == AppButtonType.filled ? primaryColor : Colors.transparent;
+    final bgColor =
+        type == AppButtonType.filled ? primaryColor : Colors.transparent;
     final side = type == AppButtonType.oulined
         ? BorderSide(color: color ?? primaryColor)
         : BorderSide.none;
 
     return FilledButton(
       style: FilledButton.styleFrom(
-        padding: padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        foregroundColor: textColor,
-        backgroundColor: bgColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          side: side,
-        )
-      ),
+          padding: padding ??
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          foregroundColor: textColor,
+          backgroundColor: bgColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+            side: side,
+          )),
       onPressed: onPressed,
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
+      child: 
+      Text(
           label,
-          style: textstyle ?? context.style.labelMedium!.copyWith(color: textColor, fontWeight: FontWeight.bold),
+          style: 
+              context.style.titleMedium!
+                  .copyWith(color: textColor, fontWeight: FontWeight.bold),
         ),
-      ),
+      // FittedBox(
+      //   fit: BoxFit.scaleDown,
+      //   child: Text(
+      //     label,
+      //     style: textstyle ??
+      //         context.style.labelMedium!
+      //             .copyWith(color: textColor, fontWeight: FontWeight.bold),
+      //   ),
+      // ),
     );
   }
 }

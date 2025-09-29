@@ -22,7 +22,7 @@
      </queries>
 
     <application
-        android:label="BookStay"
+        android:label="Yatrify"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

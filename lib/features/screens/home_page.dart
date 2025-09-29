@@ -1,8 +1,5 @@
 import 'package:bookstay/core/models/pg.dart';
-import 'package:bookstay/features/providers/router_provider.dart';
-import 'package:bookstay/features/screens/pg_details_view.dart';
 import 'package:bookstay/features/screens/responsive.dart';
-import 'package:bookstay/features/widgets/banner_carousel.dart';
 import 'package:bookstay/features/widgets/header_section.dart';
 import 'package:bookstay/features/widgets/hover_to_expand.dart';
 import 'package:bookstay/features/widgets/pg_mobile_card.dart';
@@ -40,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(
                           height: 16,
                         ),
-                        BannerCarousel(banners: pgData.banners!),
+                        //BannerCarousel(banners: pgData.banners!),
                       ],
                       const SizedBox(
                         height: 20,

@@ -116,7 +116,7 @@ class PgDetailsView extends StatelessWidget {
 
   /// -------------------- Pg Info --------------------
   Widget _buildPgAddressInfo(BuildContext context) {
-    final label = context.labels;
+  //  final label = context.labels;
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Column(

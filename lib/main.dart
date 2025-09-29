@@ -1,9 +1,8 @@
 import 'package:bookstay/features/providers/router_provider.dart';
-import 'package:bookstay/features/screens/home_page.dart';
 import 'package:bookstay/firebase_options.dart';
+import 'package:bookstay/l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'BookStay',
+      title: 'GudiGo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
