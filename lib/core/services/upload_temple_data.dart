@@ -9,7 +9,15 @@ Future<void> uploadTempleDataToFirebase(Temple templeData) async {
   final templeDoc = firestore.collection('temples').doc('temple_master');
 
   final templeMap = {
+    'logo': templeData.logo,
+    'isSmallBannerShow': templeData.isSmallBannerShow,
     'banner': templeData.banner
+        ?.map((b) => {
+              'bannerImage': b.bannerImage,
+              'link': b.link,
+            })
+        .toList(),
+        'smallBanner': templeData.smallBanner
         ?.map((b) => {
               'bannerImage': b.bannerImage,
               'link': b.link,
@@ -24,10 +32,11 @@ Future<void> uploadTempleDataToFirebase(Temple templeData) async {
               'images': s.images,
               'bookNowButton': s.bookNowButton,
               'weblink': s.weblink,
-              'timings': s.timings,
-              'dressCode': s.dressCode,
+              'rituals': s.rituals,
+              'howToBook': s.howToBook,
               'fee': s.fee,
-              'tips': s.tips,       
+              'tips': s.tips,  
+              'calendarMaxDate': s.calendarMaxDate,
               'videos': s.videos
                   ?.map((v) => {
                         'id': v.id,
@@ -52,6 +61,9 @@ Future<void> uploadTempleDataToFirebase(Temple templeData) async {
                         .toList(),
                   })
               .toList(),
+              
+            
+              
             })
         .toList(),
     'timings': templeData.timings
@@ -98,8 +110,15 @@ Future<void> uploadTempleDataToFirebase(Temple templeData) async {
               'images': b.images,
               'url': b.url,
               'description': b.description,
-              'bookNowButton': b.bookNowButton,
+              'directionButton': b.directionButton,
               'weblink': b.weblink,
+            })
+        .toList(),
+        'wallpapers': templeData.wallpapers
+        ?.map((w) => {
+              'shareTitle': w.shareTitle,
+              'shareDescription': w.shareDescription,
+              'image': w.image,
             })
         .toList(),
         

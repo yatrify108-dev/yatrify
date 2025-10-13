@@ -111,4 +111,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mealTimings => 'Meal Timings';
+
+  @override
+  String get openingBrowser => 'Opening browser...';
+
+  @override
+  String get redirectingToVideo => 'Redirecting to video...';
+
+  @override
+  String get openingWebsite => 'Opening website...';
+
+  @override
+  String get redirectingToWebsite => 'Redirecting to website...';
+
+  @override
+  String get morning => 'Morning';
+
+  @override
+  String get evening => 'Evening';
+
+  @override
+  String get bojana => 'Bojana';
+
+  @override
+  String get darshanaOpen => 'Darshana Open';
+
+  @override
+  String get darshanaClose => 'Darshana Close';
+
+  @override
+  String get direction => 'Direction';
+
+  @override
+  String get rituals => 'Rituals';
+
+  @override
+  String get howToBook => 'How to Book';
+
+  @override
+  String get specialDay => 'Aslesha Nakshatra (Special Day)';
+
+  @override
+  String get ekadashi => 'Ekadashi (Pooja Not Available)';
+
+  @override
+  String get available => 'Available';
+
+  @override
+  String get wallpapers => 'Wallpapers';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get download => 'Download';
 }

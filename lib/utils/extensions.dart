@@ -29,6 +29,49 @@ extension BuildContextExtension on BuildContext {
       );
   }
 }
+enum MessageType { success, error, info }
+
+void showTopMessage(
+  BuildContext context,
+  String message, {
+  MessageType type = MessageType.success,
+}) {
+  final overlay = Overlay.of(context);
+  final overlayEntry = OverlayEntry(
+    builder: (context) => Positioned(
+      top: 50,
+      left: 16,
+      right: 16,
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          decoration: BoxDecoration(
+            color: type == MessageType.success
+                ? Colors.green
+                : type == MessageType.error
+                    ? Colors.red
+                    : Colors.blue,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            message,
+            style: const TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+    ),
+  );
+
+  overlay.insert(overlayEntry);
+  Future.delayed(const Duration(seconds: 2), () {
+    overlayEntry.remove();
+  });
+}
+
+
+
 
 extension PriceDetailsExtensions on List<PriceDetails> {
   double get lowestPrice => map((p) => p.price).reduce((a, b) => a < b ? a : b);

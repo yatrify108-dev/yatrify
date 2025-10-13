@@ -1,31 +1,14 @@
+import 'package:bookstay/features/widgets/nearby_places_view_card.dart';
 import 'package:bookstay/utils/color.schemes.g.dart';
 import 'package:bookstay/utils/extensions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
 import '../screens/responsive.dart';
 
 class NearByPlacesCard<T> extends StatelessWidget {
   const NearByPlacesCard({super.key, required this.item, required this.title});
   final List<T> item;
   final String title;
-
-// class TempleMediaWidget extends StatelessWidget {
-//   const TempleMediaWidget(
-//       {super.key,
-//       required this.name,
-//       required this.title,
-//       required this.image,
-//       this.url,
-//       required this.index,
-//       required this.length,});
-//   final String name;
-//   final String image;
-//   final String? url;
-//   final String title;
-//   final int index;
-//   final int length;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +27,7 @@ class NearByPlacesCard<T> extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-         SizedBox(
+        SizedBox(
           height: 128,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -52,11 +35,18 @@ class NearByPlacesCard<T> extends StatelessWidget {
             itemBuilder: (context, index) {
               final media = item[index] as dynamic;
               return Padding(
-                padding:  EdgeInsets.only(left: 12, right: index == item.length - 1 ? 16 : 0),
+                padding: EdgeInsets.only(
+                    left: 12, right: index == item.length - 1 ? 16 : 0),
                 child: GestureDetector(
-                  onTap: (){
-                   context.push('/nearby-places-view',extra: media);
-
+                  onTap: () {
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return NearByPlacesViewCard(nearByPlaces: media,);
+                      },
+                    );
+                    // context.push('/nearby-places-view',extra: media);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +58,10 @@ class NearByPlacesCard<T> extends StatelessWidget {
                           height: getResponsiveImageHeight(context),
                           width: getRsponsiveImageWidth(context),
                           fit: BoxFit.cover,
-                          errorWidget: (context, url, error) => const Icon(Icons.error, color: primaryColor,),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: primaryColor,
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -142,3 +135,5 @@ class NearByPlacesCard<T> extends StatelessWidget {
     );
   }
 }
+
+

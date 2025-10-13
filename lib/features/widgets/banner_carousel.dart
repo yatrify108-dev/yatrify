@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import '../screens/responsive.dart';
 
 class BannerCarousel extends StatefulWidget {
-  const BannerCarousel({super.key, required this.banners, this.screenHeightValue, this.autoPlay});
+  const BannerCarousel({super.key, required this.banners, this.screenHeightValue, this.autoPlay, this.borderRadius = 0});
 
   final List<BaseBanner> banners;
   final double? screenHeightValue;
   final bool? autoPlay;
+  final double borderRadius;
 
   @override
   State<BannerCarousel> createState() => _BannerCarouselState();
@@ -83,20 +84,21 @@ class _BannerCarouselState extends State<BannerCarousel> {
                 child: Stack(
                   children: [
                     ClipRRect(
-                      // borderRadius: BorderRadius.circular(12),
+                       borderRadius: BorderRadius.circular(widget.borderRadius),
                       child: banner.bannerImage != null &&
                               banner.bannerImage!.startsWith('http')
                           ? CachedNetworkImage(
                               imageUrl: banner.bannerImage ?? '',
                               fit: BoxFit.cover,
                               width: double.infinity,
-                              height: sliderHeight,
+                              height: 400,
                               placeholder: (context, url) => const Center(
                                 child: CircularProgressIndicator(),
                               ),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
                             )
+                            
                           : Image.asset(
                               banner.bannerImage ?? '',
                               fit: BoxFit.cover,

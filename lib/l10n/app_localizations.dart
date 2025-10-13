@@ -297,6 +297,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Meal Timings'**
   String get mealTimings;
+
+  /// No description provided for @openingBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening browser...'**
+  String get openingBrowser;
+
+  /// No description provided for @redirectingToVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Redirecting to video...'**
+  String get redirectingToVideo;
+
+  /// No description provided for @openingWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening website...'**
+  String get openingWebsite;
+
+  /// No description provided for @redirectingToWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Redirecting to website...'**
+  String get redirectingToWebsite;
+
+  /// No description provided for @morning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get morning;
+
+  /// No description provided for @evening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening'**
+  String get evening;
+
+  /// No description provided for @bojana.
+  ///
+  /// In en, this message translates to:
+  /// **'Bojana'**
+  String get bojana;
+
+  /// No description provided for @darshanaOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Darshana Open'**
+  String get darshanaOpen;
+
+  /// No description provided for @darshanaClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Darshana Close'**
+  String get darshanaClose;
+
+  /// No description provided for @direction.
+  ///
+  /// In en, this message translates to:
+  /// **'Direction'**
+  String get direction;
+
+  /// No description provided for @rituals.
+  ///
+  /// In en, this message translates to:
+  /// **'Rituals'**
+  String get rituals;
+
+  /// No description provided for @howToBook.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Book'**
+  String get howToBook;
+
+  /// No description provided for @specialDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Aslesha Nakshatra (Special Day)'**
+  String get specialDay;
+
+  /// No description provided for @ekadashi.
+  ///
+  /// In en, this message translates to:
+  /// **'Ekadashi (Pooja Not Available)'**
+  String get ekadashi;
+
+  /// No description provided for @available.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get available;
+
+  /// No description provided for @wallpapers.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallpapers'**
+  String get wallpapers;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @download.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get download;
 }
 
 class _AppLocalizationsDelegate

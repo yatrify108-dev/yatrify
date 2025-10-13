@@ -80,86 +80,89 @@ class _TempleTimingsCardState extends State<TempleTimingsCard> {
     final label = context.labels;
     return GestureDetector(
       onTap: (){
-         context.push('/temple-timings-view', extra: widget.timings);
+         //context.push('/temple-timings-view', extra: widget.timings);
       },
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-            color: whiteColor,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.09),
-                  blurRadius: 4,
-                  spreadRadius: 1,
-                  offset: const Offset(0, 0))
-            ]),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  label.templeTimings,
-                  style: context.style.titleMedium!.copyWith(
-                      color: fontcolor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
-                ),
-                ValueListenableBuilder<bool>(
-                  valueListenable: isOpenNotifier,
-                  builder: (context, isOpen, _) {
-                    return Container(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle,
-                              color: isOpen ? Colors.green : Colors.red,
-                              size: 16,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              isOpen ? 'Darshan Open' : 'Darshan Closed',
-                              style: context.style.titleSmall!.copyWith(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+              color: whiteColor,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.09),
+                    blurRadius: 4,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 0))
+              ]),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    label.templeTimings,
+                    style: context.style.titleMedium!.copyWith(
+                        color: fontcolor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                  ValueListenableBuilder<bool>(
+                    valueListenable: isOpenNotifier,
+                    builder: (context, isOpen, _) {
+                      return Container(
+                          padding:
+                              const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                          decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
                                 color: isOpen ? Colors.green : Colors.red,
+                                size: 16,
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                  },
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (widget.timings.slots.isNotEmpty)
-                  Expanded(
-                      child: _buildTimingRow(
-                          context, 'Morning', widget.timings.slots.first)),
-                if (widget.timings.slots.length > 1)
-                  Expanded(
-                      child: _buildTimingRow(
-                          context, 'Evening', widget.timings.slots.last)),
-                if (widget.timings.lunch.isNotEmpty)
-                  Expanded(
-                      child: _buildTimingRow(
-                          context, 'Lunch', widget.timings.lunch.first))
-              ],
-            ),
-          ],
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                isOpen ? label.darshanaOpen : label.darshanaClose,
+                                style: context.style.titleSmall!.copyWith(
+                                  color: isOpen ? Colors.green : Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                    },
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (widget.timings.slots.isNotEmpty)
+                    Expanded(
+                        child: _buildTimingRow(
+                            context, label.morning, widget.timings.slots.first)),
+                  if (widget.timings.slots.length > 1)
+                    Expanded(
+                        child: _buildTimingRow(
+                            context, label.evening, widget.timings.slots.last)),
+                  if (widget.timings.lunch.isNotEmpty)
+                    Expanded(
+                        child: _buildTimingRow(
+                            context, label.bojana, widget.timings.lunch.first))
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

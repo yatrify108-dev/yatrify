@@ -1,3 +1,5 @@
+import 'package:bookstay/features/widgets/redirect_widget.dart';
+import 'package:bookstay/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -35,6 +37,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final label = context.labels;
     return FutureBuilder<bool>(
       future: _waitForRedirect(),
       builder: (context, snapshot) {
@@ -48,31 +51,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             elevation: 0,
           ),
           body: isLoading
-              ? Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.video_library,
-                            size: 60, color: Colors.purple),
-                        SizedBox(height: 16),
-                        Text(
-                          "Opening browser...",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "Redirecting to video...",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        SizedBox(height: 24),
-                        CircularProgressIndicator(),
-                      ],
-                    ),
-                  ),
-                )
+              ? RedirectWidget(icon: Icons.video_library, title: label.openingBrowser, subtitle: label.redirectingToVideo,)
               : YoutubePlayerBuilder(
                   player: YoutubePlayer(controller: _controller),
                   builder: (context, player) => Center(child: player),

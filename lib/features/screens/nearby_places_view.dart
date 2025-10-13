@@ -19,7 +19,7 @@ class NearbyPlacesView extends StatelessWidget {
         forceMaterialTransparency: true,
       ),
        bottomNavigationBar:
-          (nearByPlaces.bookNowButton && nearByPlaces.weblink.isNotNullOrEmpty)
+          (nearByPlaces.directionButton && nearByPlaces.weblink.isNotNullOrEmpty)
               ? Padding(
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewPadding.bottom + 16,
@@ -56,6 +56,7 @@ class NearbyPlacesView extends StatelessWidget {
                 enableCaching: true,
               ),
             ),
+            const SizedBox(height: 20,),
           ],
         ),
       ),

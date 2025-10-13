@@ -7,7 +7,10 @@ import 'package:bookstay/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:paged_vertical_calendar/paged_vertical_calendar.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import '../../core/models/temple.dart';
 import '../widgets/app_button.dart';
 
@@ -111,11 +114,12 @@ class ServicesDetailsView extends StatelessWidget {
     //     service.videos!.where((v) => v.link.isNotEmpty).toList();
 
     // Color palette
-    final Color redBg = Colors.red;
+    const Color redBg = Colors.red;
     // final Color redTx = Colors.red;
-    final Color blackTx = Colors.black;
+    const Color blackTx = Colors.black;
 
-    final Color greenBg = Colors.green.shade800; // light fill
+    final Color yellowBg = Colors.yellow.shade700;
+    final Color greenlightBg = Colors.green.shade300;
     // final Color greenTx =
     //     Colors.green.shade800; // dark green text (your “dark green”)
 
@@ -145,7 +149,8 @@ class ServicesDetailsView extends StatelessWidget {
                   child: AppButton(
                     label: label.bookNow,
                     onPressed: () {
-                      service.weblink.launch();
+                      // service.weblink.launch();
+                      context.push('/redirect-page', extra: service.weblink);
                     },
                   ),
                 )
@@ -153,6 +158,7 @@ class ServicesDetailsView extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // ClipRRect(
             //   child: CachedNetworkImage(
@@ -187,10 +193,34 @@ class ServicesDetailsView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: HtmlWidget(
                   service.details!,
-                  textStyle: context.style.bodyMedium!.copyWith(fontSize: 16),
                   enableCaching: true,
+                  textStyle: context.style.bodyMedium!.copyWith(fontSize: 16),
+                  customWidgetBuilder: (element) {
+                    if (element.localName == 'img') {
+                      final src = element.attributes['src'];
+                      double? height;
+                      final style = element.attributes['style'] ?? '';
+                      if (style.contains('height')) {
+                        final heightStr =
+                            style.split('height:')[1].split('px')[0].trim();
+                        height = double.tryParse(heightStr);
+                      }
+
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          src ?? '',
+                          width: double.infinity,
+                          height: height,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    }
+                    return null;
+                  },
                 ),
               ),
+              const SizedBox(height: 40),
             ],
             if (service.purpose!.isNotEmpty) ...[
               const SizedBox(height: 16),
@@ -292,23 +322,23 @@ class ServicesDetailsView extends StatelessWidget {
             //   ),
             // ],
 
-            if (service.timings != null && service.timings!.isNotEmpty) ...[
+            if (service.rituals != null && service.rituals!.isNotEmpty) ...[
               const SizedBox(
                 height: 8,
               ),
               ServiceDetailCard(
-                  title: label.timings,
-                  details: service.timings!,
-                  icon: FontAwesomeIcons.solidClock)
+                  title: label.rituals,
+                  details: service.rituals!,
+                  icon: FontAwesomeIcons.dharmachakra)
             ],
-            if (service.dressCode != null && service.dressCode!.isNotEmpty) ...[
+            if (service.howToBook != null && service.howToBook!.isNotEmpty) ...[
               const SizedBox(
                 height: 8,
               ),
               ServiceDetailCard(
-                  title: label.dressCode,
-                  details: service.dressCode!,
-                  icon: FontAwesomeIcons.shirt)
+                  title: label.howToBook,
+                  details: service.howToBook!,
+                  icon: FontAwesomeIcons.calendarCheck)
             ],
             if (service.fee != null && service.fee!.isNotEmpty) ...[
               const SizedBox(
@@ -325,7 +355,7 @@ class ServicesDetailsView extends StatelessWidget {
               ),
               ServiceDetailCard(
                   title: label.tips,
-                  details: service.fee!,
+                  details: service.tips!,
                   icon: FontAwesomeIcons.solidLightbulb)
             ],
             if (service.isCalendar!) ...[
@@ -343,19 +373,29 @@ class ServicesDetailsView extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
+                child: Wrap(
+                  spacing: 24,
+                  runSpacing: 4,
                   children: [
+                    if (availableSet.isNotEmpty)
+                      InfoWidget(
+                        color: yellowBg,
+                        title: label.specialDay,
+                      ),
                     InfoWidget(
-                      color: greenBg,
-                      title: 'Available',
+                      color: greenlightBg,
+                      title: label.available,
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
+
                     InfoWidget(
                       color: redBg,
-                      title: 'Unavailable',
-                    )
+                      title: label.ekadashi,
+                    ),
+
+                    //    InfoWidget(
+                    //   color: redBg,
+                    //   title: 'Unavailable',
+                    // )
                   ],
                 ),
               ),
@@ -431,7 +471,7 @@ class ServicesDetailsView extends StatelessWidget {
 
                     if (allDayAvailable) {
                       // both id lists empty → everything green
-                      bgColor = greenBg;
+                      bgColor = greenlightBg;
                       textColor = blackTx;
                     } else if (unavailableSet.contains(key)) {
                       // Yekadashi → red (highest priority)
@@ -439,35 +479,77 @@ class ServicesDetailsView extends StatelessWidget {
                       textColor = blackTx;
                     } else if (availableSet.contains(key)) {
                       // Ashlesha Nakshathra / Shudha Shasti (ids in available) → green
-                      bgColor = greenBg;
+                      bgColor = yellowBg;
 
                       textColor = blackTx;
                     } else {
                       // Rest → light gray
-                      bgColor = Colors.transparent;
-                      textColor = grayTx;
+                      // bgColor = Colors.transparent;
+                      // textColor = grayTx;
+                      bgColor = greenlightBg;
+                      textColor = blackTx;
                     }
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${date.day}',
-                          style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    return GestureDetector(
+                      onTap: () {
+                        if (bgColor == redBg) {
+                          showAlert(
+                            QuickAlertType.custom,
+                            context,
+                            'No pooja on yekadashi',
+                            'Please select another date',
+                            3,
+                            'Okay',
+                            null,
+                          );
+                        }
+                        else if (bgColor == yellowBg) {
+                        showAlert(
+                            QuickAlertType.custom,
+                            context,
+                            'Special Pooja Day',
+                            'Ashlesha Nakshatra – Special pooja available!',
+                            2,
+                            label.bookNow,
+                            service.weblink,
+                          );
+                      } else if (bgColor == greenlightBg) {
+                        showAlert(
+                            QuickAlertType.custom,
+                            context,
+                            'Pooja Available',
+                            'You can book pooja on this date',
+                            1,
+                            label.bookNow,
+                            service.weblink,
+                          );
+                      }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${date.day}',
+                              style: TextStyle(
+                                color: textColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(
+                                height: 2), // spacing between text & circle
+                            Container(
+                              height: 8,
+                              width: 8,
+                              decoration: BoxDecoration(
+                                color: bgColor,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                            height: 2), // spacing between text & circle
-                        Container(
-                          height: 8,
-                          width: 8,
-                          decoration: BoxDecoration(
-                            color: bgColor,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ],
+                      ),
                     );
 
                     // return Container(
@@ -492,13 +574,25 @@ class ServicesDetailsView extends StatelessWidget {
               Center(
                 child: TextButton(
                   onPressed: () {
+                    List<String> parts = service.calendarMaxDate.split('-');
+                    DateTime parsedDate = DateTime.now();
+
+                    if (parts.length == 3) {
+                      int day = int.parse(parts[0]);
+                      int month = int.parse(parts[1]);
+                      int year = int.parse(parts[2]);
+
+                      parsedDate = DateTime(year, month, day);
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => FullCalendarPage(
-                          availableDates: cleanedAvailableDates,
+                          availableDates: availableList,
                           unavailableDates: unavailableList,
                           allDayAvailable: allDayAvailable,
+                          maxDate: parsedDate,
+                          url: service.weblink,
                         ),
                       ),
                     );
@@ -537,16 +631,65 @@ class ServicesDetailsView extends StatelessWidget {
   }
 }
 
+void showAlert(QuickAlertType quickAlertType, BuildContext context,
+    String title, String subTitle, int num, String buttonText, String? url) {
+  QuickAlert.show(
+    context: context,
+    confirmBtnColor: primaryColor,
+    type: quickAlertType,
+    confirmBtnText: buttonText,
+    widget: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.error_outline,
+            color: (num == 1)
+                ? Colors.green
+                : (num == 2)
+                    ? Colors.yellow.shade700
+                    : Colors.red,
+            size: 60),
+        const SizedBox(height: 16),
+        Text(
+          title,
+          style: context.style.titleMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          subTitle,
+          style: context.style.bodyMedium,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+    onConfirmBtnTap: () {
+      if (url != null && url.isNotEmpty) {
+        context.pop();
+        context.push('/redirect-page', extra: url);
+      } else {
+        context.pop();
+      }
+    },
+  );
+}
+
 class FullCalendarPage extends StatelessWidget {
   final List<DateTime> availableDates;
   final List<DateTime> unavailableDates;
   final bool allDayAvailable;
+  final DateTime maxDate;
+  final String url;
 
   const FullCalendarPage({
     super.key,
     required this.availableDates,
     required this.unavailableDates,
     required this.allDayAvailable,
+    required this.maxDate,
+    required this.url
   });
 
   // Fast lookup key
@@ -563,7 +706,8 @@ class FullCalendarPage extends StatelessWidget {
     // final Color redTx = Colors.red;
     final Color blackTx = Colors.black;
 
-    final Color greenBg = Colors.green.shade800; // light fill
+    final Color yellowBg = Colors.yellow.shade700;
+    final Color greenlightBg = Colors.green.shade300;
     // final Color greenTx =
     //     Colors.green.shade800; // dark green text (your “dark green”)
 
@@ -578,6 +722,7 @@ class FullCalendarPage extends StatelessWidget {
         title: Text(label.availableDates),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
             height: 8,
@@ -586,19 +731,23 @@ class FullCalendarPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
             ),
-            child: Row(
+            child: Wrap(
+              spacing: 24,
+              runSpacing: 4,
               children: [
+                if (availableSet.isNotEmpty)
+                  InfoWidget(
+                    color: yellowBg,
+                    title: label.specialDay,
+                  ),
                 InfoWidget(
-                  color: greenBg,
-                  title: 'Available',
-                ),
-                const SizedBox(
-                  width: 20,
+                  color: greenlightBg,
+                  title: label.available,
                 ),
                 InfoWidget(
                   color: redBg,
-                  title: 'Unavailable',
-                )
+                  title: label.ekadashi,
+                ),
               ],
             ),
           ),
@@ -622,7 +771,7 @@ class FullCalendarPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: PagedVerticalCalendar(
                 minDate: DateTime.now(),
-                maxDate: DateTime.now().add(const Duration(days: 365)),
+                maxDate: maxDate,
                 initialDate: DateTime.now(),
                 monthBuilder: (context, month, year) {
                   return Padding(
@@ -644,7 +793,7 @@ class FullCalendarPage extends StatelessWidget {
 
                   if (allDayAvailable) {
                     // both id lists empty → everything green
-                    bgColor = greenBg;
+                    bgColor = greenlightBg;
                     textColor = blackTx;
                   } else if (unavailableSet.contains(key)) {
                     // Yekadashi → red (highest priority)
@@ -652,34 +801,75 @@ class FullCalendarPage extends StatelessWidget {
                     textColor = blackTx;
                   } else if (availableSet.contains(key)) {
                     // Ashlesha Nakshathra / Shudha Shasti (ids in available) → green
-                    bgColor = greenBg;
+                    bgColor = yellowBg;
 
                     textColor = blackTx;
                   } else {
                     // Rest → light gray
-                    bgColor = Colors.transparent;
-                    textColor = grayTx;
+                    // bgColor = Colors.transparent;
+                    // textColor = grayTx;
+                    bgColor = greenlightBg;
+                    textColor = blackTx;
                   }
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${date.day}',
-                        style: TextStyle(
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  return GestureDetector(
+                    onTap: () {
+                      if (bgColor == redBg) {
+                        showAlert(
+                            QuickAlertType.custom,
+                            context,
+                            'No pooja on yekadashi',
+                            'Please select another date',
+                            3,
+                            'Okay',
+                            null,
+                          );
+                      } else if (bgColor == yellowBg) {
+                        showAlert(
+                            QuickAlertType.custom,
+                            context,
+                            'Special Pooja Day',
+                            'Ashlesha Nakshatra – Special pooja available!',
+                            2,
+                            label.bookNow,
+                            url,
+                          );
+                      } else if (bgColor == greenlightBg) {
+                        showAlert(
+                            QuickAlertType.custom,
+                            context,
+                            'Pooja Available',
+                            'You can book pooja on this date',
+                            1,
+                            label.bookNow,
+                            url,
+                          );
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${date.day}',
+                            style: TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Container(
+                            height: 8,
+                            width: 8,
+                            decoration: BoxDecoration(
+                              color: bgColor,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 2),
-                      Container(
-                        height: 8,
-                        width: 8,
-                        decoration: BoxDecoration(
-                          color: bgColor,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ],
+                    ),
                   );
                 },
               ),
