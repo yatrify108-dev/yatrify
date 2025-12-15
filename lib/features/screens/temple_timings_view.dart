@@ -1,6 +1,6 @@
-import 'package:bookstay/core/models/temple.dart';
-import 'package:bookstay/utils/color.schemes.g.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 

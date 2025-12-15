@@ -1,5 +1,5 @@
-import 'package:bookstay/utils/color.schemes.g.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
 enum AppButtonType { filled, oulined }
@@ -42,7 +42,7 @@ class AppButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
             side: side,
-          )),
+          ),),
       onPressed: onPressed,
       child: 
       Text(

@@ -1,8 +1,8 @@
-import 'package:bookstay/core/models/base_banner.dart';
-import 'package:bookstay/core/models/temple.dart';
-import 'package:bookstay/features/widgets/app_button.dart';
-import 'package:bookstay/features/widgets/banner_carousel.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/core/models/base_banner.dart';
+import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/features/widgets/app_button.dart';
+import 'package:yatrify/features/widgets/banner_carousel.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 

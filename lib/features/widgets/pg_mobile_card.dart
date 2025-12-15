@@ -1,10 +1,10 @@
-import 'package:bookstay/core/models/pg.dart';
-import 'package:bookstay/features/widgets/bottom_curve_clipper.dart';
-import 'package:bookstay/features/widgets/custom_marquee.dart';
-import 'package:bookstay/features/widgets/gender_badge.dart';
-import 'package:bookstay/features/widgets/pg_image_carousel.dart';
-import 'package:bookstay/utils/color.schemes.g.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/core/models/pg.dart';
+import 'package:yatrify/features/widgets/bottom_curve_clipper.dart';
+import 'package:yatrify/features/widgets/custom_marquee.dart';
+import 'package:yatrify/features/widgets/gender_badge.dart';
+import 'package:yatrify/features/widgets/pg_image_carousel.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../constant/const_string.dart';

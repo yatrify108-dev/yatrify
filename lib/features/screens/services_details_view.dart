@@ -1,9 +1,11 @@
-import 'package:bookstay/core/models/base_banner.dart';
-import 'package:bookstay/features/widgets/banner_carousel.dart';
-import 'package:bookstay/features/widgets/info_widget.dart';
-import 'package:bookstay/features/widgets/service_detail_card.dart';
-import 'package:bookstay/utils/color.schemes.g.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/core/models/base_banner.dart';
+import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
+import 'package:yatrify/features/widgets/banner_carousel.dart';
+import 'package:yatrify/features/widgets/info_widget.dart';
+import 'package:yatrify/features/widgets/rathosthava_seva_widget.dart';
+import 'package:yatrify/features/widgets/service_detail_card.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,18 +16,33 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import '../../core/models/temple.dart';
 import '../widgets/app_button.dart';
 
-class ServicesDetailsView extends StatelessWidget {
+class ServicesDetailsView extends StatefulWidget {
   const ServicesDetailsView({
     super.key,
     required this.service,
     required this.calendar,
+    required this.webLogo,
   });
 
   final Services service;
   final Map<String, List<String>>? calendar;
+  final String webLogo;
+
+  @override
+  State<ServicesDetailsView> createState() => _ServicesDetailsViewState();
+}
+
+class _ServicesDetailsViewState extends State<ServicesDetailsView> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseManager()
+        .setCurrentScreen('LandedOn${widget.service.name}ViewScreen');
+  }
 
   @override
   Widget build(BuildContext context) {
+    final labels = context.labels;
     List<DateTime> parseDateList(List<String>? dateStrings) {
       if (dateStrings == null) return [];
       final dates = <DateTime>[];
@@ -69,16 +86,19 @@ class ServicesDetailsView extends StatelessWidget {
     final label = context.labels;
 
 // ✅ Use ONLY the current service’s ids
-    final availableList = datesForIds(calendar, service.availableDateIds);
-    final unavailableList = datesForIds(calendar, service.unavailableDateIds);
+    final availableList =
+        datesForIds(widget.calendar, widget.service.availableDateIds);
+    final unavailableList =
+        datesForIds(widget.calendar, widget.service.unavailableDateIds);
 
 // Sets for O(1) membership
     final availableSet = availableList.map(k).toSet();
     final unavailableSet = unavailableList.map(k).toSet();
 
 // “All day available” when both id lists are empty
-    final allDayAvailable = (service.availableDateIds?.isEmpty ?? true) &&
-        (service.unavailableDateIds?.isEmpty ?? true);
+    final allDayAvailable =
+        (widget.service.availableDateIds?.isEmpty ?? true) &&
+            (widget.service.unavailableDateIds?.isEmpty ?? true);
 
     final now = DateTime.now();
     final minDate = DateTime(now.year, now.month, 1);
@@ -95,9 +115,9 @@ class ServicesDetailsView extends StatelessWidget {
 
     // final label = context.labels;
     final availableDates = parseDateList(
-      calendar?.values.expand((dates) => dates).toList(),
+      widget.calendar?.values.expand((dates) => dates).toList(),
     );
-    final unavailableDates = parseDateList(service.unavailableDateIds);
+    final unavailableDates = parseDateList(widget.service.unavailableDateIds);
     List<DateTime> cleanAvailableDates(
         List<DateTime> available, List<DateTime> unavailable) {
       return available.where((date) {
@@ -129,483 +149,543 @@ class ServicesDetailsView extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
+        toolbarHeight: 40,
         centerTitle: true,
         forceMaterialTransparency: true,
         title: Text(
-          service.name,
+          widget.service.name,
           style: context.style.titleLarge!
-              .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
+              .copyWith(fontSize: 22, fontWeight: FontWeight.w600),
         ),
       ),
-      bottomNavigationBar:
-          (service.bookNowButton && service.weblink.isNotNullOrEmpty)
-              ? Padding(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewPadding.bottom + 16,
-                    left: 16,
-                    right: 16,
-                    top: 16,
-                  ),
-                  child: AppButton(
-                    label: label.bookNow,
-                    onPressed: () {
-                      // service.weblink.launch();
-                      context.push('/redirect-page', extra: service.weblink);
-                    },
-                  ),
-                )
-              : const SizedBox.shrink(),
+      bottomNavigationBar: (widget.service.bookNowButton &&
+              widget.service.weblink.isNotNullOrEmpty)
+          ? Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewPadding.bottom + 16,
+                left: 16,
+                right: 16,
+                top: 16,
+              ),
+              child: AppButton(
+                label: label.bookNow,
+                onPressed: () {
+                  try {
+                    if (widget.service.id.toLowerCase() ==
+                        'kumaraparvathatrek') {
+                      widget.service.weblink.launch();
+                    } else {
+                      context.push(
+                        '/redirect-page',
+                        extra: {
+                          'url': widget.service.weblink,
+                          'title': labels.openingTemplesOfficialPage,
+                          'subTitle': labels.yourSpiritual,
+                          'webLogo': widget.webLogo,
+                        },
+                      );
+                    }
+                    FirebaseManager().logEvent(
+                      FirebaseEvent.buttonClick,
+                      parameters: {
+                        'button_name': '${widget.service.name}_book_now'
+                      },
+                    );
+                  } catch (e, stackTrace) {
+                    FirebaseManager().reportError(
+                      e,
+                      stackTrace,
+                    );
+                  }
+                  // service.weblink.launch();
+                },
+              ),
+            )
+          : const SizedBox.shrink(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // ClipRRect(
-            //   child: CachedNetworkImage(
-            //     imageUrl: service.images.first,
-            //     height: MediaQuery.of(context).size.height * 0.3,
-            //     fit: BoxFit.cover,
-            //     width: double.infinity,
-            //     placeholder: (context, url) => const Center(
-            //       child: CircularProgressIndicator(),
-            //     ),
-            //   ),
-            // ),
             BannerCarousel(
               screenHeightValue: MediaQuery.of(context).size.height * 0.4,
               autoPlay: true,
-              banners: service.images
+              banners: widget.service.images
                   .map((url) => BaseBanner(bannerImage: url, link: null))
                   .toList(),
             ),
+            widget.service.id.toLowerCase() == 'rathosthavaseva'
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: RathosthavaSevaWidget(
+                      rathotsavaSevaList:
+                          widget.service.rathotsavaSevaList ?? [],
+                      note: widget.service.note,
+                      contactDetails: widget.service.contactDetails,
+                    ),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      // ClipRRect(
+                      //   child: CachedNetworkImage(
+                      //     imageUrl: service.images.first,
+                      //     height: MediaQuery.of(context).size.height * 0.3,
+                      //     fit: BoxFit.cover,
+                      //     width: double.infinity,
+                      //     placeholder: (context, url) => const Center(
+                      //       child: CircularProgressIndicator(),
+                      //     ),
+                      //   ),
+                      // ),
 
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 16),
-            //   child: HtmlWidget(
-            //     service.details,
-            //     textStyle: context.style.titleMedium,
-            //     enableCaching: true,
-            //   ),
-            // ),
-            if (service.details!.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: HtmlWidget(
-                  service.details!,
-                  enableCaching: true,
-                  textStyle: context.style.bodyMedium!.copyWith(fontSize: 16),
-                  customWidgetBuilder: (element) {
-                    if (element.localName == 'img') {
-                      final src = element.attributes['src'];
-                      double? height;
-                      final style = element.attributes['style'] ?? '';
-                      if (style.contains('height')) {
-                        final heightStr =
-                            style.split('height:')[1].split('px')[0].trim();
-                        height = double.tryParse(heightStr);
-                      }
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                      //   child: HtmlWidget(
+                      //     service.details,
+                      //     textStyle: context.style.titleMedium,
+                      //     enableCaching: true,
+                      //   ),
+                      // ),
+                      if (widget.service.details!.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: HtmlWidget(
+                            widget.service.details!,
+                            enableCaching: true,
+                            textStyle: context.style.bodyMedium!
+                                .copyWith(fontSize: 16),
+                            customWidgetBuilder: (element) {
+                              if (element.localName == 'img') {
+                                final src = element.attributes['src'];
+                                double? height;
+                                final style = element.attributes['style'] ?? '';
+                                if (style.contains('height')) {
+                                  final heightStr = style
+                                      .split('height:')[1]
+                                      .split('px')[0]
+                                      .trim();
+                                  height = double.tryParse(heightStr);
+                                }
 
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          src ?? '',
-                          width: double.infinity,
-                          height: height,
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(height: 40),
-            ],
-            if (service.purpose!.isNotEmpty) ...[
-              const SizedBox(height: 16),
-              ServiceDetailCard(
-                  title: label.purpose,
-                  details: service.purpose!,
-                  icon: FontAwesomeIcons.solidStar)
-            ],
-            if (service.otherSevas != null &&
-                service.otherSevas!.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: service.otherSevas!.map((category) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          category.categoryName,
-                          style: context.style.titleLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.network(
+                                    src ?? '',
+                                    width: double.infinity,
+                                    height: height,
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              }
+                              return null;
+                            },
                           ),
                         ),
-                        const SizedBox(height: 6),
-                        ...category.sevas.map((seva) => Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text(
-                                seva.title,
-                                style: context.style.bodyMedium!
-                                    .copyWith(fontSize: 16),
-                              ),
-                            )),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 40),
                       ],
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
-
-            // if (service.videos != null &&
-            //     service.videos!.isNotEmpty &&
-            //     validVideos.isNotEmpty) ...[
-            //   //const SizedBox(height: 20),
-            //   SizedBox(
-            //     height: 180,
-            //     child: ListView.builder(
-            //       scrollDirection: Axis.horizontal,
-            //       itemCount: validVideos.length,
-            //       padding: const EdgeInsets.symmetric(horizontal: 16),
-            //       itemBuilder: (context, index) {
-            //         final video = validVideos[index];
-            //         if (video.link.isEmpty) return const SizedBox.shrink();
-
-            //         final videoId = YoutubePlayer.convertUrlToId(video.link)!;
-            //         final thumbnailUrl = YoutubePlayer.getThumbnail(
-            //           videoId: videoId,
-            //           quality: ThumbnailQuality.high,
-            //         );
-
-            //         return GestureDetector(
-            //           onTap: () {
-            //             context.push('/video-player', extra: video.link);
-            //           },
-            //           child: Container(
-            //             margin: const EdgeInsets.only(right: 12, top: 20),
-            //             child: ClipRRect(
-            //               borderRadius: BorderRadius.circular(16),
-            //               child: Stack(
-            //                 alignment: Alignment.center,
-            //                 children: [
-            //                   CachedNetworkImage(
-            //                     imageUrl: thumbnailUrl,
-            //                     fit: BoxFit.cover,
-            //                     height: 140,
-            //                     width: 180,
-            //                   ),
-            //                   Container(
-            //                     decoration: const BoxDecoration(
-            //                       color: Colors.black54,
-            //                       shape: BoxShape.circle,
-            //                     ),
-            //                     padding: const EdgeInsets.all(8),
-            //                     child: const Icon(
-            //                       Icons.play_arrow,
-            //                       color: Colors.white,
-            //                       size: 40,
-            //                     ),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //           ),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ],
-
-            if (service.rituals != null && service.rituals!.isNotEmpty) ...[
-              const SizedBox(
-                height: 8,
-              ),
-              ServiceDetailCard(
-                  title: label.rituals,
-                  details: service.rituals!,
-                  icon: FontAwesomeIcons.dharmachakra)
-            ],
-            if (service.howToBook != null && service.howToBook!.isNotEmpty) ...[
-              const SizedBox(
-                height: 8,
-              ),
-              ServiceDetailCard(
-                  title: label.howToBook,
-                  details: service.howToBook!,
-                  icon: FontAwesomeIcons.calendarCheck)
-            ],
-            if (service.fee != null && service.fee!.isNotEmpty) ...[
-              const SizedBox(
-                height: 8,
-              ),
-              ServiceDetailCard(
-                  title: label.fee,
-                  details: service.fee!,
-                  icon: FontAwesomeIcons.indianRupeeSign)
-            ],
-            if (service.tips != null && service.tips!.isNotEmpty) ...[
-              const SizedBox(
-                height: 8,
-              ),
-              ServiceDetailCard(
-                  title: label.tips,
-                  details: service.tips!,
-                  icon: FontAwesomeIcons.solidLightbulb)
-            ],
-            if (service.isCalendar!) ...[
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  label.availableDates,
-                  style: context.style.titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Wrap(
-                  spacing: 24,
-                  runSpacing: 4,
-                  children: [
-                    if (availableSet.isNotEmpty)
-                      InfoWidget(
-                        color: yellowBg,
-                        title: label.specialDay,
-                      ),
-                    InfoWidget(
-                      color: greenlightBg,
-                      title: label.available,
-                    ),
-
-                    InfoWidget(
-                      color: redBg,
-                      title: label.ekadashi,
-                    ),
-
-                    //    InfoWidget(
-                    //   color: redBg,
-                    //   title: 'Unavailable',
-                    // )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Sun",
-                      style: context.style.titleSmall,
-                    ),
-                    Text(
-                      "Mon",
-                      style: context.style.titleSmall,
-                    ),
-                    Text(
-                      "Tue",
-                      style: context.style.titleSmall,
-                    ),
-                    Text(
-                      "Wed",
-                      style: context.style.titleSmall,
-                    ),
-                    Text(
-                      "Thu",
-                      style: context.style.titleSmall,
-                    ),
-                    Text(
-                      "Fri",
-                      style: context.style.titleSmall,
-                    ),
-                    Text(
-                      "Sat",
-                      style: context.style.titleSmall,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(16.0).copyWith(bottom: 0),
-                height: 610,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: PagedVerticalCalendar(
-                  physics: const NeverScrollableScrollPhysics(),
-                  minDate: minDate,
-                  maxDate: maxDate,
-                  initialDate: DateTime.now(),
-                  onDayPressed: (date) {
-                    if (availableDates.any((d) => isSameDay(d, date))) {}
-                  },
-                  monthBuilder: (context, month, year) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        '${_getMonthName(month)} $year',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      if (widget.service.purpose!.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        ServiceDetailCard(
+                            title: label.purpose,
+                            details: widget.service.purpose!,
+                            icon: FontAwesomeIcons.solidStar)
+                      ],
+                      if (widget.service.otherSevas != null &&
+                          widget.service.otherSevas!.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:
+                                widget.service.otherSevas!.map((category) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    category.categoryName,
+                                    style: context.style.titleLarge!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  ...category.sevas.map((seva) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2),
+                                        child: Text(
+                                          seva.title,
+                                          style: context.style.bodyMedium!
+                                              .copyWith(fontSize: 16),
+                                        ),
+                                      )),
+                                  const SizedBox(height: 12),
+                                ],
+                              );
+                            }).toList(),
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  dayBuilder: (context, date) {
-                    final key = k(date);
+                      ],
 
-                    Color bgColor;
-                    Color textColor;
+                      // if (service.videos != null &&
+                      //     service.videos!.isNotEmpty &&
+                      //     validVideos.isNotEmpty) ...[
+                      //   //const SizedBox(height: 20),
+                      //   SizedBox(
+                      //     height: 180,
+                      //     child: ListView.builder(
+                      //       scrollDirection: Axis.horizontal,
+                      //       itemCount: validVideos.length,
+                      //       padding: const EdgeInsets.symmetric(horizontal: 16),
+                      //       itemBuilder: (context, index) {
+                      //         final video = validVideos[index];
+                      //         if (video.link.isEmpty) return const SizedBox.shrink();
 
-                    if (allDayAvailable) {
-                      // both id lists empty → everything green
-                      bgColor = greenlightBg;
-                      textColor = blackTx;
-                    } else if (unavailableSet.contains(key)) {
-                      // Yekadashi → red (highest priority)
-                      bgColor = redBg;
-                      textColor = blackTx;
-                    } else if (availableSet.contains(key)) {
-                      // Ashlesha Nakshathra / Shudha Shasti (ids in available) → green
-                      bgColor = yellowBg;
+                      //         final videoId = YoutubePlayer.convertUrlToId(video.link)!;
+                      //         final thumbnailUrl = YoutubePlayer.getThumbnail(
+                      //           videoId: videoId,
+                      //           quality: ThumbnailQuality.high,
+                      //         );
 
-                      textColor = blackTx;
-                    } else {
-                      // Rest → light gray
-                      // bgColor = Colors.transparent;
-                      // textColor = grayTx;
-                      bgColor = greenlightBg;
-                      textColor = blackTx;
-                    }
-                    return GestureDetector(
-                      onTap: () {
-                        if (bgColor == redBg) {
-                          showAlert(
-                            QuickAlertType.custom,
-                            context,
-                            'No pooja on yekadashi',
-                            'Please select another date',
-                            3,
-                            'Okay',
-                            null,
-                          );
-                        }
-                        else if (bgColor == yellowBg) {
-                        showAlert(
-                            QuickAlertType.custom,
-                            context,
-                            'Special Pooja Day',
-                            'Ashlesha Nakshatra – Special pooja available!',
-                            2,
-                            label.bookNow,
-                            service.weblink,
-                          );
-                      } else if (bgColor == greenlightBg) {
-                        showAlert(
-                            QuickAlertType.custom,
-                            context,
-                            'Pooja Available',
-                            'You can book pooja on this date',
-                            1,
-                            label.bookNow,
-                            service.weblink,
-                          );
-                      }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        color: Colors.transparent,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${date.day}',
-                              style: TextStyle(
-                                color: textColor,
-                                fontWeight: FontWeight.bold,
+                      //         return GestureDetector(
+                      //           onTap: () {
+                      //             context.push('/video-player', extra: video.link);
+                      //           },
+                      //           child: Container(
+                      //             margin: const EdgeInsets.only(right: 12, top: 20),
+                      //             child: ClipRRect(
+                      //               borderRadius: BorderRadius.circular(16),
+                      //               child: Stack(
+                      //                 alignment: Alignment.center,
+                      //                 children: [
+                      //                   CachedNetworkImage(
+                      //                     imageUrl: thumbnailUrl,
+                      //                     fit: BoxFit.cover,
+                      //                     height: 140,
+                      //                     width: 180,
+                      //                   ),
+                      //                   Container(
+                      //                     decoration: const BoxDecoration(
+                      //                       color: Colors.black54,
+                      //                       shape: BoxShape.circle,
+                      //                     ),
+                      //                     padding: const EdgeInsets.all(8),
+                      //                     child: const Icon(
+                      //                       Icons.play_arrow,
+                      //                       color: Colors.white,
+                      //                       size: 40,
+                      //                     ),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //   ),
+                      // ],
+
+                      if (widget.service.rituals != null &&
+                          widget.service.rituals!.isNotEmpty) ...[
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        ServiceDetailCard(
+                            title: label.rituals,
+                            details: widget.service.rituals!,
+                            icon: FontAwesomeIcons.dharmachakra)
+                      ],
+                      if (widget.service.howToBook != null &&
+                          widget.service.howToBook!.isNotEmpty) ...[
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        ServiceDetailCard(
+                            title: label.howToBook,
+                            details: widget.service.howToBook!,
+                            icon: FontAwesomeIcons.calendarCheck)
+                      ],
+                      if (widget.service.fee != null &&
+                          widget.service.fee!.isNotEmpty) ...[
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        ServiceDetailCard(
+                            title: label.fee,
+                            details: widget.service.fee!,
+                            icon: FontAwesomeIcons.indianRupeeSign)
+                      ],
+                      if (widget.service.tips != null &&
+                          widget.service.tips!.isNotEmpty) ...[
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        ServiceDetailCard(
+                            title: label.tips,
+                            details: widget.service.tips!,
+                            icon: FontAwesomeIcons.solidLightbulb)
+                      ],
+                      if (widget.service.isCalendar!) ...[
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            label.availableDates,
+                            style: context.style.titleMedium!.copyWith(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Wrap(
+                            spacing: 24,
+                            runSpacing: 4,
+                            children: [
+                              if (availableSet.isNotEmpty)
+                                InfoWidget(
+                                  color: yellowBg,
+                                  title: label.specialDay,
+                                ),
+                              InfoWidget(
+                                color: greenlightBg,
+                                title: label.available,
+                              ),
+
+                              InfoWidget(
+                                color: redBg,
+                                title: label.ekadashi,
+                              ),
+
+                              //    InfoWidget(
+                              //   color: redBg,
+                              //   title: 'Unavailable',
+                              // )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                "Sun",
+                                style: context.style.titleSmall,
+                              ),
+                              Text(
+                                "Mon",
+                                style: context.style.titleSmall,
+                              ),
+                              Text(
+                                "Tue",
+                                style: context.style.titleSmall,
+                              ),
+                              Text(
+                                "Wed",
+                                style: context.style.titleSmall,
+                              ),
+                              Text(
+                                "Thu",
+                                style: context.style.titleSmall,
+                              ),
+                              Text(
+                                "Fri",
+                                style: context.style.titleSmall,
+                              ),
+                              Text(
+                                "Sat",
+                                style: context.style.titleSmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin:
+                              const EdgeInsets.all(16.0).copyWith(bottom: 0),
+                          height: 660,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: PagedVerticalCalendar(
+                            physics: const NeverScrollableScrollPhysics(),
+                            minDate: minDate,
+                            maxDate: maxDate,
+                            initialDate: DateTime.now(),
+                            startWeekWithSunday: true,
+                            onDayPressed: (date) {
+                              if (availableDates
+                                  .any((d) => isSameDay(d, date))) {}
+                            },
+                            monthBuilder: (context, month, year) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  '${_getMonthName(month)} $year',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              );
+                            },
+                            dayBuilder: (context, date) {
+                              final key = k(date);
+
+                              Color bgColor;
+                              Color textColor;
+
+                              if (allDayAvailable) {
+                                // both id lists empty → everything green
+                                bgColor = greenlightBg;
+                                textColor = blackTx;
+                              } else if (unavailableSet.contains(key)) {
+                                // Yekadashi → red (highest priority)
+                                bgColor = redBg;
+                                textColor = blackTx;
+                              } else if (availableSet.contains(key)) {
+                                // Ashlesha Nakshathra / Shudha Shasti (ids in available) → green
+                                bgColor = yellowBg;
+
+                                textColor = blackTx;
+                              } else {
+                                // Rest → light gray
+                                // bgColor = Colors.transparent;
+                                // textColor = grayTx;
+                                bgColor = greenlightBg;
+                                textColor = blackTx;
+                              }
+                              return GestureDetector(
+                                onTap: () {
+                                  if (bgColor == redBg) {
+                                    showAlert(
+                                      QuickAlertType.custom,
+                                      context,
+                                      label.poojaNotAvailable,
+                                      label.pleaseSelectAnotherDate,
+                                      3,
+                                      label.okay,
+                                      null,
+                                      widget.webLogo,
+                                    );
+                                  } else if (bgColor == yellowBg) {
+                                    showAlert(
+                                      QuickAlertType.custom,
+                                      context,
+                                      label.specialPoojaDay,
+                                      label.ashleshaNakshatraSpecialPooja,
+                                      2,
+                                      label.bookNow,
+                                      widget.service.weblink,
+                                      widget.webLogo,
+                                    );
+                                  } else if (bgColor == greenlightBg) {
+                                    showAlert(
+                                      QuickAlertType.custom,
+                                      context,
+                                      label.poojaAvailable,
+                                      label.youCanBookPooja,
+                                      1,
+                                      label.bookNow,
+                                      widget.service.weblink,
+                                      widget.webLogo,
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  color: Colors.transparent,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${date.day}',
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                          height:
+                                              2), // spacing between text & circle
+                                      Container(
+                                        height: 8,
+                                        width: 8,
+                                        decoration: BoxDecoration(
+                                          color: bgColor,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+
+                              // return Container(
+                              //   margin: const EdgeInsets.all(4),
+                              //   decoration: BoxDecoration(
+                              //     color: bgColor,
+                              //     shape: BoxShape.circle,
+                              //   ),
+                              //   child: Center(
+                              //     child: Text(
+                              //       '${date.day}',
+                              //       style: TextStyle(
+                              //         color: textColor,
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // );
+                            },
+                          ),
+                        ),
+                        Center(
+                          child: TextButton(
+                            onPressed: () {
+                              List<String> parts =
+                                  widget.service.calendarMaxDate.split('-');
+                              DateTime parsedDate = DateTime.now();
+
+                              if (parts.length == 3) {
+                                int day = int.parse(parts[0]);
+                                int month = int.parse(parts[1]);
+                                int year = int.parse(parts[2]);
+
+                                parsedDate = DateTime(year, month, day);
+                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => FullCalendarPage(
+                                    availableDates: availableList,
+                                    unavailableDates: unavailableList,
+                                    allDayAvailable: allDayAvailable,
+                                    maxDate: parsedDate,
+                                    url: widget.service.weblink,
+                                    webLogo: widget.webLogo,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              label.viewMore,
+                              style: context.style.titleMedium!.copyWith(
+                                color: primaryColor,
                               ),
                             ),
-                            const SizedBox(
-                                height: 2), // spacing between text & circle
-                            Container(
-                              height: 8,
-                              width: 8,
-                              decoration: BoxDecoration(
-                                color: bgColor,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-
-                    // return Container(
-                    //   margin: const EdgeInsets.all(4),
-                    //   decoration: BoxDecoration(
-                    //     color: bgColor,
-                    //     shape: BoxShape.circle,
-                    //   ),
-                    //   child: Center(
-                    //     child: Text(
-                    //       '${date.day}',
-                    //       style: TextStyle(
-                    //         color: textColor,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // );
-                  },
-                ),
-              ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    List<String> parts = service.calendarMaxDate.split('-');
-                    DateTime parsedDate = DateTime.now();
-
-                    if (parts.length == 3) {
-                      int day = int.parse(parts[0]);
-                      int month = int.parse(parts[1]);
-                      int year = int.parse(parts[2]);
-
-                      parsedDate = DateTime(year, month, day);
-                    }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => FullCalendarPage(
-                          availableDates: availableList,
-                          unavailableDates: unavailableList,
-                          allDayAvailable: allDayAvailable,
-                          maxDate: parsedDate,
-                          url: service.weblink,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    label.viewMore,
-                    style: context.style.titleMedium!.copyWith(
-                      color: primaryColor,
-                    ),
+                      ],
+                    ],
                   ),
-                ),
-              ),
-            ],
           ],
         ),
       ),
@@ -631,8 +711,15 @@ class ServicesDetailsView extends StatelessWidget {
   }
 }
 
-void showAlert(QuickAlertType quickAlertType, BuildContext context,
-    String title, String subTitle, int num, String buttonText, String? url) {
+void showAlert(
+    QuickAlertType quickAlertType,
+    BuildContext context,
+    String title,
+    String subTitle,
+    int num,
+    String buttonText,
+    String? url,
+    String webLogo) {
   QuickAlert.show(
     context: context,
     confirmBtnColor: primaryColor,
@@ -668,7 +755,15 @@ void showAlert(QuickAlertType quickAlertType, BuildContext context,
     onConfirmBtnTap: () {
       if (url != null && url.isNotEmpty) {
         context.pop();
-        context.push('/redirect-page', extra: url);
+        context.push(
+          '/redirect-page',
+          extra: {
+            'url': url,
+            'title': context.labels.openingTemplesOfficialPage,
+            'subTitle': context.labels.yourSpiritual,
+            'webLogo': webLogo,
+          },
+        );
       } else {
         context.pop();
       }
@@ -682,6 +777,7 @@ class FullCalendarPage extends StatelessWidget {
   final bool allDayAvailable;
   final DateTime maxDate;
   final String url;
+  final String webLogo;
 
   const FullCalendarPage({
     super.key,
@@ -689,7 +785,8 @@ class FullCalendarPage extends StatelessWidget {
     required this.unavailableDates,
     required this.allDayAvailable,
     required this.maxDate,
-    required this.url
+    required this.url,
+    required this.webLogo,
   });
 
   // Fast lookup key
@@ -773,6 +870,7 @@ class FullCalendarPage extends StatelessWidget {
                 minDate: DateTime.now(),
                 maxDate: maxDate,
                 initialDate: DateTime.now(),
+                startWeekWithSunday: true,
                 monthBuilder: (context, month, year) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -815,34 +913,37 @@ class FullCalendarPage extends StatelessWidget {
                     onTap: () {
                       if (bgColor == redBg) {
                         showAlert(
-                            QuickAlertType.custom,
-                            context,
-                            'No pooja on yekadashi',
-                            'Please select another date',
-                            3,
-                            'Okay',
-                            null,
-                          );
+                          QuickAlertType.custom,
+                          context,
+                          label.poojaNotAvailable,
+                          label.pleaseSelectAnotherDate,
+                          3,
+                          label.okay,
+                          null,
+                          webLogo,
+                        );
                       } else if (bgColor == yellowBg) {
                         showAlert(
-                            QuickAlertType.custom,
-                            context,
-                            'Special Pooja Day',
-                            'Ashlesha Nakshatra – Special pooja available!',
-                            2,
-                            label.bookNow,
-                            url,
-                          );
+                          QuickAlertType.custom,
+                          context,
+                          label.specialPoojaDay,
+                          label.ashleshaNakshatraSpecialPooja,
+                          2,
+                          label.bookNow,
+                          url,
+                          webLogo,
+                        );
                       } else if (bgColor == greenlightBg) {
                         showAlert(
-                            QuickAlertType.custom,
-                            context,
-                            'Pooja Available',
-                            'You can book pooja on this date',
-                            1,
-                            label.bookNow,
-                            url,
-                          );
+                          QuickAlertType.custom,
+                          context,
+                          label.poojaAvailable,
+                          label.youCanBookPooja,
+                          1,
+                          label.bookNow,
+                          url,
+                          webLogo,
+                        );
                       }
                     },
                     child: Container(

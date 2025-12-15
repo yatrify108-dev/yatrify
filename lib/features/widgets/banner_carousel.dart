@@ -1,6 +1,6 @@
-import 'package:bookstay/core/models/base_banner.dart';
-import 'package:bookstay/utils/color.schemes.g.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/core/models/base_banner.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -91,9 +91,9 @@ class _BannerCarouselState extends State<BannerCarousel> {
                               imageUrl: banner.bannerImage ?? '',
                               fit: BoxFit.cover,
                               width: double.infinity,
-                              height: 400,
+                              height: sliderHeight,
                               placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator(color: primaryColor,),
                               ),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),

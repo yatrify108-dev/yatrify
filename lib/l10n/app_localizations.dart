@@ -337,7 +337,7 @@ abstract class AppLocalizations {
   /// No description provided for @bojana.
   ///
   /// In en, this message translates to:
-  /// **'Bojana'**
+  /// **'Bhojana'**
   String get bojana;
 
   /// No description provided for @darshanaOpen.
@@ -349,7 +349,7 @@ abstract class AppLocalizations {
   /// No description provided for @darshanaClose.
   ///
   /// In en, this message translates to:
-  /// **'Darshana Close'**
+  /// **'Darshana Closed'**
   String get darshanaClose;
 
   /// No description provided for @direction.
@@ -405,6 +405,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download'**
   String get download;
+
+  /// No description provided for @poojaNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Pooja not available on Ekadashi'**
+  String get poojaNotAvailable;
+
+  /// No description provided for @pleaseSelectAnotherDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select another date'**
+  String get pleaseSelectAnotherDate;
+
+  /// No description provided for @okay.
+  ///
+  /// In en, this message translates to:
+  /// **'Okay'**
+  String get okay;
+
+  /// No description provided for @specialPoojaDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Special Pooja Day'**
+  String get specialPoojaDay;
+
+  /// No description provided for @ashleshaNakshatraSpecialPooja.
+  ///
+  /// In en, this message translates to:
+  /// **'Ashlesha Nakshatra – Special pooja available!'**
+  String get ashleshaNakshatraSpecialPooja;
+
+  /// No description provided for @poojaAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Pooja Available'**
+  String get poojaAvailable;
+
+  /// No description provided for @youCanBookPooja.
+  ///
+  /// In en, this message translates to:
+  /// **'You can book pooja on this date'**
+  String get youCanBookPooja;
+
+  /// No description provided for @openingTemplesOfficialPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening temple’s official page'**
+  String get openingTemplesOfficialPage;
+
+  /// No description provided for @yourSpiritual.
+  ///
+  /// In en, this message translates to:
+  /// **'your spiritual journey continues'**
+  String get yourSpiritual;
 }
 
 class _AppLocalizationsDelegate

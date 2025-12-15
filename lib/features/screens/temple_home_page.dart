@@ -1,99 +1,168 @@
-import 'package:bookstay/core/models/base_banner.dart';
-import 'package:bookstay/core/models/temple.dart';
-import 'package:bookstay/core/services/fetch_data.dart';
-import 'package:bookstay/features/widgets/banner_carousel.dart';
-import 'package:bookstay/features/widgets/nearby_places.dart';
-import 'package:bookstay/features/widgets/small_banner_card.dart';
-import 'package:bookstay/features/widgets/temple_timings_card.dart';
-import 'package:bookstay/features/widgets/wallpaper_card.dart';
-import 'package:bookstay/utils/color.schemes.g.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'dart:io';
+import 'package:go_router/go_router.dart';
+import 'package:yatrify/core/models/base_banner.dart';
+import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/core/services/fetch_data.dart';
+import 'package:yatrify/core/services/firebase_manager_service.dart';
+import 'package:yatrify/features/app_update/app_update.dart';
+import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
+import 'package:yatrify/features/widgets/banner_carousel.dart';
+import 'package:yatrify/features/widgets/nearby_places.dart';
+import 'package:yatrify/features/widgets/small_banner_card.dart';
+import 'package:yatrify/features/widgets/temple_timings_card.dart';
+import 'package:yatrify/features/widgets/wallpaper_card.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import '../widgets/service_widget.dart';
 import '../widgets/temple_media_widget.dart';
 
-class TempleHomePage extends StatelessWidget {
+class TempleHomePage extends StatefulWidget {
   const TempleHomePage({super.key});
 
   @override
+  State<TempleHomePage> createState() => _TempleHomePageState();
+}
+
+class _TempleHomePageState extends State<TempleHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseManager().setCurrentScreen('LandedOnHomeScreen');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AppUpdateChecker().checkForUpdate(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Temple>(
-      future: fetchTempleData(),
-      builder: (context, snapshot) {
-        //final temple = snapshot.data!;
-        return Scaffold(
-          backgroundColor: whiteColor,
-          appBar: snapshot.connectionState == ConnectionState.waiting
-              ? PreferredSize(
-                  preferredSize: const Size.fromHeight(42),
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: 21,
-                        width: double.infinity,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                )
-              : PreferredSize(
-                  preferredSize: const Size.fromHeight(42),
-                  child: AppBar(
-                    centerTitle: true,
-                    backgroundColor: whiteColor,
-                    forceMaterialTransparency: true,
-                    title: (snapshot.hasData &&
-                            snapshot.data!.logo != null &&
-                            snapshot.data!.logo!.isNotEmpty)
-                        ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl: snapshot.data!.logo!,
-                                height: 30,
-                                width: 30,
-                                errorWidget: (context, url, error) =>
-                                    const Icon(
-                                  Icons.error,
-                                  color: primaryColor,
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Yatrify',
-                                style: context.style.titleLarge!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: fontcolor),
-                              ),
-                            ],
-                          )
-                        : Text(
-                            'Yatrify',
-                            style: context.style.titleLarge!.copyWith(
-                                fontWeight: FontWeight.bold, color: fontcolor),
+    return ValueListenableBuilder<bool>(
+        valueListenable: FirebaseManagerService.isDevelopment,
+        builder: (context, isDev, _) {
+          return FutureBuilder<Temple>(
+            key: ValueKey(isDev),
+            future: fetchTempleData(),
+            builder: (context, snapshot) {
+              //final temple = snapshot.data!;
+              return Scaffold(
+                backgroundColor: whiteColor,
+                appBar: snapshot.connectionState == ConnectionState.waiting
+                    ? PreferredSize(
+                        preferredSize: const Size.fromHeight(42),
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              height: 21,
+                              width: double.infinity,
+                              color: Colors.white,
+                            ),
                           ),
-                    actions: [
-                      IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.share))
-                    ],
-                  ),
-                ),
-          body: snapshot.connectionState == ConnectionState.waiting
-              ? _buildShimmerPlaceholder(context)
-              : snapshot.hasError
-                  ? Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    )
-                  : _buildTempleBody(context, snapshot.data!),
-        );
-      },
-    );
+                        ),
+                      )
+                    : PreferredSize(
+                        preferredSize: const Size.fromHeight(42),
+                        child: AppBar(
+                          centerTitle: true,
+                          backgroundColor: whiteColor,
+                          forceMaterialTransparency: true,
+                          title: (snapshot.hasData &&
+                                  snapshot.data!.logo != null &&
+                                  snapshot.data!.logo!.isNotEmpty)
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: snapshot.data!.logo!,
+                                      height: 30,
+                                      width: 30,
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(
+                                        Icons.error,
+                                        color: primaryColor,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      FirebaseManagerService.isDevelopment.value
+                                          ? 'Yatrify (Dev)'
+                                          : 'Yatrify',
+                                      style: context.style.titleLarge!.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: fontcolor),
+                                    ),
+                                  ],
+                                )
+                              : Text(
+                                  'Yatrify',
+                                  style: context.style.titleLarge!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: fontcolor),
+                                ),
+                          actions: [
+                            IconButton(
+                              onPressed: () async {
+                                await Future.delayed(Duration.zero);
+                                final url = Platform.isAndroid
+                                    ? 'https://play.google.com/store/apps/details?id=com.yatrify.store'
+                                    : 'https://apps.apple.com/app/idYOUR_APP_ID';
+
+                                final text =
+                                    'Check out this app on ${Platform.isAndroid ? 'Play Store' : 'App Store'}!';
+                                final params = ShareParams(
+                                  text: url,
+                                  title: text,
+                                );
+                                await SharePlus.instance.share(params);
+                                FirebaseManager().logEvent(
+                                    FirebaseEvent.buttonClick,
+                                    parameters: {'button_name': 'share'});
+                              },
+                              icon: const Icon(Icons.share),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                context.push(
+                                  '/settings',
+                                  extra: {
+                                    'privacyPolicy':
+                                        snapshot.data!.privacyPolicy,
+                                    'termsAndCondition':
+                                        snapshot.data!.termsAndCondition,
+                                    'password': snapshot.data!.password,
+                                  },
+                                );
+                              },
+                              icon: const Icon(Icons.settings),
+                            ),
+                            // Switch(
+                            //   activeThumbColor: Colors.green,
+                            //   value: FirebaseManagerService.isDevelopment.value,
+                            //   onChanged: (value) {
+                            //     FirebaseManagerService.isDevelopment.value =
+                            //         value;
+                            //   },
+                            // ),
+                          ],
+                        ),
+                      ),
+                body: snapshot.connectionState == ConnectionState.waiting
+                    ? _buildShimmerPlaceholder(context)
+                    : snapshot.hasError
+                        ? Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          )
+                        : _buildTempleBody(context, snapshot.data!),
+              );
+            },
+          );
+        });
   }
 
   Widget _buildTempleBody(BuildContext context, Temple temple) {
@@ -235,6 +304,7 @@ class TempleHomePage extends StatelessWidget {
                     return ServiceCard(
                       services: service,
                       calender: temple.calender,
+                      webLogo: temple.webLogo,
                     );
                   },
                 ),

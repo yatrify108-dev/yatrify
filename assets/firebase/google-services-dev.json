@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "684409727216",
+    "project_id": "yatrify-680d9",
+    "storage_bucket": "yatrify-680d9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684409727216:android:3d516c98f7f070ff8eba35",
+        "android_client_info": {
+          "package_name": "com.yatrify.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7HULhAj6sakYwSe1UF2fw0pzaaqRo58A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

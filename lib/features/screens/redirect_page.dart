@@ -1,12 +1,20 @@
-import 'package:bookstay/features/widgets/redirect_widget.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/features/widgets/redirect_widget.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class RedirectPage extends StatefulWidget {
   final String url;
-  const RedirectPage({super.key, required this.url});
+  final String? title;
+  final String? subTitle;
+  final String webLogo;
+  const RedirectPage({
+    super.key,
+    required this.url,
+    this.title,
+    this.subTitle,
+    required this.webLogo,
+  });
 
   @override
   State<RedirectPage> createState() => _RedirectPageState();
@@ -48,14 +56,11 @@ class _RedirectPageState extends State<RedirectPage> {
       //   foregroundColor: Colors.black,
       //   elevation: 0,
       // ),
-      body: 
-      
-       RedirectWidget(
-          icon: Icons.open_in_browser,
-          title: label.openingWebsite,
-          subtitle: label.redirectingToWebsite,
-        ),
+      body: RedirectWidget(
+        webLogo: widget.webLogo,
+        title: widget.title ?? label.openingWebsite,
+        subtitle: widget.subTitle ?? label.redirectingToWebsite,
+      ),
     );
   }
 }
-

@@ -1,11 +1,11 @@
-import 'package:bookstay/core/models/pg.dart';
-import 'package:bookstay/features/screens/responsive.dart';
-import 'package:bookstay/features/widgets/header_section.dart';
-import 'package:bookstay/features/widgets/hover_to_expand.dart';
-import 'package:bookstay/features/widgets/pg_mobile_card.dart';
-import 'package:bookstay/features/widgets/pg_web_card.dart';
-import 'package:bookstay/utils/color.schemes.g.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/core/models/pg.dart';
+import 'package:yatrify/features/screens/responsive.dart';
+import 'package:yatrify/features/widgets/header_section.dart';
+import 'package:yatrify/features/widgets/hover_to_expand.dart';
+import 'package:yatrify/features/widgets/pg_mobile_card.dart';
+import 'package:yatrify/features/widgets/pg_web_card.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

@@ -1,11 +1,14 @@
-import 'package:bookstay/features/widgets/redirect_widget.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/features/widgets/redirect_widget.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoPlayerPage extends StatefulWidget {
   final String videoUrl;
-  const VideoPlayerPage({super.key, required this.videoUrl});
+  const VideoPlayerPage({
+    super.key,
+    required this.videoUrl,
+  });
 
   @override
   State<VideoPlayerPage> createState() => _VideoPlayerPageState();
@@ -51,10 +54,27 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             elevation: 0,
           ),
           body: isLoading
-              ? RedirectWidget(icon: Icons.video_library, title: label.openingBrowser, subtitle: label.redirectingToVideo,)
+              ? RedirectWidget(
+                  webLogo: '',
+                  title: label.openingBrowser,
+                  subtitle: label.redirectingToVideo,
+                )
               : YoutubePlayerBuilder(
-                  player: YoutubePlayer(controller: _controller),
-                  builder: (context, player) => Center(child: player),
+                  player: YoutubePlayer(
+                    controller: _controller,
+                    // showVideoProgressIndicator: true,
+                    // progressIndicatorColor: Colors.red,
+                  ),
+                  builder: (context, player) => Center(
+                    child: FractionallySizedBox(
+                      heightFactor: 0.85,
+                      widthFactor: 1.0,
+                      child: AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: player,
+                      ),
+                    ),
+                  ),
                 ),
         );
       },

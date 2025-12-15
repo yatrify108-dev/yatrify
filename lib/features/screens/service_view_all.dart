@@ -1,6 +1,6 @@
-import 'package:bookstay/core/models/temple.dart';
-import 'package:bookstay/utils/color.schemes.g.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/service_widget.dart';
@@ -33,6 +33,7 @@ class ServiceViewAll extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             final s = temple.services[index];
+            
             return GestureDetector(
               onTap: () {
                 context.push(
@@ -46,6 +47,7 @@ class ServiceViewAll extends StatelessWidget {
               child: ServiceCard(
                 services: s,
                 calender: temple.calender,
+                webLogo: temple.webLogo,
               ),
             );
           },

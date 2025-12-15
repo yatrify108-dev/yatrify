@@ -1,7 +1,7 @@
-import 'package:bookstay/core/models/temple.dart';
-import 'package:bookstay/features/providers/router_provider.dart';
-import 'package:bookstay/features/widgets/custom_conatiner.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
+import 'package:yatrify/utils/extensions.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,14 +12,15 @@ class ServiceCard extends StatelessWidget {
     super.key,
     required this.services,
     required this.calender,
+    required this.webLogo,
   });
 
   final Services services;
   final Map<String, List<String>>? calender;
+  final String webLogo;
 
   @override
   Widget build(BuildContext context) {
-    final label = context.labels;
     return GestureDetector(
       onTap: () {
         context.push(
@@ -27,38 +28,54 @@ class ServiceCard extends StatelessWidget {
           extra: {
             'service': services,
             'calendar': calender,
+            'webLogo': webLogo,
           },
+        );
+        FirebaseManager().logEvent(
+          FirebaseEvent.buttonClick,
+          parameters: {'button_name': '${services.name}_service'},
         );
       },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: whiteColor,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-             BoxShadow(
-            color: Colors.black.withOpacity(0.09),
-            blurRadius: 4,
-            spreadRadius: 1,
-            offset: const Offset(0, 0)
-          )
-          ]
-        ),
+            color: whiteColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.09),
+                blurRadius: 4,
+                spreadRadius: 1,
+                offset: const Offset(0, 0),
+              ),
+            ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(6),
               // height: 40,
               // width: 40,
               decoration:
                   const BoxDecoration(shape: BoxShape.circle, color: bgColor),
-              child: Image.asset(
-                'assets/icon/service_icon.png',
-                height: 18,
-                width: 18,
-              ),
+              child: services.icon.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: services.icon,
+                      height: 20,
+                      width: 20,
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.error,
+                        size: 18,
+                        color: primaryColor,
+                      ),
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/icon/service_icon.png',
+                      height: 18,
+                      width: 18,
+                    ),
             ),
             const SizedBox(
               height: 8,
@@ -66,7 +83,9 @@ class ServiceCard extends StatelessWidget {
             Text(
               services.name,
               style: context.style.titleSmall!.copyWith(
-                  color: fontcolor, fontWeight: FontWeight.bold,),
+                color: fontcolor,
+                fontWeight: FontWeight.bold,
+              ),
               maxLines: 2,
             ),
             // Expanded(

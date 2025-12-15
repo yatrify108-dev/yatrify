@@ -131,13 +131,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get evening => 'Evening';
 
   @override
-  String get bojana => 'Bojana';
+  String get bojana => 'Bhojana';
 
   @override
   String get darshanaOpen => 'Darshana Open';
 
   @override
-  String get darshanaClose => 'Darshana Close';
+  String get darshanaClose => 'Darshana Closed';
 
   @override
   String get direction => 'Direction';
@@ -165,4 +165,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get download => 'Download';
+
+  @override
+  String get poojaNotAvailable => 'Pooja not available on Ekadashi';
+
+  @override
+  String get pleaseSelectAnotherDate => 'Please select another date';
+
+  @override
+  String get okay => 'Okay';
+
+  @override
+  String get specialPoojaDay => 'Special Pooja Day';
+
+  @override
+  String get ashleshaNakshatraSpecialPooja =>
+      'Ashlesha Nakshatra – Special pooja available!';
+
+  @override
+  String get poojaAvailable => 'Pooja Available';
+
+  @override
+  String get youCanBookPooja => 'You can book pooja on this date';
+
+  @override
+  String get openingTemplesOfficialPage => 'Opening temple’s official page';
+
+  @override
+  String get yourSpiritual => 'your spiritual journey continues';
 }

@@ -46,9 +46,9 @@
     "redirectingToWebsite": "Redirecting to website...",
     "morning": "Morning",
     "evening": "Evening",
-    "bojana": "Bojana",
+    "bojana": "Bhojana",
     "darshanaOpen": "Darshana Open",
-    "darshanaClose": "Darshana Close",
+    "darshanaClose": "Darshana Closed",
     "direction": "Direction",
     "rituals": "Rituals",
     "howToBook": "How to Book",
@@ -57,5 +57,14 @@
     "available": "Available",
     "wallpapers": "Wallpapers",
     "share": "Share",
-    "download": "Download"
+    "download": "Download",
+    "poojaNotAvailable": "Pooja not available on Ekadashi",
+    "pleaseSelectAnotherDate": "Please select another date",
+    "okay": "Okay",
+    "specialPoojaDay": "Special Pooja Day",
+    "ashleshaNakshatraSpecialPooja": "Ashlesha Nakshatra – Special pooja available!",
+    "poojaAvailable": "Pooja Available",
+    "youCanBookPooja": "You can book pooja on this date",
+    "openingTemplesOfficialPage": "Opening temple’s official page",
+    "yourSpiritual": "your spiritual journey continues"
 }

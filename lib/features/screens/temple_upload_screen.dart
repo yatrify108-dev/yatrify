@@ -1,8 +1,8 @@
-import 'package:bookstay/core/models/temple.dart';
-import 'package:bookstay/core/services/upload_temple_data.dart';
-import 'package:bookstay/features/widgets/app_button.dart';
-import 'package:bookstay/utils/extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:yatrify/core/services/firebase_manager_service.dart';
+import 'package:yatrify/core/services/upload_temple_data.dart';
+import 'package:yatrify/utils/extensions.dart';
+import 'package:yatrify/core/models/temple.dart';
 
 class TempleUploadScreen extends StatefulWidget {
   const TempleUploadScreen({super.key});
@@ -14,29 +14,23 @@ class TempleUploadScreen extends StatefulWidget {
 class _TempleUploadScreenState extends State<TempleUploadScreen> {
   final ValueNotifier<bool> isLoading = ValueNotifier(false);
 
-  Future<void> _handleUpload() async {
-  print("Upload started");
-  isLoading.value = true;
+  Future<void> _upload(bool toDev) async {
+    try {
+      isLoading.value = true;
 
-  try {
-    await uploadTempleDataToFirebase(templeData);
-    print("Upload success");
-    context.message("Temple data uploaded successfully");
-  } catch (e, st) {
-    print("Upload error: $e");
-    print("StackTrace: $st");
-    context.message("Upload failed: $e");
-  } finally {
-    isLoading.value = false;
-    print("Loading set to false");
-  }
-}
+      final app =
+          toDev ? FirebaseManagerService.devApp! : FirebaseManagerService.prodApp!;
 
+      await uploadTempleDataToFirebase(templeData, app);
 
-  @override
-  void dispose() {
-    isLoading.dispose();
-    super.dispose();
+      context.message(
+        toDev ? "Uploaded to DEVELOPMENT" : "Uploaded to PRODUCTION",
+      );
+    } catch (e) {
+      context.message("Upload Failed: $e");
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   @override
@@ -46,15 +40,23 @@ class _TempleUploadScreenState extends State<TempleUploadScreen> {
       body: Center(
         child: ValueListenableBuilder<bool>(
           valueListenable: isLoading,
-          builder: (context, loading, _) {
-            return loading
-                ? const CircularProgressIndicator()
-                : AppButton(
-                    label: 'Upload Temple Data to Firebase',
-                    onPressed:(){
-                      _handleUpload();
-                    },
-                  );
+          builder: (_, loading, __) {
+            if (loading) return const CircularProgressIndicator();
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () => _upload(true),
+                  child: const Text("Upload to DEVELOPMENT"),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _upload(false),
+                  child: const Text("Upload to PRODUCTION"),
+                ),
+              ],
+            );
           },
         ),
       ),

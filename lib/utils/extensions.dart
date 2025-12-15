@@ -1,6 +1,6 @@
-import 'package:bookstay/core/models/pg.dart';
-import 'package:bookstay/l10n/app_localizations.dart';
-import 'package:bookstay/l10n/app_localizations_en.dart';
+import 'package:yatrify/core/models/pg.dart';
+import 'package:yatrify/l10n/app_localizations.dart';
+import 'package:yatrify/l10n/app_localizations_en.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';

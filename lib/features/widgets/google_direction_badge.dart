@@ -1,4 +1,4 @@
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

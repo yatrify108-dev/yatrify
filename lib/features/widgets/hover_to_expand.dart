@@ -1,6 +1,5 @@
-import 'package:bookstay/core/models/pg.dart';
-import 'package:bookstay/features/screens/responsive.dart';
-import 'package:bookstay/utils/color.schemes.g.dart';
+import 'package:yatrify/core/models/pg.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:flutter/material.dart';
 
 class HoverToExpand extends StatelessWidget {

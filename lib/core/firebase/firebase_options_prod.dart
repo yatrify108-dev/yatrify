@@ -14,7 +14,7 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
-class DefaultFirebaseOptions {
+class DefaultFirebaseOptionsProd {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       return web;
@@ -47,29 +47,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD6IioBFtbRoLwmX4yh-xT2tuxWQh5HkLY',
-    appId: '1:512892847639:web:8ddbdc8f90fb461b1e3e52',
-    messagingSenderId: '512892847639',
-    projectId: 'bookstay-46eb6',
-    authDomain: 'bookstay-46eb6.firebaseapp.com',
-    storageBucket: 'bookstay-46eb6.firebasestorage.app',
-    measurementId: 'G-3Z8BSH93W5',
+    apiKey: 'AIzaSyBUyFYHJeGPPXvYQANGfYMzMfcIxDUJTmw',
+    appId: '1:203562774276:web:c992063eb7c95df83daa51',
+    messagingSenderId: '203562774276',
+    projectId: 'yatrify-72f71',
+    authDomain: 'yatrify-72f71.firebaseapp.com',
+    storageBucket: 'yatrify-72f71.firebasestorage.app',
+    measurementId: 'G-5WBW2PCM7R',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAKL7FFX4X1gXAYgEMgnIzpXX2YHydbPf0',
-    appId: '1:512892847639:android:ca78ad1ee9d6fc951e3e52',
-    messagingSenderId: '512892847639',
-    projectId: 'bookstay-46eb6',
-    storageBucket: 'bookstay-46eb6.firebasestorage.app',
+    apiKey: 'AIzaSyAo3BSsV5NEiRm7PKQmbBSYlj0oAFFYWvE',
+    appId: '1:203562774276:android:628d59c7b1c6596e3daa51',
+    messagingSenderId: '203562774276',
+    projectId: 'yatrify-72f71',
+    storageBucket: 'yatrify-72f71.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCLWgE3w7NhYcmPuS-CM_7PoSSbvqN9pf4',
-    appId: '1:512892847639:ios:429b4b64dc1e8b6b1e3e52',
-    messagingSenderId: '512892847639',
-    projectId: 'bookstay-46eb6',
-    storageBucket: 'bookstay-46eb6.firebasestorage.app',
-    iosBundleId: 'com.bookstay.store',
+    apiKey: 'AIzaSyCC8QeaBu7Q1rLqFvymXb8mGkT_RFO9SL4',
+    appId: '1:203562774276:ios:e88299b5e2e866e23daa51',
+    messagingSenderId: '203562774276',
+    projectId: 'yatrify-72f71',
+    storageBucket: 'yatrify-72f71.firebasestorage.app',
+    iosBundleId: 'com.yatrify.store',
   );
 }

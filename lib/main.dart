@@ -1,14 +1,21 @@
-import 'package:bookstay/features/providers/router_provider.dart';
-import 'package:bookstay/firebase_options.dart';
-import 'package:bookstay/l10n/app_localizations.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:ui';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:yatrify/core/services/firebase_manager_service.dart';
+import 'package:yatrify/features/providers/router_provider.dart';
+import 'package:yatrify/l10n/app_localizations.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await FirebaseManagerService.init();
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   runApp(const MyApp());
 }
 
@@ -20,9 +27,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'GudiGo',
+      title: 'Yatrify',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+       // colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         useMaterial3: true,
       ),
       routerConfig: router,

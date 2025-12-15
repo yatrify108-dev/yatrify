@@ -1,6 +1,7 @@
-import 'package:bookstay/features/widgets/nearby_places_view_card.dart';
-import 'package:bookstay/utils/color.schemes.g.dart';
-import 'package:bookstay/utils/extensions.dart';
+import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
+import 'package:yatrify/features/widgets/nearby_places_view_card.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
+import 'package:yatrify/utils/extensions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../screens/responsive.dart';
@@ -43,8 +44,14 @@ class NearByPlacesCard<T> extends StatelessWidget {
                       isScrollControlled: true,
                       context: context,
                       builder: (context) {
-                        return NearByPlacesViewCard(nearByPlaces: media,);
+                        return NearByPlacesViewCard(
+                          nearByPlaces: media,
+                        );
                       },
+                    );
+                    FirebaseManager().logEvent(
+                      FirebaseEvent.buttonClick,
+                      parameters: {'button_name': '${media.name}_clicked'},
                     );
                     // context.push('/nearby-places-view',extra: media);
                   },
@@ -135,5 +142,3 @@ class NearByPlacesCard<T> extends StatelessWidget {
     );
   }
 }
-
-
