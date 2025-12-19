@@ -97,5 +97,5 @@ class FirebaseManagerService {
     }
 
     return map;
-  }
+  } 
 }

@@ -78,14 +78,17 @@ class _TempleTimingsCardState extends State<TempleTimingsCard> {
   @override
   Widget build(BuildContext context) {
     final label = context.labels;
+    final isKannada =
+    Localizations.localeOf(context).languageCode == 'kn';
+
     return GestureDetector(
-      onTap: (){
-         //context.push('/temple-timings-view', extra: widget.timings);
+      onTap: () {
+        //context.push('/temple-timings-view', extra: widget.timings);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding:  EdgeInsets.symmetric(horizontal: isKannada?10: 16, vertical: 16),
           decoration: BoxDecoration(
               color: whiteColor,
               borderRadius: BorderRadius.circular(16),
@@ -104,7 +107,12 @@ class _TempleTimingsCardState extends State<TempleTimingsCard> {
                 children: [
                   Text(
                     label.templeTimings,
-                    style: context.style.titleMedium!.copyWith(
+                    style: isKannada?
+                    context.style.titleSmall!.copyWith(
+                        color: fontcolor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16):
+                    context.style.titleMedium!.copyWith(
                         color: fontcolor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
@@ -112,33 +120,43 @@ class _TempleTimingsCardState extends State<TempleTimingsCard> {
                   ValueListenableBuilder<bool>(
                     valueListenable: isOpenNotifier,
                     builder: (context, isOpen, _) {
-                      return Container(
-                          padding:
-                              const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                          decoration: BoxDecoration(
+                      return Flexible(
+                        child: IntrinsicWidth(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
+                            decoration: BoxDecoration(
                               color: Colors.grey.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                color: isOpen ? Colors.green : Colors.red,
-                                size: 16,
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                isOpen ? label.darshanaOpen : label.darshanaClose,
-                                style: context.style.titleSmall!.copyWith(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
                                   color: isOpen ? Colors.green : Colors.red,
+                                  size: 16,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 2),
+                                Flexible(
+                                  child: Text(
+                                    isOpen
+                                        ? label.darshanaOpen
+                                        : label.darshanaClose,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: context.style.titleSmall!.copyWith(
+                                      color: isOpen ? Colors.green : Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        );
+                        ),
+                      );
                     },
-                  )
+                  ),
                 ],
               ),
               const SizedBox(
@@ -149,8 +167,8 @@ class _TempleTimingsCardState extends State<TempleTimingsCard> {
                 children: [
                   if (widget.timings.slots.isNotEmpty)
                     Expanded(
-                        child: _buildTimingRow(
-                            context, label.morning, widget.timings.slots.first)),
+                        child: _buildTimingRow(context, label.morning,
+                            widget.timings.slots.first)),
                   if (widget.timings.slots.length > 1)
                     Expanded(
                         child: _buildTimingRow(

@@ -1,4 +1,5 @@
 import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class RathosthavaSevaWidget extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          r.name,
+                          LocaleService.getLocalized(r.name),
                           style: context.style.titleMedium!.copyWith(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
@@ -62,9 +63,9 @@ class RathosthavaSevaWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   HtmlWidget(
-                    r.description,
+                    LocaleService.getLocalized(r.description),
                     textStyle: context.style.bodyMedium!.copyWith(fontSize: 16),
-                  //  textStyle: context.style.titleMedium,
+                    //  textStyle: context.style.titleMedium,
                     enableCaching: true,
                   ),
                 ],
@@ -76,7 +77,7 @@ class RathosthavaSevaWidget extends StatelessWidget {
             HtmlWidget(
               note!,
               textStyle: context.style.bodyMedium!.copyWith(fontSize: 16),
-            //  textStyle: context.style.titleMedium,
+              //  textStyle: context.style.titleMedium,
               enableCaching: true,
             ),
           ],

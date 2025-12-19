@@ -4,8 +4,10 @@ import 'package:yatrify/core/models/base_banner.dart';
 import 'package:yatrify/core/models/temple.dart';
 import 'package:yatrify/core/services/fetch_data.dart';
 import 'package:yatrify/core/services/firebase_manager_service.dart';
+import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/app_update/app_update.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
+import 'package:yatrify/features/screens/settings_page.dart';
 import 'package:yatrify/features/widgets/banner_carousel.dart';
 import 'package:yatrify/features/widgets/nearby_places.dart';
 import 'package:yatrify/features/widgets/small_banner_card.dart';
@@ -33,8 +35,13 @@ class _TempleHomePageState extends State<TempleHomePage> {
   void initState() {
     super.initState();
     FirebaseManager().setCurrentScreen('LandedOnHomeScreen');
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
       AppUpdateChecker().checkForUpdate(context);
+      final isFirstLaunch = await LocaleService.isFirstLaunch();
+      if(isFirstLaunch){
+        showLanguageDialog(context);
+        await LocaleService.setFirstLaunchDone();
+      }
     });
   }
 
@@ -295,6 +302,7 @@ class _TempleHomePageState extends State<TempleHomePage> {
                     crossAxisCount: 3,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 10,
+                    childAspectRatio: 0.87,
                     //childAspectRatio: 1.0,
                   ),
                   shrinkWrap: true,

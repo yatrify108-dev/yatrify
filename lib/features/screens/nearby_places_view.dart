@@ -1,5 +1,6 @@
 import 'package:yatrify/core/models/base_banner.dart';
 import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/widgets/app_button.dart';
 import 'package:yatrify/features/widgets/banner_carousel.dart';
 import 'package:yatrify/utils/extensions.dart';
@@ -51,7 +52,7 @@ class NearbyPlacesView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: HtmlWidget(
-                nearByPlaces.description,
+               LocaleService.getLocalized( nearByPlaces.description),
                 textStyle: context.style.bodyMedium!.copyWith(fontSize: 16),
                 enableCaching: true,
               ),
