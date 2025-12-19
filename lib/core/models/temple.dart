@@ -648,7 +648,7 @@ class Bhajans {
 //       rituals: {
 //         'en': '''
 // <p>
-// Sarpa Samskara is a 2-day pooja. Devotees are advised to visit the temple one day early.  
+// Sarpa Samskara is a 2-day pooja. Devotees are advised to visit the temple one day early.
 // Take a holy bath in the <b>Kumaradhara River</b> before entering the temple for the pooja, and wear simple, traditional clothes.
 // </p>
 
@@ -667,7 +667,7 @@ class Bhajans {
 // ''',
 //         'kn': '''
 // <p>
-// ಸರ್ಪ ಸಂಸ್ಕಾರವು 2-ದಿನಗಳ ಪೂಜೆ. ಭಕ್ತರು ಒಂದು ದಿನ ಮುಂಚಿತವಾಗಿ ದೇವಸ್ಥಾನಕ್ಕೆ ಬರುವಂತೆ ಸಲಹೆ ನೀಡಲಾಗಿದೆ.  
+// ಸರ್ಪ ಸಂಸ್ಕಾರವು 2-ದಿನಗಳ ಪೂಜೆ. ಭಕ್ತರು ಒಂದು ದಿನ ಮುಂಚಿತವಾಗಿ ದೇವಸ್ಥಾನಕ್ಕೆ ಬರುವಂತೆ ಸಲಹೆ ನೀಡಲಾಗಿದೆ.
 // ಪೂಜೆಗೆ ದೇವಸ್ಥಾನಕ್ಕೆ ಹೋಗುವ ಮೊದಲು <b>ಕುಮಾರಧಾರಾ ನದಿ</b>ಯಲ್ಲಿ ಪವಿತ್ರ ಸ್ನಾನ ಮಾಡಿ, ಸರಳ, ಪರಂಪರೆಯ ಉಡುಪುಗಳನ್ನು ಧರಿಸಬೇಕು.
 // </p>
 
@@ -1234,7 +1234,7 @@ class Bhajans {
 //       details: {
 //         'en': '''
 // <p>
-// Rising to an elevation of <b>1,712 meters</b>, Kumara Parvatha—also known as Pushpagiri—is the 
+// Rising to an elevation of <b>1,712 meters</b>, Kumara Parvatha—also known as Pushpagiri—is the
 // <b>second-highest peak in Karnataka</b> and one of the most popular trekking destinations in the Western Ghats.
 // </p>
 
@@ -1256,8 +1256,8 @@ class Bhajans {
 //       <li><b>Difficulty:</b> Long & Challenging</li>
 //       <li><b>Best For:</b> Experienced trekkers</li>
 //       <li>
-//         <b>Booking Option:</b>  
-//         Select <b>District – Kodagu</b> →  
+//         <b>Booking Option:</b>
+//         Select <b>District – Kodagu</b> →
 //         <b>Subrahmanya – Sheshaparvatha – Subrahmanya</b>
 //       </li>
 //     </ul>
@@ -1273,7 +1273,7 @@ class Bhajans {
 //       <li><b>Difficulty:</b> Easier compared to Subrahmanya route</li>
 //       <li><b>Best For:</b> Beginners & moderate trekkers</li>
 //       <li>
-//         <b>Booking Option:</b>  
+//         <b>Booking Option:</b>
 //         Select <b>Beedahalli – Kumara Parvatha – Beedahalli</b>
 //       </li>
 //     </ul>
@@ -1312,12 +1312,12 @@ class Bhajans {
 // ''',
 //         'kn': '''
 // <p>
-// <b>1,712 ಮೀಟರ್</b> ಎತ್ತರಕ್ಕೆ ಏರಿರುವ ಕುಮಾರ ಪರ್ವತ — ಪುಷ್ಪಗಿರಿ ಎಂದೂ ಕರೆಯಲ್ಪಡುವುದು — 
+// <b>1,712 ಮೀಟರ್</b> ಎತ್ತರಕ್ಕೆ ಏರಿರುವ ಕುಮಾರ ಪರ್ವತ — ಪುಷ್ಪಗಿರಿ ಎಂದೂ ಕರೆಯಲ್ಪಡುವುದು —
 // <b>ಕರ್ನಾಟಕದ ಎರಡನೇ ಅತಿ ಎತ್ತರದ ಶಿಖರ</b>ವಾಗಿದ್ದು, ಪಶ್ಚಿಮ ಘಟ್ಟಗಳಲ್ಲಿನ ಅತ್ಯಂತ ಜನಪ್ರಿಯ ಟ್ರೆಕ್ಕಿಂಗ್ ಸ್ಥಳಗಳಲ್ಲಿ ಒಂದಾಗಿದೆ.
 // </p>
 
 // <p>
-// ಈ ಟ್ರೆಕ್ ದಟ್ಟವಾದ ಕಾಡುಗಳು, ತೀವ್ರ ಏರುಬಾಗಿಲುಗಳು ಮತ್ತು ವಿಶಾಲ ಹುಲ್ಲುಮೈದಾನಗಳ ಸಂಯೋಜನೆಯನ್ನು ನೀಡುತ್ತಿದ್ದು, 
+// ಈ ಟ್ರೆಕ್ ದಟ್ಟವಾದ ಕಾಡುಗಳು, ತೀವ್ರ ಏರುಬಾಗಿಲುಗಳು ಮತ್ತು ವಿಶಾಲ ಹುಲ್ಲುಮೈದಾನಗಳ ಸಂಯೋಜನೆಯನ್ನು ನೀಡುತ್ತಿದ್ದು,
 // ಸಾಹಸ ಪ್ರಿಯರು ಮತ್ತು ಪ್ರಕೃತಿ ಪ್ರೇಮಿಗಳಿಗೆ ಮರೆಯಲಾಗದ ಅನುಭವವಾಗಿರುತ್ತದೆ.
 // </p>
 
@@ -1335,8 +1335,8 @@ class Bhajans {
 //       <li><b>ಕಷ್ಟದ ಮಟ್ಟ:</b> ದೀರ್ಘ ಮತ್ತು ಸವಾಲಿನದು</li>
 //       <li><b>ಯಾರಿಗೆ ಸೂಕ್ತ:</b> ಅನುಭವಿ ಟ್ರೆಕ್ಕರ್‌ಗಳಿಗೆ</li>
 //       <li>
-//         <b>ಬುಕಿಂಗ್ ಆಯ್ಕೆ:</b>  
-//         <b>ಜಿಲ್ಲೆ – ಕೊಡಗು</b> →  
+//         <b>ಬುಕಿಂಗ್ ಆಯ್ಕೆ:</b>
+//         <b>ಜಿಲ್ಲೆ – ಕೊಡಗು</b> →
 //         <b>ಸುಬ್ರಹ್ಮಣ್ಯ – ಶೇಷಪರ್ವತ – ಸುಬ್ರಹ್ಮಣ್ಯ</b> ಆಯ್ಕೆಮಾಡಿ
 //       </li>
 //     </ul>
@@ -1352,7 +1352,7 @@ class Bhajans {
 //       <li><b>ಕಷ್ಟದ ಮಟ್ಟ:</b> ಸುಬ್ರಹ್ಮಣ್ಯ ಮಾರ್ಗಕ್ಕಿಂತ ಸುಲಭ</li>
 //       <li><b>ಯಾರಿಗೆ ಸೂಕ್ತ:</b> ಆರಂಭಿಕರು ಮತ್ತು ಮಧ್ಯಮ ಮಟ್ಟದ ಟ್ರೆಕ್ಕರ್‌ಗಳಿಗೆ</li>
 //       <li>
-//         <b>ಬುಕಿಂಗ್ ಆಯ್ಕೆ:</b>  
+//         <b>ಬುಕಿಂಗ್ ಆಯ್ಕೆ:</b>
 //         <b>ಬೀಡಹಳ್ಳಿ – ಕುಮಾರ ಪರ್ವತ – ಬೀಡಹಳ್ಳಿ</b> ಆಯ್ಕೆಮಾಡಿ
 //       </li>
 //     </ul>
@@ -1571,7 +1571,7 @@ class Bhajans {
 //         'en': '''
 // <h3>Basaveshwara Temple, Kulkunda</h3>
 // <p>
-// Located just <b>4 km from Kukke Temple</b>, this <b>800-year-old shrine</b> showcases 
+// Located just <b>4 km from Kukke Temple</b>, this <b>800-year-old shrine</b> showcases
 // ancient Hindu architecture with a <b>unique Shivalinga on Nandi’s forehead</b>.
 // </p>
 //   ''',
@@ -1600,8 +1600,8 @@ class Bhajans {
 // <h3>Shri Somanatheshwara Temple</h3>
 
 // <p>
-// Located just <b>2 km from Kukke Temple</b>, the <b>Agrahara Somanath Temple</b> is an 
-// <b>800-year-old shrine</b> situated on the riverbank, reflecting the grandeur of 
+// Located just <b>2 km from Kukke Temple</b>, the <b>Agrahara Somanath Temple</b> is an
+// <b>800-year-old shrine</b> situated on the riverbank, reflecting the grandeur of
 // ancient Hindu architecture.
 // </p>
 // ''',
@@ -1609,8 +1609,8 @@ class Bhajans {
 // <h3>ಶ್ರೀ ಸೋಮನಾಥೇಶ್ವರ ದೇವಸ್ಥಾನ</h3>
 
 // <p>
-// ಕುಕ್ಕೆ ದೇವಸ್ಥಾನದಿಂದ ಕೇವಲ <b>2 ಕಿಮೀ ದೂರದಲ್ಲಿ</b>, <b>ಅಗ್ರಹಾರ ಸೋಮನಾಥ ದೇವಸ್ಥಾನ</b> 
-// ಒಂದು <b>800 ವರ್ಷದ ಹಳೆಯ ದೇವಸ್ಥಾನ</b>, ನದಿ ತೀರದಲ್ಲಿ ಸ್ಥಿತವಾಗಿದೆ ಮತ್ತು 
+// ಕುಕ್ಕೆ ದೇವಸ್ಥಾನದಿಂದ ಕೇವಲ <b>2 ಕಿಮೀ ದೂರದಲ್ಲಿ</b>, <b>ಅಗ್ರಹಾರ ಸೋಮನಾಥ ದೇವಸ್ಥಾನ</b>
+// ಒಂದು <b>800 ವರ್ಷದ ಹಳೆಯ ದೇವಸ್ಥಾನ</b>, ನದಿ ತೀರದಲ್ಲಿ ಸ್ಥಿತವಾಗಿದೆ ಮತ್ತು
 // ಪ್ರಾಚೀನ ಹಿಂದೂ ವಾಸ್ತುಶಿಲ್ಪದ ಮಹತ್ವವನ್ನು ಪ್ರತಿಬಿಂಬಿಸುತ್ತದೆ.
 // </p>
 // '''
@@ -1632,7 +1632,7 @@ class Bhajans {
 // <h3>Shri Shankapala Subrahmanya Swami Temple</h3>
 
 // <p>
-// It is located about <b>10 km from Kukke Temple</b>. A unique feature of this temple is 
+// It is located about <b>10 km from Kukke Temple</b>. A unique feature of this temple is
 // the presence of a <b>live anthill (hutta)</b> inside the sanctum.
 // </p>
 //   ''',
@@ -1640,7 +1640,7 @@ class Bhajans {
 // <h3>ಶ್ರೀ ಶಂಕಪಾಲ ಸುಬ್ರಹ್ಮಣ್ಯ ಸ್ವಾಮಿ ದೇವಸ್ಥಾನ</h3>
 
 // <p>
-// ಇದು <b>ಕುಕ್ಕೆ ದೇವಾಲಯದಿಂದ 10 ಕಿಮೀ</b> ದೂರದಲ್ಲಿದೆ. ಈ ದೇವಾಲಯದ ವಿಶೇಷತೆ ಎಂದರೆ 
+// ಇದು <b>ಕುಕ್ಕೆ ದೇವಾಲಯದಿಂದ 10 ಕಿಮೀ</b> ದೂರದಲ್ಲಿದೆ. ಈ ದೇವಾಲಯದ ವಿಶೇಷತೆ ಎಂದರೆ
 // ಪ್ರಾರ್ಥನಾ ಕ್ಷೇತ್ರದೊಳಗೆ <b>ಜೀವಂತ ಹುಟ್ಟ (ಹುಟ್ಟ)</b> ಇರುವುದು.
 // </p>
 //   ''',
@@ -1663,8 +1663,8 @@ class Bhajans {
 // <h3>Marakatha Durga Parameshwari Temple</h3>
 
 // <p>
-// Located about <b>8 km from Kukke Temple</b>, it sits on the banks of the <b>Kotitheertha River</b> 
-// flowing from Shesha Parvata. Surrounded by greenery, it’s believed that feeding the fish here 
+// Located about <b>8 km from Kukke Temple</b>, it sits on the banks of the <b>Kotitheertha River</b>
+// flowing from Shesha Parvata. Surrounded by greenery, it’s believed that feeding the fish here
 // and praying to the Lord fulfills one’s wishes.
 // </p>
 // ''',
@@ -1672,8 +1672,8 @@ class Bhajans {
 // <h3>ಮರಕಥ ದುರ್ಗಾ ಪರಮೇಶ್ವರಿ ದೇವಸ್ಥಾನ</h3>
 
 // <p>
-// ಕುಕ್ಕೇ ದೇವಸ್ಥಾನದಿಂದ ಸುಮಾರು <b>8 ಕಿ.ಮೀ.</b> ದೂರದಲ್ಲಿದ್ದು, ಇದು ಶೇಷಪರ್ವತದಿಂದ ಹರಿಯುವ <b>ಕೋಟೀಥೇರ್ಥ ನದಿ</b> ತೀರದಲ್ಲಿ 
-// ನಿಂತಿದೆ. ಹಸಿರು ಪರಿಸರದಿಂದ ಸುತ್ತಿಕೊಂಡಿರುವ ಈ ಸ್ಥಳದಲ್ಲಿ ಮೀನುಗಳನ್ನು ಆಹಾರ ನೀಡಿ ದೇವರಿಗೆ ಪ್ರಾರ್ಥನೆ ಮಾಡುವುದರಿಂದ 
+// ಕುಕ್ಕೇ ದೇವಸ್ಥಾನದಿಂದ ಸುಮಾರು <b>8 ಕಿ.ಮೀ.</b> ದೂರದಲ್ಲಿದ್ದು, ಇದು ಶೇಷಪರ್ವತದಿಂದ ಹರಿಯುವ <b>ಕೋಟೀಥೇರ್ಥ ನದಿ</b> ತೀರದಲ್ಲಿ
+// ನಿಂತಿದೆ. ಹಸಿರು ಪರಿಸರದಿಂದ ಸುತ್ತಿಕೊಂಡಿರುವ ಈ ಸ್ಥಳದಲ್ಲಿ ಮೀನುಗಳನ್ನು ಆಹಾರ ನೀಡಿ ದೇವರಿಗೆ ಪ್ರಾರ್ಥನೆ ಮಾಡುವುದರಿಂದ
 // ಮನೋವೀಕ್ಷೆಗಳು ಪೂರಣವಾಗುತ್ತದೆ ಎಂದು ನಂಬಲಾಗುತ್ತದೆ.
 // </p>
 // '''
@@ -1797,7 +1797,6 @@ class Bhajans {
 //     ],
 //   },
 // );
-
 
 //Production
 final templeData = Temple(
@@ -2408,60 +2407,142 @@ Booking for the Sarpa Samskara Pooja is done <b>online only</b> through the offi
       weblink: '',
       otherSevas: {
         'en': '''
-<h3>Daily Sevas</h3>
+<center>
+  <h1>Temple Seva Details</h1>
+  <h4><em>Please choose the seva according to your devotion</em></h4>
+</center>
 
-<ol>
-  <li>Mahapooje (Whole day included) – ₹400</li>
-  <li>Mahapooje (Afternoon included) – ₹250</li>
-  <li>Pavamana Panchamrita Abhisheka – ₹100</li>
-  <li>Kalasha Pooja Panchamrita Abhisheka – ₹100</li>
-  <li>Panchamrita Abhisheka – ₹75</li>
-  <li>Rudrabhisheka – ₹75</li>
-  <li>Ksheerabhisheka – ₹50</li>
-  <li>Sheshaseva – ₹100</li>
-  <li>Kartika Pooje – ₹50</li>
-  <li>Pancha Kajjaya – ₹20</li>
-  <li>Halu Payasa – ₹100</li>
-  <li>Chitranna Samarpane – ₹100</li>
-</ol>
+<hr>
 
-<h3>Harake Sevas</h3>
+<fieldset>
+  <legend><h3>Daily Sevas</h3></legend>
 
-<ol>
-  <li>Thulabhara – ₹75</li>
-  <li>Chavala – ₹25</li>
-  <li>Kivi Chuchhuvudu (Ear Piercing) – ₹20</li>
-  <li>Anna Prashana – ₹25</li>
-  <li>Namkarana – ₹150</li>
-</ol>
-  ''',
-        'kn': '''
-<h3>ದೈನಂದಿನ ಸೇವೆಗಳು</h3>
+  <table width="100%" cellpadding="12" cellspacing="0">
+    <tr>
+      <th align="left">Seva</th>
+      <th align="right">Offering (₹)</th>
+    </tr>
 
-<ol>
-  <li>ಮಹಾಪೂಜೆ (ಸಂಪೂರ್ಣ ದಿನ ಒಳಗೊಂಡಿದೆ) – ₹400</li>
-  <li>ಮಹಾಪೂಜೆ (ಮಧ್ಯಾಹ್ನ ಒಳಗೊಂಡಿದೆ) – ₹250</li>
-  <li>ಪವಮಾನ ಪಂಚಾಮೃತ ಅಭಿಷೇಕ – ₹100</li>
-  <li>ಕಲಶ ಪೂಜೆ ಪಂಚಾಮೃತ ಅಭಿಷೇಕ – ₹100</li>
-  <li>ಪಂಚಾಮೃತ ಅಭಿಷೇಕ – ₹75</li>
-  <li>ರುದ್ರಾಭಿಷೇಕ – ₹75</li>
-  <li>ಕ್ಷೀರಾಭಿಷೇಕ – ₹50</li>
-  <li>ಶೇಷಸೇವೆ – ₹100</li>
-  <li>ಕಾರ್ತಿಕ ಪೂಜೆ – ₹50</li>
-  <li>ಪಂಚ ಕಜ್ಜಾಯ – ₹20</li>
-  <li>ಹಾಲು ಪಾಯಸ – ₹100</li>
-  <li>ಚಿತ್ರಾನ್ನ ಸಮರ್ಪಣೆ – ₹100</li>
-</ol>
+    <tr>
+      <td>
+        <strong>Mahapooje</strong><br>
+        <small>Whole Day Seva</small>
+      </td>
+      <td align="right"><strong>400</strong></td>
+    </tr>
 
-<h3>ಹರಕೆ ಸೇವೆಗಳು</h3>
+    <tr>
+      <td>
+        <strong>Mahapooje</strong><br>
+        <small>Afternoon Seva</small>
+      </td>
+      <td align="right"><strong>250</strong></td>
+    </tr>
 
-<ol>
-  <li>ತೂಲಾಭಾರ – ₹75</li>
-  <li>ಚವಳ – ₹25</li>
-  <li>ಕಿವಿ ಚುಚ್ಚುವುದು – ₹20</li>
-  <li>ಅನ್ನಪ್ರಾಶನ – ₹25</li>
-  <li>ನಾಮಕರಣ – ₹150</li>
-</ol>
+    <tr><td colspan="2"><hr></td></tr>
+
+    <tr>
+      <td><strong>Pavamana Panchamrita Abhisheka</strong></td>
+      <td align="right">100</td>
+    </tr>
+
+    <tr>
+      <td><strong>Kalasha Pooja Panchamrita Abhisheka</strong></td>
+      <td align="right">100</td>
+    </tr>
+
+    <tr>
+      <td>Panchamrita Abhisheka</td>
+      <td align="right">75</td>
+    </tr>
+
+    <tr>
+      <td>Rudrabhisheka</td>
+      <td align="right">75</td>
+    </tr>
+
+    <tr>
+      <td>Ksheerabhisheka</td>
+      <td align="right">50</td>
+    </tr>
+
+    <tr><td colspan="2"><hr></td></tr>
+
+    <tr>
+      <td>Sheshaseva</td>
+      <td align="right">100</td>
+    </tr>
+
+    <tr>
+      <td>Kartika Pooje</td>
+      <td align="right">50</td>
+    </tr>
+
+    <tr>
+      <td>Pancha Kajjaya</td>
+      <td align="right">20</td>
+    </tr>
+
+    <tr>
+      <td>Halu Payasa</td>
+      <td align="right">100</td>
+    </tr>
+
+    <tr>
+      <td>Chitranna Samarpane</td>
+      <td align="right">100</td>
+    </tr>
+  </table>
+</fieldset>
+
+<br>
+
+<fieldset>
+  <legend><h3>Harake Sevas</h3></legend>
+
+  <table width="100%" cellpadding="12" cellspacing="0">
+    <tr>
+      <th align="left">Seva</th>
+      <th align="right">Offering (₹)</th>
+    </tr>
+
+    <tr>
+      <td>Thulabhara</td>
+      <td align="right">75</td>
+    </tr>
+
+    <tr>
+      <td>Chavala</td>
+      <td align="right">25</td>
+    </tr>
+
+    <tr>
+      <td>
+        <strong>Kivi Chuchhuvudu</strong><br>
+        <small>Ear Piercing Ceremony</small>
+      </td>
+      <td align="right">20</td>
+    </tr>
+
+    <tr>
+      <td>Anna Prashana</td>
+      <td align="right">25</td>
+    </tr>
+
+    <tr>
+      <td><strong>Namkarana</strong></td>
+      <td align="right"><strong>150</strong></td>
+    </tr>
+  </table>
+</fieldset>
+
+<hr>
+
+<center>
+  <p><strong>Note:</strong> Seva offerings are fixed as per temple guidelines.</p>
+  <p><em>Devotees are kindly requested to cooperate with temple staff.</em></p>
+</center>
+
   '''
       },
       calendarMaxDate: "31-03-2026",
@@ -2775,7 +2856,10 @@ The trek offers a rewarding mix of dense forests, steep climbs, and open grassla
   ],
   bhajans: [
     Bhajans(
-      name: {'en': 'Namo Namo Shri', 'kn': 'ನಮೋ ನಮೋ ಶ್ರೀ',},
+      name: {
+        'en': 'Namo Namo Shri',
+        'kn': 'ನಮೋ ನಮೋ ಶ್ರೀ',
+      },
       image:
           'https://res.cloudinary.com/dftflve8u/image/upload/c_crop,g_north_west,h_634,w_643,x_90,y_216/Kukke_Devaru3_sfoaya.jpg',
       url: 'https://youtu.be/8H2WFMXXgZI?si=enUE26paHHWDARqu',
@@ -2933,8 +3017,7 @@ and praying to the Lord fulfills one’s wishes.
     // ),
   ],
   wallpapers: [
-    
-     Wallpapers(
+    Wallpapers(
       shareTitle: "Subrahmanya",
       shareDescription: "Seek Subrahmanya Blessings",
       image:
@@ -3033,4 +3116,3 @@ and praying to the Lord fulfills one’s wishes.
     ],
   },
 );
-

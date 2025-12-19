@@ -72,9 +72,9 @@ Future<void> uploadTempleDataToFirebase(
                     })
                 .toList(),
             'availableDateIds':
-                s.availableDateIds?.map((id) => {'id': id}).toList(),
+                s.availableDateIds,
             'unavailableDateIds':
-                s.unavailableDateIds?.map((id) => {'id': id}).toList(),
+                s.unavailableDateIds,
             'isCalendar': s.isCalendar,
             'otherSevas': {
               'en': s.otherSevas?['en'] ?? '',
