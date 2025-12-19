@@ -1,3 +1,4 @@
+import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
 import 'package:yatrify/features/widgets/nearby_places_view_card.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
@@ -29,7 +30,7 @@ class NearByPlacesCard<T> extends StatelessWidget {
           height: 16,
         ),
         SizedBox(
-          height: 128,
+          height: 148,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: item.length,
@@ -77,7 +78,7 @@ class NearByPlacesCard<T> extends StatelessWidget {
                       SizedBox(
                         width: getRsponsiveImageWidth(context),
                         child: Text(
-                          '${media.name!}',
+                          LocaleService.getLocalized(media.name!),
                           style: context.style.titleSmall,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

@@ -1,4 +1,5 @@
 import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
 import 'package:yatrify/utils/extensions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -80,13 +81,15 @@ class ServiceCard extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Text(
-              services.name,
-              style: context.style.titleSmall!.copyWith(
-                color: fontcolor,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                LocaleService.getLocalized(services.name),
+                style: context.style.titleSmall!.copyWith(
+                  color: fontcolor,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 3,
               ),
-              maxLines: 2,
             ),
             // Expanded(
             //   child: Text(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yatrify/core/services/firebase_manager_service.dart';
+import 'package:yatrify/core/services/locale_service.dart';
+import 'package:yatrify/features/widgets/app_button.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
 
@@ -17,6 +18,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final label = context.labels;
     Future<void> launchUrlLink(String url) async {
       final uri = Uri.parse(url);
       if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
@@ -30,7 +32,7 @@ class SettingsPage extends StatelessWidget {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: whiteColor,
-        title: const Text('Settings'),
+        title: Text(label.settings),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -42,9 +44,9 @@ class SettingsPage extends StatelessWidget {
                   launchUrlLink(privacyPolicy!);
                 }
               },
-              child: const SettingsWidget(
+              child: SettingsWidget(
                 icon: Icons.privacy_tip,
-                title: 'Privacy Policy',
+                title: label.privacyPolicy,
               ),
             ),
             const SizedBox(
@@ -57,9 +59,9 @@ class SettingsPage extends StatelessWidget {
                   launchUrlLink(termsAndCondition!);
                 }
               },
-              child: const SettingsWidget(
+              child: SettingsWidget(
                 icon: Icons.text_snippet,
-                title: 'Terms and Conditions',
+                title: label.termsAndConditions,
               ),
             ),
             const SizedBox(
@@ -76,16 +78,28 @@ class SettingsPage extends StatelessWidget {
               child: FutureBuilder(
                   future: PackageInfo.fromPlatform(),
                   builder: (context, snapshot) {
-                    String versionTest = 'Loading...';
+                    String versionTest = label.loading;
                     if (snapshot.hasData) {
                       final info = snapshot.data!;
-                      versionTest = 'App Version - ${info.version}';
+                      versionTest = '${label.appVersion} - ${info.version}';
                     }
                     return SettingsWidget(
                       icon: Icons.system_update,
                       title: versionTest,
                     );
                   }),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            GestureDetector(
+              onTap: () {
+                showLanguageDialog(context);
+              },
+              child: SettingsWidget(
+                icon: Icons.language,
+                title: label.appLanguage,
+              ),
             ),
           ],
         ),
@@ -94,26 +108,125 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
+void showLanguageDialog(BuildContext context) {
+  final ValueNotifier<String> selectedLang =
+      ValueNotifier(LocaleService.localeNotifier.value.languageCode);
+      final label = context.labels;
+
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: ValueListenableBuilder<String>(
+            valueListenable: selectedLang,
+            builder: (context, value, _) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /// Title Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                       Text(
+                        label.selectAppLanguage,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      )
+                    ],
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  RadioTheme(
+                    data: RadioThemeData(
+                      fillColor:
+                          WidgetStateProperty.resolveWith<Color>((states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return primaryColor; // selected
+                        }
+                        return Colors.grey; // unselected
+                      }),
+                    ),
+                    child: RadioGroup<String>(
+                      groupValue: value,
+                      onChanged: (val) {
+                        if (val != null) selectedLang.value = val;
+                      },
+                      child: const Column(
+                        children: [
+                          RadioListTile(
+                            radioScaleFactor: 1.2,
+                            value: 'en',
+                            title:
+                                Text('English', style: TextStyle(fontSize: 16),),
+                          ),
+                          RadioListTile(
+                            radioScaleFactor: 1.2,
+                            value: 'kn',
+                            title:
+                                Text('ಕನ್ನಡ', style: TextStyle(fontSize: 16),),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  /// Apply Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: AppButton(
+                      label: label.apply,
+                      onPressed: () {
+                        LocaleService.setLocale(selectedLang.value);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
+        ),
+      );
+    },
+  );
+}
+
 void showDebugDialog(BuildContext context, String password) {
   final TextEditingController controller = TextEditingController();
+  final label = context.labels;
 
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('Debug', textAlign: TextAlign.center),
+      title: Text(label.debug, textAlign: TextAlign.center),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text("Please enter password to enter debug mode.",
-              textAlign: TextAlign.center),
+          Text(label.pleaseEnterPassword, textAlign: TextAlign.center),
           const SizedBox(
             height: 10,
           ),
           TextField(
             cursorColor: primaryColor,
             controller: controller,
-           // obscureText: true,
+            // obscureText: true,
             //  textAlign: TextAlign.center,
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -137,9 +250,9 @@ void showDebugDialog(BuildContext context, String password) {
           onPressed: () {
             context.pop();
           },
-          child: const Text(
-            "CANCEL",
-            style: TextStyle(color: primaryColor),
+          child: Text(
+            label.cancel,
+            style: const TextStyle(color: primaryColor),
           ),
         ),
         TextButton(
@@ -171,7 +284,7 @@ void showDebugDialog(BuildContext context, String password) {
                         // ),
                         // const SizedBox(height: 20),
                         Text(
-                          "Developer Mode",
+                          label.developerMode,
                           style:
                               context.style.titleMedium!.copyWith(fontSize: 18),
                         ),
@@ -180,7 +293,7 @@ void showDebugDialog(BuildContext context, String password) {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Debug Mode",
+                              label.debugMode,
                               style: context.style.bodyLarge,
                             ),
                             ValueListenableBuilder(
@@ -213,13 +326,13 @@ void showDebugDialog(BuildContext context, String password) {
                 },
               );
             } else {
-              context.message("Wrong password");
+              context.message(label.wrongPassword);
               controller.clear();
             }
           },
-          child: const Text(
-            "OK",
-            style: TextStyle(color: primaryColor),
+          child: Text(
+            label.ok,
+            style: const TextStyle(color: primaryColor),
           ),
         ),
       ],

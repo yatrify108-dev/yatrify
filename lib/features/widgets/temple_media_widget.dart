@@ -1,3 +1,4 @@
+import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
@@ -91,7 +92,7 @@ class TempleMediaWidget<T> extends StatelessWidget {
                       SizedBox(
                         width: getRsponsiveImageWidth(context),
                         child: Text(
-                          '${media.name!}',
+                          LocaleService.getLocalized(media.name!),
                           style: context.style.titleSmall,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

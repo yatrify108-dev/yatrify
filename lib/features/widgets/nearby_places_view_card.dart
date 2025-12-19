@@ -1,5 +1,6 @@
 import 'package:yatrify/core/models/base_banner.dart';
 import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
 import 'package:yatrify/features/widgets/app_button.dart';
 import 'package:yatrify/features/widgets/banner_carousel.dart';
@@ -40,7 +41,7 @@ class NearByPlacesViewCard extends StatelessWidget {
                     height: 12,
                   ),
                   HtmlWidget(
-                    nearByPlaces.description,
+                    LocaleService.getLocalized(nearByPlaces.description),
                     textStyle: context.style.bodyMedium!.copyWith(fontSize: 16),
                     enableCaching: true,
                   ),

@@ -1,4 +1,5 @@
 import 'package:yatrify/core/models/base_banner.dart';
+import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
 import 'package:yatrify/features/widgets/banner_carousel.dart';
 import 'package:yatrify/features/widgets/info_widget.dart';
@@ -153,7 +154,7 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
         centerTitle: true,
         forceMaterialTransparency: true,
         title: Text(
-          widget.service.name,
+          LocaleService.getLocalized(widget.service.name),
           style: context.style.titleLarge!
               .copyWith(fontSize: 22, fontWeight: FontWeight.w600),
         ),
@@ -219,8 +220,9 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                     child: RathosthavaSevaWidget(
                       rathotsavaSevaList:
                           widget.service.rathotsavaSevaList ?? [],
-                      note: widget.service.note,
-                      contactDetails: widget.service.contactDetails,
+                      note: LocaleService.getLocalized(widget.service.note),
+                      contactDetails: LocaleService.getLocalized(
+                          widget.service.contactDetails),
                     ),
                   )
                 : Column(
@@ -247,12 +249,13 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                       //     enableCaching: true,
                       //   ),
                       // ),
-                      if (widget.service.details!.isNotEmpty) ...[
+                      if ((LocaleService.getLocalized(widget.service.details!))
+                          .isNotEmpty) ...[
                         const SizedBox(height: 12),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: HtmlWidget(
-                            widget.service.details!,
+                            LocaleService.getLocalized(widget.service.details!),
                             enableCaching: true,
                             textStyle: context.style.bodyMedium!
                                 .copyWith(fontSize: 16),
@@ -285,47 +288,63 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                         ),
                         const SizedBox(height: 40),
                       ],
-                      if (widget.service.purpose!.isNotEmpty) ...[
+                      if ((LocaleService.getLocalized(widget.service.purpose!))
+                          .isNotEmpty) ...[
                         const SizedBox(height: 12),
                         ServiceDetailCard(
                             title: label.purpose,
-                            details: widget.service.purpose!,
+                            details: LocaleService.getLocalized(
+                                widget.service.purpose!),
                             icon: FontAwesomeIcons.solidStar)
                       ],
                       if (widget.service.otherSevas != null &&
-                          widget.service.otherSevas!.isNotEmpty) ...[
-                        const SizedBox(height: 12),
+                          (LocaleService.getLocalized(
+                                  widget.service.otherSevas!))
+                              .isNotEmpty) ...[
+                        const SizedBox(height: 16),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:
-                                widget.service.otherSevas!.map((category) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    category.categoryName,
-                                    style: context.style.titleLarge!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  ...category.sevas.map((seva) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2),
-                                        child: Text(
-                                          seva.title,
-                                          style: context.style.bodyMedium!
-                                              .copyWith(fontSize: 16),
-                                        ),
-                                      )),
-                                  const SizedBox(height: 12),
-                                ],
-                              );
-                            }).toList(),
+                          child: HtmlWidget(
+                            (LocaleService.getLocalized(
+                                widget.service.otherSevas)),
+                            textStyle: context.style.bodyMedium!
+                                .copyWith(fontSize: 16),
+                            enableCaching: true,
                           ),
                         ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                        //   child:
+                        //   Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children:
+                        //         widget.service.otherSevas!.map((category) {
+                        //       return Column(
+                        //         crossAxisAlignment: CrossAxisAlignment.start,
+                        //         children: [
+                        //           Text(
+                        //             LocaleService.getLocalized(category.categoryName),
+                        //             style: context.style.titleLarge!.copyWith(
+                        //               fontWeight: FontWeight.bold,
+                        //             ),
+                        //           ),
+                        //           const SizedBox(height: 6),
+                        //           ...category.sevas.map((seva) => Padding(
+                        //                 padding: const EdgeInsets.symmetric(
+                        //                     vertical: 2),
+                        //                 child: Text(
+                        //                   LocaleService.getLocalized(seva.title),
+                        //                   style: context.style.bodyMedium!
+                        //                       .copyWith(fontSize: 16),
+                        //                 ),
+                        //               )),
+                        //           const SizedBox(height: 12),
+                        //         ],
+                        //       );
+                        //     }).toList(),
+                        //   ),
+                        // ),
+                        const SizedBox(height: 20),
                       ],
 
                       // if (service.videos != null &&
@@ -388,43 +407,52 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                       // ],
 
                       if (widget.service.rituals != null &&
-                          widget.service.rituals!.isNotEmpty) ...[
+                          (LocaleService.getLocalized(widget.service.rituals!))
+                              .isNotEmpty) ...[
                         const SizedBox(
                           height: 8,
                         ),
                         ServiceDetailCard(
                             title: label.rituals,
-                            details: widget.service.rituals!,
+                            details: LocaleService.getLocalized(
+                                widget.service.rituals!),
                             icon: FontAwesomeIcons.dharmachakra)
                       ],
                       if (widget.service.howToBook != null &&
-                          widget.service.howToBook!.isNotEmpty) ...[
+                          (LocaleService.getLocalized(
+                                  widget.service.howToBook!))
+                              .isNotEmpty) ...[
                         const SizedBox(
                           height: 8,
                         ),
                         ServiceDetailCard(
                             title: label.howToBook,
-                            details: widget.service.howToBook!,
+                            details: LocaleService.getLocalized(
+                                widget.service.howToBook!),
                             icon: FontAwesomeIcons.calendarCheck)
                       ],
                       if (widget.service.fee != null &&
-                          widget.service.fee!.isNotEmpty) ...[
+                          (LocaleService.getLocalized(widget.service.fee!))
+                              .isNotEmpty) ...[
                         const SizedBox(
                           height: 8,
                         ),
                         ServiceDetailCard(
                             title: label.fee,
-                            details: widget.service.fee!,
+                            details:
+                                LocaleService.getLocalized(widget.service.fee!),
                             icon: FontAwesomeIcons.indianRupeeSign)
                       ],
                       if (widget.service.tips != null &&
-                          widget.service.tips!.isNotEmpty) ...[
+                          (LocaleService.getLocalized(widget.service.tips!))
+                              .isNotEmpty) ...[
                         const SizedBox(
                           height: 8,
                         ),
                         ServiceDetailCard(
                             title: label.tips,
-                            details: widget.service.tips!,
+                            details: LocaleService.getLocalized(
+                                widget.service.tips!),
                             icon: FontAwesomeIcons.solidLightbulb)
                       ],
                       if (widget.service.isCalendar!) ...[
@@ -542,7 +570,7 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                               Color bgColor;
                               Color textColor;
 
-                              if (allDayAvailable) {
+                             if (allDayAvailable) {
                                 // both id lists empty → everything green
                                 bgColor = greenlightBg;
                                 textColor = blackTx;
@@ -890,25 +918,25 @@ class FullCalendarPage extends StatelessWidget {
                   Color textColor;
 
                   if (allDayAvailable) {
-                    // both id lists empty → everything green
-                    bgColor = greenlightBg;
-                    textColor = blackTx;
-                  } else if (unavailableSet.contains(key)) {
-                    // Yekadashi → red (highest priority)
-                    bgColor = redBg;
-                    textColor = blackTx;
-                  } else if (availableSet.contains(key)) {
-                    // Ashlesha Nakshathra / Shudha Shasti (ids in available) → green
-                    bgColor = yellowBg;
+                                // both id lists empty → everything green
+                                bgColor = greenlightBg;
+                                textColor = blackTx;
+                              } else if (unavailableSet.contains(key)) {
+                                // Yekadashi → red (highest priority)
+                                bgColor = redBg;
+                                textColor = blackTx;
+                              } else if (availableSet.contains(key)) {
+                                // Ashlesha Nakshathra / Shudha Shasti (ids in available) → green
+                                bgColor = yellowBg;
 
-                    textColor = blackTx;
-                  } else {
-                    // Rest → light gray
-                    // bgColor = Colors.transparent;
-                    // textColor = grayTx;
-                    bgColor = greenlightBg;
-                    textColor = blackTx;
-                  }
+                                textColor = blackTx;
+                              } else {
+                                // Rest → light gray
+                                // bgColor = Colors.transparent;
+                                // textColor = grayTx;
+                                bgColor = greenlightBg;
+                                textColor = blackTx;
+                              }
                   return GestureDetector(
                     onTap: () {
                       if (bgColor == redBg) {

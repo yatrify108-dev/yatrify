@@ -193,4 +193,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yourSpiritual => 'your spiritual journey continues';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get termsAndConditions => 'Terms and Conditions';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get appVersion => 'App Version';
+
+  @override
+  String get debug => 'Debug';
+
+  @override
+  String get pleaseEnterPassword =>
+      'Please enter password to enter debug mode.';
+
+  @override
+  String get cancel => 'CANCEL';
+
+  @override
+  String get developerMode => 'Developer Mode';
+
+  @override
+  String get debugMode => 'Debug Mode';
+
+  @override
+  String get wrongPassword => 'Wrong password';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get appLanguage => 'App Language';
+
+  @override
+  String get selectAppLanguage => 'Select App Language';
+
+  @override
+  String get apply => 'Apply';
 }

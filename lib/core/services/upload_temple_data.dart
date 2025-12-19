@@ -5,7 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 
 import '../models/temple.dart';
 
-Future<void> uploadTempleDataToFirebase(Temple templeData, FirebaseApp app) async {
+Future<void> uploadTempleDataToFirebase(
+    Temple templeData, FirebaseApp app) async {
   final firestore = FirebaseFirestore.instanceFor(app: app);
   final templeDoc = firestore.collection('temple').doc('temple_master');
 
@@ -32,17 +33,35 @@ Future<void> uploadTempleDataToFirebase(Temple templeData, FirebaseApp app) asyn
         .map(
           (s) => {
             'id': s.id,
-            'name': s.name,
+            'name': {
+              'en': s.name['en'],
+              'kn': s.name['kn'],
+            },
             'icon': s.icon,
-            'purpose': s.purpose,
-            'details': s.details,
+            'purpose': {
+              'en': s.purpose?['en'] ?? '',
+              'kn': s.purpose?['kn'] ?? '',
+            },
+            'details': {
+              'en': s.details?['en'] ?? '',
+              'kn': s.details?['kn'] ?? '',
+            },
             'images': s.images,
             'bookNowButton': s.bookNowButton,
             'weblink': s.weblink,
-            'rituals': s.rituals,
+            'rituals': {
+              'en': s.rituals?['en'] ?? '',
+              'kn': s.rituals?['kn'] ?? '',
+            },
             'howToBook': s.howToBook,
-            'fee': s.fee,
-            'tips': s.tips,
+            'fee': {
+              'en': s.fee?['en'] ?? '',
+              'kn': s.fee?['kn'] ?? '',
+            },
+            'tips': {
+              'en': s.tips?['en'] ?? '',
+              'kn': s.tips?['kn'] ?? '',
+            },
             'calendarMaxDate': s.calendarMaxDate,
             'videos': s.videos
                 ?.map((v) => {
@@ -57,25 +76,47 @@ Future<void> uploadTempleDataToFirebase(Temple templeData, FirebaseApp app) asyn
             'unavailableDateIds':
                 s.unavailableDateIds?.map((id) => {'id': id}).toList(),
             'isCalendar': s.isCalendar,
-            'otherSevas': s.otherSevas
-                ?.map((c) => {
-                      'categoryName': c.categoryName,
-                      'sevas': c.sevas
-                          .map((seva) => {
-                                'title': seva.title,
-                              })
-                          .toList(),
-                    })
-                .toList(),
+            'otherSevas': {
+              'en': s.otherSevas?['en'] ?? '',
+              'kn': s.otherSevas?['kn'] ?? '',
+            },
+            // 'otherSevas': s.otherSevas
+            //     ?.map((c) => {
+            //           'categoryName': {
+            //             'en': c.categoryName['en'],
+            //             'kn': c.categoryName['kn'],
+            //           },
+            //           'sevas': c.sevas
+            //               .map((seva) => {
+            //                     'title': {
+            //                       'en': seva.title['en'],
+            //                       'kn': seva.title['kn'],
+            //                     },
+            //                   })
+            //               .toList(),
+            //         })
+            //     .toList(),
             'rathotsavaSevaList': s.rathotsavaSevaList
                 ?.map((r) => {
-                      'name': r.name,
+                      'name': {
+                        'en': r.name['en'],
+                        'kn': r.name['kn'],
+                      },
                       'price': r.price,
-                      'description': r.description,
+                      'description': {
+                        'en': r.description['en'],
+                        'kn': r.description['kn'],
+                      },
                     })
                 .toList(),
-                'note': s.note,
-                'contactDetails': s.contactDetails
+            'note': {
+              'en': s.note?['en'] ?? '',
+              'kn': s.note?['kn'] ?? '',
+            },
+            'contactDetails': {
+              'en': s.contactDetails?['en'] ?? '',
+              'kn': s.contactDetails?['kn'] ?? '',
+            },
           },
         )
         .toList(),
@@ -99,14 +140,20 @@ Future<void> uploadTempleDataToFirebase(Temple templeData, FirebaseApp app) asyn
         .toList(),
     'videos': templeData.videos
         ?.map((v) => {
-              'name': v.name,
+              'name': {
+                'en': v.name?['en'] ?? '',
+                'kn': v.name?['kn'] ?? '',
+              },
               'image': v.image,
               'url': v.url,
             })
         .toList(),
     'bhajans': templeData.bhajans
         ?.map((b) => {
-              'name': b.name,
+              'name': {
+                'en': b.name?['en'] ?? '',
+                'kn': b.name?['kn'] ?? '',
+              },
               'image': b.image,
               'url': b.url,
             })
@@ -117,10 +164,16 @@ Future<void> uploadTempleDataToFirebase(Temple templeData, FirebaseApp app) asyn
         )),
     'nearByPlaces': templeData.nearByPlaces
         ?.map((b) => {
-              'name': b.name,
+              'name': {
+                'en': b.name?['en'] ?? '',
+                'kn': b.name?['kn'] ?? '',
+              },
               'images': b.images,
               'url': b.url,
-              'description': b.description,
+              'description': {
+                'en': b.description?['en'] ?? '',
+                'kn': b.description?['kn'] ?? '',
+              },
               'directionButton': b.directionButton,
               'weblink': b.weblink,
             })
@@ -146,14 +199,13 @@ Future<void> uploadTempleDataToFirebase(Temple templeData, FirebaseApp app) asyn
   try {
     print("Uploading...");
     await templeDoc.set(templeMap).timeout(
-      const Duration(seconds: 10),
-      onTimeout: () => throw Exception("Upload timed out"),
-    );
+          const Duration(seconds: 10),
+          onTimeout: () => throw Exception("Upload timed out"),
+        );
 
     print("Upload complete");
   } catch (e) {
     print("Upload failed: $e");
     rethrow;
   }
-
 }
