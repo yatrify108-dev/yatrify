@@ -377,7 +377,7 @@ abstract class AppLocalizations {
   /// No description provided for @specialDay.
   ///
   /// In en, this message translates to:
-  /// **'Aslesha Nakshatra (Special Day)'**
+  /// **'Ashlesha Nakshatra (Special Day)'**
   String get specialDay;
 
   /// No description provided for @ekadashi.

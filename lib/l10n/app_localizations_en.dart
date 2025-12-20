@@ -149,7 +149,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howToBook => 'How to Book';
 
   @override
-  String get specialDay => 'Aslesha Nakshatra (Special Day)';
+  String get specialDay => 'Ashlesha Nakshatra (Special Day)';
 
   @override
   String get ekadashi => 'Ekadashi (Pooja Not Available)';
