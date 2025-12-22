@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:share_plus/share_plus.dart';
-
 import '../firebase_manager/firebase_manager.dart';
 
 class WallpaperPage extends StatefulWidget {
@@ -34,31 +33,58 @@ class _WallpaperPageState extends State<WallpaperPage> {
 
     Future<void> downloadImage(String url, String fileName) async {
       isDownloading.value = true;
+
       try {
-        final status = await Permission.photos.request();
-        final storageStatus = await Permission.storage.request();
+        final photosPermission = await Permission.photos.request();
+        final storagePermission = await Permission.storage.request();
 
-        if (status.isGranted || storageStatus.isGranted) {
-          final response = await Dio().get(
-            url,
-            options: Options(responseType: ResponseType.bytes),
+        if (!photosPermission.isGranted && !storagePermission.isGranted) {
+          showTopMessage(
+            context,
+            label.storagePermissionDenied,
+            type: MessageType.error,
           );
-          final bytes = Uint8List.fromList(response.data);
-
-          await PhotoManager.editor.saveImage(
-            bytes,
-            filename: "${fileName.replaceAll(' ', '_')}.jpg",
-          );
-
-          showTopMessage(context, 'Wallpaper downloaded successfully!',
-              type: MessageType.success);
-        } else {
-          showTopMessage(context, "Permission denied!",
-              type: MessageType.error);
+          return;
         }
-      } catch (e) {
-        showTopMessage(context, "Error saving image: $e",
-            type: MessageType.error);
+
+        final dio = Dio(
+          BaseOptions(
+            connectTimeout: const Duration(seconds: 15),
+            receiveTimeout: const Duration(seconds: 15),
+          ),
+        );
+
+        final response = await dio.get(
+          url,
+          options: Options(responseType: ResponseType.bytes),
+        );
+
+        final bytes = Uint8List.fromList(response.data);
+
+        await PhotoManager.editor.saveImage(
+          bytes,
+          filename: "${fileName.replaceAll(' ', '_')}.jpg",
+        );
+
+        showTopMessage(
+          context,
+          label.wallpaperDownloaded,
+          type: MessageType.success,
+        );
+      } on DioException catch (e, stackTrace) {
+        showTopMessage(
+          context,
+          label.noInternetConnection,
+          type: MessageType.error,
+        );
+        FirebaseManager().reportError(e, stackTrace);
+      } catch (e, stackTrace) {
+        showTopMessage(
+          context,
+          label.somethingWentWrong,
+          type: MessageType.error,
+        );
+        FirebaseManager().reportError(e, stackTrace);
       } finally {
         isDownloading.value = false;
       }
@@ -171,7 +197,7 @@ class _WallpaperPageState extends State<WallpaperPage> {
                             }
                           },
                           label: Text(
-                              downloading ? 'Downloading...' : label.download),
+                              downloading ? label.downloading : label.download),
                           icon: downloading
                               ? const SizedBox(
                                   width: 18,

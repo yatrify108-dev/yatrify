@@ -68,6 +68,7 @@ dependencies:
   firebase_crashlytics: ^4.3.10
   firebase_analytics: ^11.6.0
   shared_preferences: ^2.5.4
+  connectivity_plus: ^7.0.0
   
 flutter_launcher_icons:
   android: true

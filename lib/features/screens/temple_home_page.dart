@@ -340,11 +340,6 @@ class _TempleHomePageState extends State<TempleHomePage> {
             title: label.bhajans,
             item: temple.bhajans ?? [],
           ),
-          TempleMediaWidget<Bhajans>(
-            title: label.bhajans,
-            item: temple.bhajans ?? [],
-          ),
-          
           const SizedBox(height: 40),
         ],
       ),
