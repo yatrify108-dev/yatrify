@@ -239,4 +239,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get apply => 'Apply';
+
+  @override
+  String get storagePermissionDenied => 'Storage permission denied!';
+
+  @override
+  String get wallpaperDownloaded => 'Wallpaper downloaded successfully!';
+
+  @override
+  String get noInternetConnection =>
+      'No internet connection. Please try again later.';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong while downloading.';
+
+  @override
+  String get downloading => 'Downloading...';
 }

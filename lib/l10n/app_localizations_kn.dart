@@ -241,4 +241,21 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get apply => 'ಅನ್ವಯಿಸಿ';
+
+  @override
+  String get storagePermissionDenied => 'ಸಂಗ್ರಹಣ ಅನುಮತಿ ನಿರಾಕರಿಸಲಾಗಿದೆ!';
+
+  @override
+  String get wallpaperDownloaded =>
+      'ವಾಲ್‌ಪೇಪರ್ ಯಶಸ್ವಿಯಾಗಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ!';
+
+  @override
+  String get noInternetConnection =>
+      'ಇಂಟರ್‌ನೆಟ್ ಸಂಪರ್ಕ ಇಲ್ಲ. ದಯವಿಟ್ಟು ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.';
+
+  @override
+  String get somethingWentWrong => 'ಡೌನ್‌ಲೋಡ್ ಮಾಡುವಾಗ ಏನೋ ತಪ್ಪಾಗಿದೆ.';
+
+  @override
+  String get downloading => 'ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ...';
 }

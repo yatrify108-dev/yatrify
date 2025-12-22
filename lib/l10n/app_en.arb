@@ -81,5 +81,10 @@
     "ok": "OK",
     "appLanguage": "App Language",
     "selectAppLanguage": "Select App Language",
-    "apply": "Apply"
+    "apply": "Apply",
+    "storagePermissionDenied": "Storage permission denied!",
+    "wallpaperDownloaded": "Wallpaper downloaded successfully!",
+    "noInternetConnection": "No internet connection. Please try again later.",
+    "somethingWentWrong": "Something went wrong while downloading.",
+    "downloading": "Downloading..."
 }

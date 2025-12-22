@@ -553,6 +553,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Apply'**
   String get apply;
+
+  /// No description provided for @storagePermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage permission denied!'**
+  String get storagePermissionDenied;
+
+  /// No description provided for @wallpaperDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallpaper downloaded successfully!'**
+  String get wallpaperDownloaded;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please try again later.'**
+  String get noInternetConnection;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong while downloading.'**
+  String get somethingWentWrong;
+
+  /// No description provided for @downloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading...'**
+  String get downloading;
 }
 
 class _AppLocalizationsDelegate
