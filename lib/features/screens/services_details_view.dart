@@ -303,12 +303,12 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                               .isNotEmpty) ...[
                         const SizedBox(height: 16),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: HtmlWidget(
                             (LocaleService.getLocalized(
                                 widget.service.otherSevas)),
                             textStyle: context.style.bodyMedium!
-                                .copyWith(fontSize: 16),
+                                .copyWith(fontSize: 15),
                             enableCaching: true,
                           ),
                         ),

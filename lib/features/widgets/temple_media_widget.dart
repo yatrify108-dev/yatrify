@@ -60,7 +60,10 @@ class TempleMediaWidget<T> extends StatelessWidget {
                         );
                         FirebaseManager().logEvent(
                           FirebaseEvent.videoClick,
-                          parameters: {'video_name': media.name},
+                          parameters: {
+                            'video_name':
+                                LocaleService.getLocalized(media.name),
+                          },
                         );
                       }
                     } catch (e, stackTrace) {
