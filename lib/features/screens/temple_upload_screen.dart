@@ -51,10 +51,10 @@ class _TempleUploadScreenState extends State<TempleUploadScreen> {
                   child: const Text("Upload to DEVELOPMENT"),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => _upload(false),
-                  child: const Text("Upload to PRODUCTION"),
-                ),
+                // ElevatedButton(
+                //   onPressed: () => _upload(false),
+                //   child: const Text("Upload to PRODUCTION"),
+                // ),
               ],
             );
           },

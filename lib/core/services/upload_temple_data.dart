@@ -11,12 +11,14 @@ Future<void> uploadTempleDataToFirebase(
   final templeDoc = firestore.collection('temple').doc('temple_master');
 
   final templeMap = {
+    'contactUs': templeData.contactUs,
     'logo': templeData.logo,
     'privacyPolicy': templeData.privacyPolicy,
     'termsAndCondition': templeData.termsAndCondition,
     'password': templeData.password,
     'webLogo': templeData.webLogo,
     'isSmallBannerShow': templeData.isSmallBannerShow,
+    'isTextBanner': templeData.isTextBanner,
     'banner': templeData.banner
         ?.map((b) => {
               'bannerImage': b.bannerImage,
@@ -27,6 +29,13 @@ Future<void> uploadTempleDataToFirebase(
         ?.map((b) => {
               'bannerImage': b.bannerImage,
               'link': b.link,
+            })
+        .toList(),
+        'textBanner': templeData.textBanner
+        ?.map((t) => {
+              'bannerImage': t.bannerImage,
+              'link': t.link,
+              'details': t.details,
             })
         .toList(),
     'services': templeData.services

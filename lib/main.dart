@@ -1,7 +1,9 @@
 import 'dart:ui';
+import 'package:audio_session/audio_session.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:yatrify/core/services/firebase_manager_service.dart';
 import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/providers/router_provider.dart';
@@ -18,6 +20,14 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+  await JustAudioBackground.init(
+  androidNotificationChannelId: 'com.yatrify.store.channel.audio',
+  androidNotificationChannelName: 'Bhajan Player',
+  androidNotificationOngoing: false,
+  androidStopForegroundOnPause: false,
+);
+final session = await AudioSession.instance;
+  await session.configure(const AudioSessionConfiguration.music());
   await LocaleService.loadLocale();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

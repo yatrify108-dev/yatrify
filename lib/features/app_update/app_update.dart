@@ -12,16 +12,21 @@ class AppUpdateChecker {
   final FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
 
   Future<void> initConfig() async {
-    final isDebug = kDebugMode;
-    await _remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        fetchTimeout: const Duration(seconds: 10),
-        minimumFetchInterval:
-            isDebug ? Duration.zero : const Duration(hours: 1),
-      ),
-    );
+    try {
+      final isDebug = kDebugMode;
+      await _remoteConfig.setConfigSettings(
+        RemoteConfigSettings(
+          fetchTimeout: const Duration(seconds: 10),
+          minimumFetchInterval:
+              isDebug ? Duration.zero : const Duration(hours: 1),
+        ),
+      );
 
-    await _remoteConfig.fetchAndActivate();
+      await _remoteConfig.fetchAndActivate();
+    } catch (e, stack) {
+      debugPrint("RemoteConfig fetch failed: $e");
+      debugPrintStack(stackTrace: stack);
+    }
   }
 
   Future<void> checkForUpdate(BuildContext context) async {
@@ -31,7 +36,7 @@ class AppUpdateChecker {
     final bool isUpdateRequired = _remoteConfig.getBool('isUpdateRequired');
     final bool isForceUpdate = _remoteConfig.getBool('isForceUpdate');
     final bool isShowAlways = _remoteConfig.getBool('isShowAlways');
- 
+
     final int latestBuildNumber = Platform.isAndroid
         ? _remoteConfig.getInt('androidBuildNumber')
         : _remoteConfig.getInt('iOSBuildNumber');

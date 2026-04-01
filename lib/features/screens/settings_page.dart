@@ -9,12 +9,18 @@ import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage(
-      {super.key, this.privacyPolicy, this.termsAndCondition, this.password});
+  const SettingsPage({
+    super.key,
+    this.privacyPolicy,
+    this.termsAndCondition,
+    this.password,
+    this.contactUs,
+  });
 
   final String? privacyPolicy;
   final String? termsAndCondition;
   final String? password;
+  final String? contactUs;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +44,32 @@ class SettingsPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            if (contactUs != null && contactUs!.isNotEmpty) ...[
+              GestureDetector(
+                onTap: () {
+                  context.push('/contact-us', extra: contactUs);
+                },
+                child: SettingsWidget(
+                  icon: Icons.contact_page_rounded,
+                  title: label.contactUs,
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+            ],
+            GestureDetector(
+              onTap: () {
+                showLanguageDialog(context);
+              },
+              child: SettingsWidget(
+                icon: Icons.language,
+                title: label.appLanguage,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
             GestureDetector(
               onTap: () {
                 if (privacyPolicy != null && privacyPolicy!.isNotEmpty) {
@@ -89,18 +121,6 @@ class SettingsPage extends StatelessWidget {
                     );
                   }),
             ),
-            const SizedBox(
-              height: 12,
-            ),
-            GestureDetector(
-              onTap: () {
-                showLanguageDialog(context);
-              },
-              child: SettingsWidget(
-                icon: Icons.language,
-                title: label.appLanguage,
-              ),
-            ),
           ],
         ),
       ),
@@ -111,7 +131,7 @@ class SettingsPage extends StatelessWidget {
 void showLanguageDialog(BuildContext context) {
   final ValueNotifier<String> selectedLang =
       ValueNotifier(LocaleService.localeNotifier.value.languageCode);
-      final label = context.labels;
+  final label = context.labels;
 
   showDialog(
     context: context,
@@ -134,7 +154,7 @@ void showLanguageDialog(BuildContext context) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                       Text(
+                      Text(
                         label.selectAppLanguage,
                         style: const TextStyle(
                           fontSize: 16,
@@ -170,14 +190,18 @@ void showLanguageDialog(BuildContext context) {
                           RadioListTile(
                             radioScaleFactor: 1.2,
                             value: 'en',
-                            title:
-                                Text('English', style: TextStyle(fontSize: 16),),
+                            title: Text(
+                              'English',
+                              style: TextStyle(fontSize: 16),
+                            ),
                           ),
                           RadioListTile(
                             radioScaleFactor: 1.2,
                             value: 'kn',
-                            title:
-                                Text('ಕನ್ನಡ', style: TextStyle(fontSize: 16),),
+                            title: Text(
+                              'ಕನ್ನಡ',
+                              style: TextStyle(fontSize: 16),
+                            ),
                           ),
                         ],
                       ),

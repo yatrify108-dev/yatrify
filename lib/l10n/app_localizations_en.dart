@@ -255,4 +255,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get downloading => 'Downloading...';
+
+  @override
+  String get contactUs => 'Contact Us';
+
+  @override
+  String get getInTouch => 'GET IN TOUCH!';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get email => 'E-mail';
+
+  @override
+  String get message => 'Message';
+
+  @override
+  String get noEmailAppFound => 'No email app found';
+
+  @override
+  String get failedToOpenMail => 'Failed to open mail:';
+
+  @override
+  String get nameIsRequired => 'Name is required';
+
+  @override
+  String get messageCannotBeEmpty => 'Message cannot be empty';
+
+  @override
+  String get messageTooShort => 'Message too short';
+
+  @override
+  String get formCleared => 'Form cleared';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get noBhajansAvailable => 'No Bhajans Available';
+
+  @override
+  String get loadingAudio => 'Loading audio...';
+
+  @override
+  String get searchBhajans => 'Search bhajans...';
 }

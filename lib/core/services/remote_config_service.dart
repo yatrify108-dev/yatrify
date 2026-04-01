@@ -7,7 +7,7 @@ class RemoteConfigService {
   try {
     await remoteConfig.fetchAndActivate();
     String maxDateStr = remoteConfig.getString('calendar_max_date');
-    print("Date from RemoteConfig: $maxDateStr");
+   // print("Date from RemoteConfig: $maxDateStr");
 
     if (maxDateStr.isNotEmpty) {
       List<String> parts = maxDateStr.split('-');

@@ -86,5 +86,20 @@
   "wallpaperDownloaded": "ವಾಲ್‌ಪೇಪರ್ ಯಶಸ್ವಿಯಾಗಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗಿದೆ!",
   "noInternetConnection": "ಇಂಟರ್‌ನೆಟ್ ಸಂಪರ್ಕ ಇಲ್ಲ. ದಯವಿಟ್ಟು ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
   "somethingWentWrong": "ಡೌನ್‌ಲೋಡ್ ಮಾಡುವಾಗ ಏನೋ ತಪ್ಪಾಗಿದೆ.",
-  "downloading": "ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ..."
+  "downloading": "ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+  "contactUs": "ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ",
+  "getInTouch": "ಸಂಪರ್ಕದಲ್ಲಿರಿ!",
+  "name": "ಹೆಸರು",
+  "email": "ಇಮೇಲ್",
+  "message": "ಸಂದೇಶ",
+  "noEmailAppFound": "ಯಾವುದೇ ಇಮೇಲ್ ಅಪ್ಲಿಕೇಶನ್ ಕಂಡುಬಂದಿಲ್ಲ",
+  "failedToOpenMail": "ಇಮೇಲ್ ತೆರೆಯಲು ವಿಫಲವಾಗಿದೆ",
+  "nameIsRequired": "ಹೆಸರು ಅಗತ್ಯವಿದೆ",
+  "messageCannotBeEmpty": "ಸಂದೇಶ ಖಾಲಿಯಾಗಿರಬಾರದು",
+  "messageTooShort": "ಸಂದೇಶ ತುಂಬಾ ಚಿಕ್ಕದಾಗಿದೆ",
+  "formCleared": "ಫಾರ್ಮ್ ಕ್ಲಿಯರ್ ಆಗಿದೆ",
+  "clear": "ಕ್ಲಿಯರ್",
+  "noBhajansAvailable": "ಭಜನೆಗಳು ಲಭ್ಯವಿಲ್ಲ",
+  "loadingAudio": "ಆಡಿಯೋ ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+  "searchBhajans": "ಭಜನೆಗಳನ್ನು ಹುಡುಕಿ..."
 }

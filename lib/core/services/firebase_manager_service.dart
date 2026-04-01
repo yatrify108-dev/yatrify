@@ -13,7 +13,7 @@ class FirebaseManagerService {
   static FirebaseApp? prodApp;
   static FirebaseApp? devApp;
 
-  static ValueNotifier<bool> isDevelopment = ValueNotifier(false);
+  static ValueNotifier<bool> isDevelopment = ValueNotifier(true);
 
   static FirebaseFirestore get prodFirestore =>
       FirebaseFirestore.instanceFor(app: prodApp!);

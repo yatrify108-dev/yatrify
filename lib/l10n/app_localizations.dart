@@ -583,6 +583,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Downloading...'**
   String get downloading;
+
+  /// No description provided for @contactUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get contactUs;
+
+  /// No description provided for @getInTouch.
+  ///
+  /// In en, this message translates to:
+  /// **'GET IN TOUCH!'**
+  String get getInTouch;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'E-mail'**
+  String get email;
+
+  /// No description provided for @message.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get message;
+
+  /// No description provided for @noEmailAppFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No email app found'**
+  String get noEmailAppFound;
+
+  /// No description provided for @failedToOpenMail.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to open mail:'**
+  String get failedToOpenMail;
+
+  /// No description provided for @nameIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is required'**
+  String get nameIsRequired;
+
+  /// No description provided for @messageCannotBeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Message cannot be empty'**
+  String get messageCannotBeEmpty;
+
+  /// No description provided for @messageTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Message too short'**
+  String get messageTooShort;
+
+  /// No description provided for @formCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Form cleared'**
+  String get formCleared;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// No description provided for @noBhajansAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No Bhajans Available'**
+  String get noBhajansAvailable;
+
+  /// No description provided for @loadingAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading audio...'**
+  String get loadingAudio;
+
+  /// No description provided for @searchBhajans.
+  ///
+  /// In en, this message translates to:
+  /// **'Search bhajans...'**
+  String get searchBhajans;
 }
 
 class _AppLocalizationsDelegate

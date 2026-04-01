@@ -86,5 +86,20 @@
     "wallpaperDownloaded": "Wallpaper downloaded successfully!",
     "noInternetConnection": "No internet connection. Please try again later.",
     "somethingWentWrong": "Something went wrong while downloading.",
-    "downloading": "Downloading..."
+    "downloading": "Downloading...",
+    "contactUs": "Contact Us",
+    "getInTouch": "GET IN TOUCH!",
+    "name": "Name",
+    "email": "E-mail",
+    "message": "Message",
+    "noEmailAppFound": "No email app found",
+    "failedToOpenMail": "Failed to open mail:",
+    "nameIsRequired": "Name is required",
+    "messageCannotBeEmpty": "Message cannot be empty",
+    "messageTooShort": "Message too short",
+    "formCleared": "Form cleared",
+    "clear": "Clear",
+    "noBhajansAvailable": "No Bhajans Available",
+    "loadingAudio": "Loading audio...",
+    "searchBhajans": "Search bhajans..."
 }

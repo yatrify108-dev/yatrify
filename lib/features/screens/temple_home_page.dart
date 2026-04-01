@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:go_router/go_router.dart';
 import 'package:yatrify/core/models/base_banner.dart';
 import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/core/services/bajana_audio_service.dart';
 import 'package:yatrify/core/services/fetch_data.dart';
 import 'package:yatrify/core/services/firebase_manager_service.dart';
 import 'package:yatrify/core/services/locale_service.dart';
@@ -9,6 +10,7 @@ import 'package:yatrify/features/app_update/app_update.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
 import 'package:yatrify/features/screens/settings_page.dart';
 import 'package:yatrify/features/widgets/banner_carousel.dart';
+import 'package:yatrify/features/widgets/mini_player.dart';
 import 'package:yatrify/features/widgets/nearby_places.dart';
 import 'package:yatrify/features/widgets/small_banner_card.dart';
 import 'package:yatrify/features/widgets/temple_timings_card.dart';
@@ -35,10 +37,10 @@ class _TempleHomePageState extends State<TempleHomePage> {
   void initState() {
     super.initState();
     FirebaseManager().setCurrentScreen('LandedOnHomeScreen');
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       AppUpdateChecker().checkForUpdate(context);
       final isFirstLaunch = await LocaleService.isFirstLaunch();
-      if(isFirstLaunch){
+      if (isFirstLaunch) {
         showLanguageDialog(context);
         await LocaleService.setFirstLaunchDone();
       }
@@ -57,6 +59,18 @@ class _TempleHomePageState extends State<TempleHomePage> {
               //final temple = snapshot.data!;
               return Scaffold(
                 backgroundColor: whiteColor,
+                extendBody: true,
+                bottomNavigationBar: ValueListenableBuilder<bool>(
+                  valueListenable: BhajanAudioService.instance.showMiniPlayer,
+                  builder: (context, show, _) {
+                    return show
+                        ? const SafeArea(
+                            top: false,
+                            child: MiniPlayer(),
+                          )
+                        : const SizedBox.shrink();
+                  },
+                ),
                 appBar: snapshot.connectionState == ConnectionState.waiting
                     ? PreferredSize(
                         preferredSize: const Size.fromHeight(42),
@@ -143,6 +157,7 @@ class _TempleHomePageState extends State<TempleHomePage> {
                                     'termsAndCondition':
                                         snapshot.data!.termsAndCondition,
                                     'password': snapshot.data!.password,
+                                    'contactUs': snapshot.data!.contactUs,
                                   },
                                 );
                               },
@@ -202,158 +217,217 @@ class _TempleHomePageState extends State<TempleHomePage> {
 
     final todayTimings = getTimingsForToday(temple.timings);
     final hasMultipleBanners = (temple.smallBanner?.length ?? 0) > 1;
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: BannerCarousel(
-              borderRadius: 24,
-              banners: (temple.banner ?? []).map((tb) {
-                return BaseBanner(
-                  bannerImage: tb.bannerImage,
-                  link: tb.link,
-                );
-              }).toList(),
+    final textBanners = temple.textBanner ?? [];
+    const double miniPlayerHeight = 74;
+    final bottomSafeArea = MediaQuery.of(context).padding.bottom;
+    return ValueListenableBuilder<bool>(
+        valueListenable: BhajanAudioService.instance.showMiniPlayer,
+        builder: (context, show, _) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: show
+                  ? miniPlayerHeight + bottomSafeArea + 16
+                  : bottomSafeArea + 16,
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // const  TempleNameCard(),
-              const SizedBox(height: 20),
-              TempleTimingsCard(
-                timings: todayTimings ??
-                    Timings(
-                      day: 'No timings today',
-                      slots: [],
-                      lunch: [],
-                    ),
-              ),
-              if (temple.isSmallBannerShow &&
-                  temple.smallBanner!.isNotEmpty) ...[
-                const SizedBox(height: 20),
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 120,
-                    viewportFraction: hasMultipleBanners ? 0.81 : 1,
-                    enableInfiniteScroll: hasMultipleBanners,
-                    autoPlayInterval: const Duration(seconds: 3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: BannerCarousel(
+                    borderRadius: 24,
+                    banners: (temple.banner ?? []).map((tb) {
+                      return BaseBanner(
+                        bannerImage: tb.bannerImage,
+                        link: tb.link,
+                      );
+                    }).toList(),
                   ),
-                  items: temple.smallBanner?.map((b) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: hasMultipleBanners ? 6 : 16),
-                      child: SmallBannerCard(
-                        image: b.bannerImage!,
-                        url: b.link!,
-                      ),
-                    );
-                  }).toList(),
                 ),
-              ],
-
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Image.asset(
-                      'assets/icon/spark.png',
-                      height: 28,
-                      width: 28,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      label.yatriServices,
-                      style: context.style.titleMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: fontcolor,
+                    // const  TempleNameCard(),
+                    if (temple.showTimings == true) ...[
+                      const SizedBox(height: 20),
+                      TempleTimingsCard(
+                        timings: todayTimings ??
+                            Timings(
+                              day: 'No timings today',
+                              slots: [],
+                              lunch: [],
+                            ),
                       ),
-                    ),
-                    // const Spacer(),
-                    // TextButton(
-                    //   onPressed: () {
-                    //     context.push('/view-all-services', extra: temple);
-                    //   },
-                    //   child: Text(
-                    //     label.viewAll,
-                    //     style: context.style.titleSmall!.copyWith(
-                    //       fontWeight: FontWeight.bold,
-                    //       color: viewAllFontColor,
-                    //     ),
-                    //   ),
-                    // ),
+                    ],
+
+                    if (temple.isSmallBannerShow &&
+                        temple.smallBanner!.isNotEmpty) ...[
+                      const SizedBox(height: 20),
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: 120,
+                          viewportFraction: hasMultipleBanners ? 0.81 : 1,
+                          enableInfiniteScroll: hasMultipleBanners,
+                          autoPlayInterval: const Duration(seconds: 3),
+                        ),
+                        items: temple.smallBanner?.map((b) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: hasMultipleBanners ? 6 : 16),
+                            child: SmallBannerCard(
+                              image: b.bannerImage!,
+                              url: b.link!,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+
+                    if ((temple.isTextBanner ?? false) &&
+                        textBanners.isNotEmpty) ...[
+                      const SizedBox(height: 20),
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: 120,
+                          viewportFraction: hasMultipleBanners ? 0.81 : 1,
+                          enableInfiniteScroll: hasMultipleBanners,
+                          autoPlayInterval: const Duration(seconds: 3),
+                        ),
+                        items: temple.textBanner?.map((b) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: hasMultipleBanners ? 6 : 16),
+                            child: SmallBannerCard(
+                              image: b.bannerImage!,
+                              url: b.link!,
+                              details: b.details,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+
+                    if (temple.showYatriServices == true) ...[
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(
+                              'assets/icon/spark.png',
+                              height: 28,
+                              width: 28,
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              label.yatriServices,
+                              style: context.style.titleMedium!.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: fontcolor,
+                              ),
+                            ),
+                            // const Spacer(),
+                            // TextButton(
+                            //   onPressed: () {
+                            //     context.push('/view-all-services', extra: temple);
+                            //   },
+                            //   child: Text(
+                            //     label.viewAll,
+                            //     style: context.style.titleSmall!.copyWith(
+                            //       fontWeight: FontWeight.bold,
+                            //       color: viewAllFontColor,
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: GridView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: temple.services.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 0.87,
+                            //childAspectRatio: 1.0,
+                          ),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final service = temple.services[index];
+                            return ServiceCard(
+                              services: service,
+                              calender: temple.calender,
+                              webLogo: temple.webLogo,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ],
                 ),
-              ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: temple.services.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.87,
-                    //childAspectRatio: 1.0,
+                if (temple.showNearByPlaces == true &&
+                    (temple.nearByPlaces?.isNotEmpty ?? false)) ...[
+                  const SizedBox(height: 16),
+                  NearByPlacesCard<NearByPlaces>(
+                    title: label.nearByPlaces,
+                    item: temple.nearByPlaces ?? [],
                   ),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final service = temple.services[index];
-                    return ServiceCard(
-                      services: service,
-                      calender: temple.calender,
-                      webLogo: temple.webLogo,
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          NearByPlacesCard<NearByPlaces>(
-            title: label.nearByPlaces,
-            item: temple.nearByPlaces ?? [],
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          WallpaperCard(
-            wallpapers: temple.wallpapers ?? [],
-            title: label.wallpapers,
-          ),
-          const SizedBox(height: 16),
-          TempleMediaWidget<PoojaVideos>(
-            title: label.poojaVideos,
-            item: temple.videos ?? [],
-          ),
-          TempleMediaWidget<Bhajans>(
-            title: label.bhajans,
-            item: temple.bhajans ?? [],
-          ),
-          const SizedBox(height: 40),
-        ],
-      ),
-    );
+                ],
+
+                if (temple.showWallpapers == true &&
+                    (temple.wallpapers?.isNotEmpty ?? false)) ...[
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  WallpaperCard(
+                    wallpapers: temple.wallpapers ?? [],
+                    title: label.wallpapers,
+                  ),
+                ],
+
+                if (temple.showPoojaVideos == true &&
+                    (temple.videos?.isNotEmpty ?? false)) ...[
+                  const SizedBox(height: 16),
+                  TempleMediaWidget<PoojaVideos>(
+                    title: label.poojaVideos,
+                    item: temple.videos ?? [],
+                  ),
+                ],
+
+                if (temple.showBhajans == true &&
+                    (temple.bhajans?.isNotEmpty ?? false)) ...[
+                  SizedBox(height: (temple.showPoojaVideos == true) ? 0 : 16),
+                  TempleMediaWidget<Bhajans>(
+                    title: label.bhajans,
+                    item: temple.bhajans ?? [],
+                    showViewAll: true,
+                  ),
+                ]
+
+                // const SizedBox(height: 40),
+              ],
+            ),
+          );
+        });
   }
 
   /// Shimmer Loader Widget
   Widget _buildShimmerPlaceholder(BuildContext context) {
-    // const backgroundColor = Color(0xFFffe99e); // page bg
-    // final baseShimmerColor = const Color(0xFFf9d97b); // slightly darker yellow
-    // final highlightShimmerColor = const Color(0xFFfff7d1); // pale cream
-    final baseShimmerColor = const Color(0xFFE0E0E0); // light gray base
-    final highlightShimmerColor =
-        const Color(0xFFF5F5F5); // near white highlight// pale cream
+    // const backgroundColor = Color(0xFFffe99e);
+    // final baseShimmerColor = const Color(0xFFf9d97b);
+    // final highlightShimmerColor = const Color(0xFFfff7d1);
+    final baseShimmerColor = const Color(0xFFE0E0E0);
+    final highlightShimmerColor = const Color(0xFFF5F5F5);
 
     return Shimmer.fromColors(
       baseColor: baseShimmerColor,
