@@ -258,4 +258,49 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get downloading => 'ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ...';
+
+  @override
+  String get contactUs => 'ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ';
+
+  @override
+  String get getInTouch => 'ಸಂಪರ್ಕದಲ್ಲಿರಿ!';
+
+  @override
+  String get name => 'ಹೆಸರು';
+
+  @override
+  String get email => 'ಇಮೇಲ್';
+
+  @override
+  String get message => 'ಸಂದೇಶ';
+
+  @override
+  String get noEmailAppFound => 'ಯಾವುದೇ ಇಮೇಲ್ ಅಪ್ಲಿಕೇಶನ್ ಕಂಡುಬಂದಿಲ್ಲ';
+
+  @override
+  String get failedToOpenMail => 'ಇಮೇಲ್ ತೆರೆಯಲು ವಿಫಲವಾಗಿದೆ';
+
+  @override
+  String get nameIsRequired => 'ಹೆಸರು ಅಗತ್ಯವಿದೆ';
+
+  @override
+  String get messageCannotBeEmpty => 'ಸಂದೇಶ ಖಾಲಿಯಾಗಿರಬಾರದು';
+
+  @override
+  String get messageTooShort => 'ಸಂದೇಶ ತುಂಬಾ ಚಿಕ್ಕದಾಗಿದೆ';
+
+  @override
+  String get formCleared => 'ಫಾರ್ಮ್ ಕ್ಲಿಯರ್ ಆಗಿದೆ';
+
+  @override
+  String get clear => 'ಕ್ಲಿಯರ್';
+
+  @override
+  String get noBhajansAvailable => 'ಭಜನೆಗಳು ಲಭ್ಯವಿಲ್ಲ';
+
+  @override
+  String get loadingAudio => 'ಆಡಿಯೋ ಲೋಡ್ ಆಗುತ್ತಿದೆ...';
+
+  @override
+  String get searchBhajans => 'ಭಜನೆಗಳನ್ನು ಹುಡುಕಿ...';
 }

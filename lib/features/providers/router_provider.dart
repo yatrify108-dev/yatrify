@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:yatrify/core/models/pg.dart';
 import 'package:yatrify/core/models/temple.dart';
 import 'package:yatrify/features/screens/about_page.dart';
+import 'package:yatrify/features/screens/audio_player_page.dart';
+import 'package:yatrify/features/screens/bhajans_view_page.dart';
+import 'package:yatrify/features/screens/contact_us_page.dart';
 import 'package:yatrify/features/screens/full_screen_image_gallery.dart';
 import 'package:yatrify/features/screens/nearby_places_view.dart';
 import 'package:yatrify/features/screens/notification_screen.dart';
@@ -130,12 +133,49 @@ final GoRouter router = GoRouter(
         final privacyPolicy = extra['privacyPolicy'] ?? '';
         final termsAndCondition = extra['termsAndCondition'] ?? '';
         final password = extra['password'] ?? '';
+        final contactUs = extra['contactUs'] ?? '';
         return SettingsPage(
           privacyPolicy: privacyPolicy,
           termsAndCondition: termsAndCondition,
           password: password,
+          contactUs: contactUs,
         );
       },
-    )
+    ),
+    GoRoute(
+      path: '/contact-us',
+      builder: (context, state) {
+        final contactUs = state.extra as String;
+
+        return ContactUsPage(contactUs: contactUs);
+      },
+    ),
+    // GoRoute(
+    //   path: '/audio-player',
+    //   builder: (context, state) {
+    //     final args = state.extra as Map<String, dynamic>?;
+
+    //     final bhajans = args?['bhajans'] as List<Bhajans>? ?? [];
+    //     final index = args?['index'] as int? ?? 0;
+
+    //     return AudioPlayerScreen(
+    //       bhajans: bhajans,
+    //       initialIndex: index,
+    //     );
+    //   },
+    // ),
+    GoRoute(
+      path: '/audio-player',
+      builder: (context, state) {
+        return const AudioPlayerScreen();
+      },
+    ),
+    GoRoute(
+      path: '/view-bhajans',
+      builder: (context, state) {
+        final bhajans = state.extra as List<Bhajans>;
+        return BhajansViewPage(bhajans: bhajans);
+      },
+    ),
   ],
 );

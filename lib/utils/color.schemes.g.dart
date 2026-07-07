@@ -27,3 +27,4 @@ const ratingFontColor = Colors.orange;
 const googleMapsColor =  Color(0xFF34A853);
 
 const List<Color> appBarGradient = [primaryColor, primaryColorM, primaryColorL];
+const List<Color> contactBarGradient = [ Color(0xFFFF8A50),primaryColor,];

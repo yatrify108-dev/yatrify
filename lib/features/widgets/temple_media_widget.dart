@@ -1,161 +1,229 @@
+import 'package:go_router/go_router.dart';
+import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/core/services/bajana_audio_service.dart';
 import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:yatrify/utils/media_utils.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../screens/responsive.dart';
 
 class TempleMediaWidget<T> extends StatelessWidget {
-  const TempleMediaWidget({super.key, required this.item, required this.title});
+  const TempleMediaWidget(
+      {super.key,
+      required this.item,
+      required this.title,
+      this.showViewAll = false});
   final List<T> item;
   final String title;
+  final bool showViewAll;
 
   @override
   Widget build(BuildContext context) {
+    final label = context.labels;
+    final displayCount =
+        showViewAll ? (item.length > 3 ? 3 : item.length) : item.length;
     if (item.isEmpty) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            title,
-            style: context.style.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold, fontSize: 20, color: fontcolor),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: context.style.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: fontcolor),
+              ),
+              if (showViewAll && item.length > 3)
+                GestureDetector(
+                  onTap: () {
+                    context.push('/view-bhajans', extra: item);
+                  },
+                  child: Text(
+                    label.viewAll,
+                    style: context.style.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold, color: primaryColor),
+                  ),
+                ),
+            ],
           ),
         ),
         const SizedBox(
-          height: 16,
+          height: 12,
         ),
-        SizedBox(
-          height: 128,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: item.length,
-            itemBuilder: (context, index) {
-              final media = item[index] as dynamic;
-              return Padding(
-                padding: EdgeInsets.only(
-                    left: 12, right: index == item.length - 1 ? 16 : 0),
-                child: GestureDetector(
-                  onTap: () {
-                    // if(media.url.toString().isNotEmpty){
-                    //   context.push('/video-player',extra: media.url);
-                    // }
+        if (title == label.bhajans)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Card(
+              color: whiteColor,
+             // shadowColor: Colors.black.withOpacity(0.4),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                
+              ),
+              elevation: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(displayCount, (index) {
+                  final media = item[index] as Bhajans;
 
-                    try {
-                      if (media.url.toString().isNotEmpty) {
-                        showGeneralDialog(
-                          context: context,
-                          barrierColor: Colors.black.withOpacity(0.4),
-                          barrierDismissible: true,
-                          barrierLabel: 'Video overlay', // ✅ Add this line
-                          transitionDuration: const Duration(milliseconds: 250),
-                          pageBuilder: (context, anim1, anim2) {
-                            return VideoOverlayPlayer(videoUrl: media.url);
-                          },
-                        );
-                        FirebaseManager().logEvent(
-                          FirebaseEvent.videoClick,
-                          parameters: {
-                            'video_name':
-                                LocaleService.getLocalized(media.name),
-                          },
-                        );
-                      }
-                    } catch (e, stackTrace) {
-                      FirebaseManager().reportError(
-                        e,
-                        stackTrace,
-                      );
-                    }
-                  },
-                  child: Column(
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          imageUrl: media.image!,
-                          height: getResponsiveImageHeight(context),
-                          width: getRsponsiveImageWidth(context),
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) => const Icon(
-                            Icons.error,
-                            color: primaryColor,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      SizedBox(
-                        width: getRsponsiveImageWidth(context),
-                        child: Text(
-                          LocaleService.getLocalized(media.name!),
+                      ListTile(
+                        leading:
+                            const Icon(Icons.play_circle, color: primaryColor),
+                        title: Text(
+                          LocaleService.getLocalized(media.name),
                           style: context.style.titleSmall,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        // SizedBox(
-        //   height: 128,
-        //   child: ListView.builder(
-        //     scrollDirection: Axis.horizontal,
-        //     itemCount: item.length,
-        //     itemBuilder: (context, index) {
-        //       final media = item[index] as dynamic;
-        //       return Padding(
-        //         padding:  EdgeInsets.only(left: 12, right: index == item.length - 1 ? 16 : 0),
-        //         child: GestureDetector(
-        //           onTap: (){
-        //             if(media.url.toString().isNotEmpty){
-        //               context.push('/video-player',extra: media.url);
-        //             }
+                        trailing: const Icon(
+                          Icons.arrow_forward_ios,
+                          color: primaryColor,
+                           size: 20,
+                        ),
+                        onTap: () {
+                          final url = media.url?.toString() ?? "";
 
-        //           },
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               ClipRRect(
-        //                 borderRadius: BorderRadius.circular(10),
-        //                 child: CachedNetworkImage(
-        //                   imageUrl: media.image!,
-        //                   height: getResponsiveImageHeight(context),
-        //                   width: getRsponsiveImageWidth(context),
-        //                   fit: BoxFit.cover,
-        //                   errorWidget: (context, url, error) => const Icon(Icons.error, color: primaryColor,),
-        //                 ),
-        //               ),
-        //               const SizedBox(
-        //                 height: 8,
-        //               ),
-        //               SizedBox(
-        //                 width: getRsponsiveImageWidth(context),
-        //                 child: Text(
-        //                   '${media.name!}',
-        //                   style: context.style.titleSmall,
-        //                   maxLines: 2,
-        //                   overflow: TextOverflow.ellipsis,
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // ),
+                          if (url.isEmpty) return;
+
+                          if (MediaUtils.isVideoUrl(url)) {
+                            showGeneralDialog(
+                              context: context,
+                              barrierColor: Colors.black.withOpacity(0.4),
+                              barrierDismissible: true,
+                              barrierLabel: 'Video overlay',
+                              transitionDuration:
+                                  const Duration(milliseconds: 250),
+                              pageBuilder: (context, anim1, anim2) {
+                                return VideoOverlayPlayer(videoUrl: url);
+                              },
+                            );
+                            return;
+                          }
+
+                          if (MediaUtils.isAudioUrl(url)) {
+                            final bhajanList = item.cast<Bhajans>();
+
+                            // context.push(
+                            //   '/audio-player',
+                            //   extra: {
+                            //     'bhajans': bhajanList,
+                            //     'index': index,
+                            //   },
+                            // );
+                            context.push('/audio-player');
+
+                            BhajanAudioService.instance.loadPlaylist(
+                              bhajans: bhajanList,
+                              startIndex: index,
+                            );
+                          }
+                        },
+                      ),
+
+                      // Divider except last item
+                      // if (index != displayCount - 1) const Divider(height: 1),
+                    ],
+                  );
+                }),
+              ),
+            ),
+          )
+        else
+          SizedBox(
+            height: 128,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: displayCount,
+              itemBuilder: (context, index) {
+                final media = item[index] as dynamic;
+                return Padding(
+                  padding: EdgeInsets.only(
+                      left: 12, right: index == displayCount - 1 ? 16 : 0),
+                  child: GestureDetector(
+                    onTap: () {
+                      try {
+                        final url = media.url?.toString() ?? "";
+
+                        if (url.isEmpty) return;
+
+                        if (MediaUtils.isVideoUrl(url)) {
+                          showGeneralDialog(
+                            context: context,
+                            barrierColor: Colors.black.withOpacity(0.4),
+                            barrierDismissible: true,
+                            barrierLabel: 'Video overlay',
+                            transitionDuration:
+                                const Duration(milliseconds: 250),
+                            pageBuilder: (context, anim1, anim2) {
+                              return VideoOverlayPlayer(videoUrl: url);
+                            },
+                          );
+                          return;
+                        }
+
+                        // if (MediaUtils.isAudioUrl(url) && media is Bhajans) {
+                        //   final bhajanList = item.cast<Bhajans>();
+
+                        //   context.push(
+                        //     '/audio-player',
+                        //     extra: {
+                        //       'bhajans': bhajanList,
+                        //       'index': index,
+                        //     },
+                        //   );
+                        // }
+                      } catch (e, stackTrace) {
+                        FirebaseManager().reportError(e, stackTrace);
+                      }
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedNetworkImage(
+                            imageUrl: media.image!,
+                            height: getResponsiveImageHeight(context),
+                            width: getRsponsiveImageWidth(context),
+                            fit: BoxFit.cover,
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.error,
+                              color: primaryColor,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        SizedBox(
+                          width: getRsponsiveImageWidth(context),
+                          child: Text(
+                            LocaleService.getLocalized(media.name!),
+                            style: context.style.titleSmall,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
       ],
     );
   }
@@ -204,13 +272,10 @@ class _VideoOverlayPlayerState extends State<VideoOverlayPlayer> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          // Dismiss background tap
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(color: Colors.transparent),
           ),
-
-          // Animated video container
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             width: isExpanded ? screen.width : screen.width * 0.9,
@@ -225,10 +290,8 @@ class _VideoOverlayPlayerState extends State<VideoOverlayPlayer> {
                   YoutubePlayer(
                     controller: _controller,
                     showVideoProgressIndicator: true,
-                    aspectRatio: 9 / 16, // 🔹 Keeps it vertical
+                    aspectRatio: 9 / 16,
                   ),
-
-                  // Close button
                   Positioned(
                     top: 10,
                     right: 10,
@@ -238,8 +301,6 @@ class _VideoOverlayPlayerState extends State<VideoOverlayPlayer> {
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
-
-                  // Expand button
                   Positioned(
                     bottom: 10,
                     right: 10,
