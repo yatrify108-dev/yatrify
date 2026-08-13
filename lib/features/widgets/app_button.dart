@@ -8,7 +8,7 @@ class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
     required this.label,
-    required this.onPressed,
+     this.onPressed,
     this.type = AppButtonType.filled,
     this.color,
     this.borderRadius = 8,
@@ -17,7 +17,7 @@ class AppButton extends StatelessWidget {
   });
 
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final AppButtonType type;
   final Color? color;
   final double borderRadius;

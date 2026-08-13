@@ -1,8 +1,7 @@
-import 'package:yatrify/core/models/pg.dart';
+import 'package:yatrify/core/models/home_stay.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
-
 import '../constant/const_string.dart';
 
 class PricingBadge extends StatelessWidget {
@@ -12,8 +11,6 @@ class PricingBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = context.labels;
-
     return Wrap(
       runSpacing: 8,
       spacing: 8,
@@ -33,9 +30,8 @@ class PricingBadge extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                        color: primaryColorL.withOpacity(0.4),
-                        border:
-                            Border.all(color: primaryColorM.withOpacity(0.4)),
+                        color: primaryColor.withOpacity(0.1),
+                        border: Border.all(color: primaryColor),
                         borderRadius: BorderRadius.circular(6)),
                     child: Row(
                       children: [
@@ -61,7 +57,7 @@ class PricingBadge extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        label.startsFrom,
+                        "Starts from",
                         style: context.style.bodySmall,
                       ),
                       Text(

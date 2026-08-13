@@ -673,6 +673,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search bhajans...'**
   String get searchBhajans;
+
+  /// No description provided for @sevaInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Seva Info'**
+  String get sevaInfo;
+
+  /// No description provided for @availableSevas.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Sevas'**
+  String get availableSevas;
+
+  /// No description provided for @trackLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Track Location'**
+  String get trackLocation;
+
+  /// No description provided for @clearSavedLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Saved Location?'**
+  String get clearSavedLocation;
+
+  /// No description provided for @areYouSureYouWantToRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove your saved parking spot?'**
+  String get areYouSureYouWantToRemove;
+
+  /// No description provided for @saveParking.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Parking'**
+  String get saveParking;
+
+  /// No description provided for @selectParkingLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Parking Location'**
+  String get selectParkingLocation;
+
+  /// No description provided for @copy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get copy;
+
+  /// No description provided for @now.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get now;
+
+  /// No description provided for @officialLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Official Kukke Subrahmanya Temple Booking Link'**
+  String get officialLink;
 }
 
 class _AppLocalizationsDelegate

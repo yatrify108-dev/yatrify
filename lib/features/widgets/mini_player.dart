@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
@@ -91,12 +92,28 @@ class _MiniPlayerContent extends StatelessWidget {
                 },
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    mediaItem.artUri.toString(),
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
-                  ),
+                  child: 
+                  // Image.network(
+                  //   mediaItem.artUri.toString(),
+                  //   height: 50,
+                  //   width: 50,
+                  //   fit: BoxFit.cover,
+                  // ),
+                  CachedNetworkImage(
+                                    imageUrl: mediaItem.artUri.toString(),
+                                    fit: BoxFit.cover,
+                                    width: 50,
+                                    height: 50,
+                                    placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(
+                                          color: Colors.white),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(
+                                      Icons.error,
+                                      color: primaryColor,
+                                    ),
+                                  ),
                 ),
                 title: Text(
                   LocaleService.getLocalized(

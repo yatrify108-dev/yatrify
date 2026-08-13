@@ -1,4 +1,4 @@
-import 'package:yatrify/core/models/pg.dart';
+import 'package:yatrify/core/models/home_stay.dart';
 import 'package:yatrify/l10n/app_localizations.dart';
 import 'package:yatrify/l10n/app_localizations_en.dart';
 import 'package:flutter/material.dart';
@@ -107,4 +107,13 @@ extension UrlLauncher on String?{
 
 extension StringNullCheckExtension on String?{
   bool get isNotNullOrEmpty  => this?.isNotEmpty ?? false;
+}
+
+extension ColorX on Color {
+  String toHex() =>
+      '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
+}
+
+Color colorFromHex(String hex) {
+  return Color(int.parse(hex.replaceFirst('#', '0xff')));
 }

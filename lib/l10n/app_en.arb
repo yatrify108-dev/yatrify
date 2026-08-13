@@ -101,5 +101,15 @@
     "clear": "Clear",
     "noBhajansAvailable": "No Bhajans Available",
     "loadingAudio": "Loading audio...",
-    "searchBhajans": "Search bhajans..."
+    "searchBhajans": "Search bhajans...",
+    "sevaInfo": "Seva Info",
+    "availableSevas": "Available Sevas",
+    "trackLocation": "Track Location",
+    "clearSavedLocation": "Clear Saved Location?",
+    "areYouSureYouWantToRemove": "Are you sure you want to remove your saved parking spot?",
+    "saveParking": "Save Parking",
+    "selectParkingLocation": "Select Parking Location",
+    "copy": "Copy",
+    "now": "Now",
+    "officialLink": "Official Kukke Subrahmanya Temple Booking Link"
 }

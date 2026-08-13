@@ -21,7 +21,7 @@ class NearByPlacesViewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final label = context.labels;
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.6,
+      height: MediaQuery.of(context).size.height * 0.65,
       child: Stack(
         children: [
           Padding(
@@ -53,7 +53,7 @@ class NearByPlacesViewCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 20,
+            bottom: MediaQuery.of(context).padding.bottom + 12,
             right: 16,
             left: 16,
             child: AppButton(

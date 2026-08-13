@@ -101,5 +101,15 @@
   "clear": "ಕ್ಲಿಯರ್",
   "noBhajansAvailable": "ಭಜನೆಗಳು ಲಭ್ಯವಿಲ್ಲ",
   "loadingAudio": "ಆಡಿಯೋ ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
-  "searchBhajans": "ಭಜನೆಗಳನ್ನು ಹುಡುಕಿ..."
+  "searchBhajans": "ಭಜನೆಗಳನ್ನು ಹುಡುಕಿ...",
+  "sevaInfo": "ಸೇವಾ ವಿವರ",
+  "availableSevas": "ಲಭ್ಯವಿರುವ ಸೇವೆಗಳು",
+  "trackLocation": "ಸ್ಥಳ ಟ್ರ್ಯಾಕ್ ಮಾಡಿ",
+  "clearSavedLocation": "ಸಂಗ್ರಹಿಸಿದ ಸ್ಥಳವನ್ನು ಅಳಿಸಬೇಕೇ?",
+  "areYouSureYouWantToRemove": "ನಿಮ್ಮ ಪಾರ್ಕಿಂಗ್ ಸ್ಥಳದ ಮಾಹಿತಿಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿದ್ದೀರಾ?",
+  "saveParking": "ಪಾರ್ಕಿಂಗ್ ಸ್ಥಳ ಸೇವ್ ಮಾಡಿ",
+  "selectParkingLocation": "ಪಾರ್ಕಿಂಗ್ ಸ್ಥಳವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ",
+  "copy": "ಕಾಪಿ ಮಾಡಿ",
+  "now": "ಈಗ",
+  "officialLink": "ಅಧಿಕೃತ ಕುಕ್ಕೆ ಸುಬ್ರಹ್ಮಣ್ಯ ದೇವಾಲಯದ ಬುಕಿಂಗ್ ಲಿಂಕ್"
 }

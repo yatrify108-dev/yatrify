@@ -1,14 +1,18 @@
 import 'package:yatrify/core/models/temple.dart' as temple_model;
 import 'package:go_router/go_router.dart';
-import 'package:yatrify/core/models/pg.dart';
+import 'package:yatrify/core/models/home_stay.dart';
 import 'package:yatrify/core/models/temple.dart';
+import 'package:yatrify/features/screens/seva_info_page.dart';
 import 'package:yatrify/features/screens/about_page.dart';
 import 'package:yatrify/features/screens/audio_player_page.dart';
 import 'package:yatrify/features/screens/bhajans_view_page.dart';
 import 'package:yatrify/features/screens/contact_us_page.dart';
+import 'package:yatrify/features/screens/firabse_uploaddata_screen.dart';
 import 'package:yatrify/features/screens/full_screen_image_gallery.dart';
+import 'package:yatrify/features/screens/home_stay_home_page.dart';
 import 'package:yatrify/features/screens/nearby_places_view.dart';
 import 'package:yatrify/features/screens/notification_screen.dart';
+import 'package:yatrify/features/screens/parking_map_page.dart';
 import 'package:yatrify/features/screens/pg_details_view.dart';
 import 'package:yatrify/features/screens/redirect_page.dart';
 import 'package:yatrify/features/screens/service_view_all.dart';
@@ -16,7 +20,6 @@ import 'package:yatrify/features/screens/services_details_view.dart';
 import 'package:yatrify/features/screens/settings_page.dart';
 import 'package:yatrify/features/screens/temple_home_page.dart';
 import 'package:yatrify/features/screens/temple_timings_view.dart';
-import 'package:yatrify/features/screens/temple_upload_screen.dart';
 import 'package:yatrify/features/screens/video_player_page.dart';
 import 'package:yatrify/features/screens/wallpaper_page.dart';
 
@@ -28,13 +31,17 @@ final GoRouter router = GoRouter(
     ),
     // GoRoute(
     //   path: '/',
-    //   builder: (context, state) => const TempleUploadScreen(),
+    //   builder: (context, state) => const FirebaseDataUploadScreen(),
     // ),
     GoRoute(
-      path: '/pg-details',
+      path: '/book-stay-home',
+      builder: (context, state) => const HomeStayHomePage(),
+    ),
+    GoRoute(
+      path: '/home-stay-details',
       builder: (context, state) {
-        final pgDetails = state.extra as PgDetails;
-        return PgDetailsView(pgDetails: pgDetails);
+        final homeStayDetails = state.extra as HomeStayDetails;
+        return HomeStayDetailsView(homeStayDetails: homeStayDetails);
       },
     ),
     GoRoute(
@@ -44,7 +51,7 @@ final GoRouter router = GoRouter(
         return FullScreenImageGallery(
           images: extra['images'] as List<String>,
           initialIndex: extra['initialIndex'] as int,
-          pgName: extra['pgName'] as String,
+          homeStayName: extra['homeStayName'] as String,
         );
       },
     ),
@@ -53,7 +60,8 @@ final GoRouter router = GoRouter(
       builder: (context, state) {
         final extra = state.extra as Map<String, String>;
         return AboutView(
-            about: extra['about'] as String, pgName: extra['pgName'] as String);
+            about: extra['about'] as String,
+            homeStayName: extra['homeStayName'] as String);
       },
     ),
     GoRoute(
@@ -82,13 +90,13 @@ final GoRouter router = GoRouter(
         return VideoPlayerPage(videoUrl: videoUrl);
       },
     ),
-    GoRoute(
-      path: '/view-all-services',
-      builder: (context, state) {
-        final temple = state.extra as Temple;
-        return ServiceViewAll(temple: temple);
-      },
-    ),
+    // GoRoute(
+    //   path: '/view-all-services',
+    //   builder: (context, state) {
+    //     final temple = state.extra as Temple;
+    //     return ServiceViewAll(temple: temple);
+    //   },
+    // ),
     GoRoute(
       path: '/temple-timings-view',
       builder: (context, state) {
@@ -175,6 +183,31 @@ final GoRouter router = GoRouter(
       builder: (context, state) {
         final bhajans = state.extra as List<Bhajans>;
         return BhajansViewPage(bhajans: bhajans);
+      },
+    ),
+    GoRoute(
+      path: '/parking-map',
+      builder: (context, state) {
+        return const ParkingMapPage();
+      },
+    ),
+    GoRoute(
+      path: '/seva-info',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+
+        final service = extra['service'] as List<temple_model.Services>;
+        final calendar = extra['calendar'] as Map<String, List<String>>?;
+        final webLogo = extra['webLogo'] ?? '';
+        final showSevaInfoNote = extra['showSevaInfoNote'] ?? false;
+        final sevaInfoNoteText = extra['sevaInfoNoteText'] as Map<String, String>?;
+        return SevaInfoPage(
+          services: service,
+          calender: calendar,
+          webLogo: webLogo,
+          showSevaInfoNote: showSevaInfoNote,
+          sevaInfoNoteText: sevaInfoNoteText,
+        );
       },
     ),
   ],

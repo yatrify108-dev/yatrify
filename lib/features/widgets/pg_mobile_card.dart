@@ -1,7 +1,7 @@
-import 'package:yatrify/core/models/pg.dart';
+import 'package:yatrify/core/models/home_stay.dart';
+import 'package:yatrify/features/widgets/availability_badge.dart';
 import 'package:yatrify/features/widgets/bottom_curve_clipper.dart';
 import 'package:yatrify/features/widgets/custom_marquee.dart';
-import 'package:yatrify/features/widgets/gender_badge.dart';
 import 'package:yatrify/features/widgets/pg_image_carousel.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
@@ -10,24 +10,54 @@ import 'package:flutter/material.dart';
 import '../constant/const_string.dart';
 import 'facilities_badge.dart';
 
-class PgMobileCard extends StatelessWidget {
-  const PgMobileCard(
-      {super.key, required this.pgDetails, this.isCompact = false});
+class HomeStayMobileCard extends StatelessWidget {
+  const HomeStayMobileCard(
+      {super.key, required this.homeStayDetails, this.isCompact = false});
 
-  final PgDetails pgDetails;
+  final HomeStayDetails homeStayDetails;
   final bool isCompact;
 
   @override
   Widget build(BuildContext context) {
-    final label = context.labels;
+    String formatDistance(double? km) {
+      if (km == null) return '';
+
+      final meters = km * 1000;
+
+      if (meters < 1000) {
+        return '${meters.round()} m';
+      }
+
+      return '${km.toStringAsFixed(1)} km';
+    }
+
+    String getAvailabilityText(String status) {
+      switch (status) {
+        case 'available':
+          return 'Available';
+
+        case 'few_left':
+          return 'Few Rooms Left';
+
+        case 'unavailable':
+          return 'Currently Unavailable';
+
+        default:
+          return '';
+      }
+    }
+
     return Card(
-      color:  whiteColor,
+      color: whiteColor,
       margin: const EdgeInsets.only(bottom: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          PgImageCarousel(
-            images:
-                (isCompact) ? [pgDetails.roomImage.first] : pgDetails.roomImage,
+          HomeStayImageCarousel(
+            images: (isCompact)
+                ? [homeStayDetails.roomImage.first]
+                : homeStayDetails.roomImage,
             customClipper: isCompact ? null : BottomCurveClipper(),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(12),
@@ -36,100 +66,15 @@ class PgMobileCard extends StatelessWidget {
             showIndicator: isCompact ? false : true,
             height: isCompact ? 200 : 240,
             indicatorAlignment: Alignment.bottomLeft,
-            topOverlay: GenderBadge(gender: pgDetails.gender),
-            bottomOverlay:isCompact || pgDetails.ratings!.isEmpty
-                ?null: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: CustomMarquee(rate: pgDetails.ratings!),
-                  )
-                ,
+            // topOverlay: GenderBadge(gender: homeStayDetails.gender),
+            bottomOverlay:
+                isCompact || (homeStayDetails.ratings?.isEmpty ?? true)
+                    ? null
+                    : SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: CustomMarquee(rate: homeStayDetails.ratings!),
+                      ),
           ),
-          // CarouselSlider.builder(
-          //   itemCount: widget.pgDetails.roomImage.length,
-          //   options: CarouselOptions(
-          //       height: 240,
-          //       autoPlay: false,
-          //       enlargeCenterPage: true,
-          //       viewportFraction: 1.0,
-          //       autoPlayInterval: const Duration(seconds: 3),
-          //       onPageChanged: (index, reason) {
-          //         _currentIndex.value = index;
-          //       }),
-          //   itemBuilder: (context, index, realIndex) {
-          //     return Builder(builder: (BuildContext context) {
-          //       final roomImage = widget.pgDetails.roomImage[index];
-          //       return ClipRRect(
-          //         borderRadius: const BorderRadius.only(
-          //             topLeft: Radius.circular(12),
-          //             topRight: Radius.circular(12)),
-          //         child: SizedBox(
-          //           height: 240,
-          //           width: double.infinity,
-          //           child: Stack(
-          //             children: [
-          //               ClipPath(
-          //                 clipper: BottomCurveClipper(),
-          //                 child: Image.network(
-          //                   roomImage,
-          //                   fit: BoxFit.cover,
-          //                   width: double.infinity,
-          //                   height: 240,
-          //                   errorBuilder: (context, error, stackTrace) {
-          //                     return const Center(
-          //                       child: Icon(Icons.broken_image,
-          //                           size: 48, color: Colors.grey),
-          //                     );
-          //                   },
-          //                 ),
-          //               ),
-          //               if (widget.pgDetails.ratings!.isNotEmpty)
-          //                 Positioned(
-          //                   bottom: 0,
-          //                   right: 0,
-          //                   // left: 170,
-          //                   //height: 40,
-          //                   width: MediaQuery.of(context).size.width * 0.5,
-          //                   child: CustomMarquee(
-          //                     rate: widget.pgDetails.ratings.toString(),
-          //                   ),
-          //                 ),
-          //               Positioned(
-          //                 bottom: 8,
-          //                 left: 12,
-          //                 child: ValueListenableBuilder<int>(
-          //                   valueListenable: _currentIndex,
-          //                   builder: (context, current, _) {
-          //                     return Row(
-          //                       children: List.generate(
-          //                           widget.pgDetails.roomImage.length,
-          //                           (i) => Container(
-          //                                 width: 6,
-          //                                 height: 6,
-          //                                 margin: const EdgeInsets.symmetric(
-          //                                     horizontal: 2),
-          //                                 decoration: BoxDecoration(
-          //                                     shape: BoxShape.circle,
-          //                                     color: i == current
-          //                                         ? primaryColor
-          //                                         : whiteColor),
-          //                               )),
-          //                     );
-          //                   },
-          //                 ),
-          //               ),
-          //               Positioned(
-          //                   top: 8,
-          //                   right: 8,
-          //                   child: GenderBadge(
-          //                     gender: widget.pgDetails.gender,
-          //                   ))
-          //             ],
-          //           ),
-          //         ),
-          //       );
-          //     });
-          //   },
-          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
@@ -142,34 +87,61 @@ class PgMobileCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        pgDetails.address.first.pgName,
+                        homeStayDetails.address.first.homeStayName,
                         style: context.style.titleMedium!
                             .copyWith(fontWeight: FontWeight.bold),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Text(label.startsFrom)
+                    const Text("Starts from")
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(pgDetails.address.first.roadName),
+                    Text(homeStayDetails.address.first.roadName),
                     Text(
-                      '${ConstString.rupees}${pgDetails.priceDetails.formatedLowestPrice}',
+                      '${ConstString.rupees}${homeStayDetails.priceDetails.formatedLowestPrice}',
                       style: context.style.titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
-                if (!isCompact && pgDetails.facilities != null &&
-                    pgDetails.facilities!.isNotEmpty) ...[
+                if (!isCompact) ...[
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (homeStayDetails.distanceKm != null)
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on_outlined,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${formatDistance(homeStayDetails.distanceKm)} from temple',
+                              style: context.style.bodySmall,
+                            ),
+                          ],
+                        ),
+                      AvailabilityBadge(
+                        status: homeStayDetails.availabilityStatus,
+                      ),
+                    ],
+                  ),
+                ],
+                if (!isCompact &&
+                    homeStayDetails.facilities != null &&
+                    homeStayDetails.facilities!.isNotEmpty) ...[
                   const SizedBox(
                     height: 16,
                   ),
-                  FacilitiesBadge(facilities: pgDetails.facilities!)
+                  FacilitiesBadge(facilities: homeStayDetails.facilities!)
                 ]
               ],
             ),

@@ -1,3 +1,4 @@
+import 'package:shimmer/shimmer.dart';
 import 'package:yatrify/core/models/base_banner.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
@@ -7,12 +8,19 @@ import 'package:flutter/material.dart';
 import '../screens/responsive.dart';
 
 class BannerCarousel extends StatefulWidget {
-  const BannerCarousel({super.key, required this.banners, this.screenHeightValue, this.autoPlay, this.borderRadius = 0});
+  const BannerCarousel(
+      {super.key,
+      required this.banners,
+      this.screenHeightValue,
+      this.autoPlay,
+      this.borderRadius = 0,
+      this.showMainBanner = false});
 
   final List<BaseBanner> banners;
   final double? screenHeightValue;
   final bool? autoPlay;
   final double borderRadius;
+  final bool? showMainBanner;
 
   @override
   State<BannerCarousel> createState() => _BannerCarouselState();
@@ -32,14 +40,16 @@ class _BannerCarouselState extends State<BannerCarousel> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     final validBanner = widget.banners
-        .where((banner) => banner.bannerImage!.isNotEmpty)
+        .where((banner) =>
+            banner.bannerImage != null && banner.bannerImage!.isNotEmpty)
         .toList();
 
-    final double sliderHeight = widget.screenHeightValue ?? (Responsive.isDesktop(context)
-        ? 300
-        : Responsive.isMobile(context)
-            ?screenHeight * 0.5
-            : 200);
+    final double sliderHeight = widget.screenHeightValue ??
+        (Responsive.isDesktop(context)
+            ? 300
+            : Responsive.isMobile(context)
+                ? screenHeight * 0.5
+                : 200);
 
     // Future<void> _launchUrl(String? url) async {
     //   if (url == null || url.isEmpty) return;
@@ -84,21 +94,51 @@ class _BannerCarouselState extends State<BannerCarousel> {
                 child: Stack(
                   children: [
                     ClipRRect(
-                       borderRadius: BorderRadius.circular(widget.borderRadius),
+                      borderRadius: BorderRadius.circular(widget.borderRadius),
                       child: banner.bannerImage != null &&
                               banner.bannerImage!.startsWith('http')
-                          ? CachedNetworkImage(
-                              imageUrl: banner.bannerImage ?? '',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: sliderHeight,
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(color: primaryColor,),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
+                          ? Stack(
+                              children: [
+                                if (widget.showMainBanner == true) ...[
+                                  Image.asset(
+                                    'assets/main-banner.png',
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: sliderHeight,
+                                  ),
+                                ],
+                                CachedNetworkImage(
+                                  imageUrl: banner.bannerImage ?? '',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: sliderHeight,
+                                  fadeInDuration:
+                                      const Duration(milliseconds: 300),
+                                  //     placeholder: (context, url) => const Center(
+                                  //   child: CircularProgressIndicator(color: primaryColor,),
+                                  // ),
+
+                                  placeholder: (widget.showMainBanner == true)
+                                      ? null
+                                      : (context, url) {
+                                          return Shimmer.fromColors(
+                                            baseColor: Colors.grey[300]!,
+                                            highlightColor: Colors.grey[100]!,
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: sliderHeight,
+                                              color: Colors.white,
+                                            ),
+                                          );
+                                        },
+
+                                  // fadeInDuration: Duration.zero,
+
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
+                              ],
                             )
-                            
                           : Image.asset(
                               banner.bannerImage ?? '',
                               fit: BoxFit.cover,
