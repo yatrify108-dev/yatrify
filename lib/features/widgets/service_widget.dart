@@ -17,12 +17,14 @@ class ServiceCard extends StatelessWidget {
     required this.calender,
     required this.webLogo,
     required this.yatriServices,
+    required this.itemCount,
   });
 
   final List<Services> services;
   final YatriServices yatriServices;
   final Map<String, List<String>>? calender;
   final String webLogo;
+  final int itemCount;
 
   @override
   Widget build(BuildContext context) {
@@ -183,52 +185,52 @@ class ServiceCard extends StatelessWidget {
         //     await context.push('/parking-map');
         //     await ParkingController.init();
         //   }
-        // } 
+        // }
         // else {
-          switch (yatriServices.id.toLowerCase()) {
-            case 'bookstay':
-             FirebaseManager().logBookStayClicked();
-              context.push('/book-stay-home');
-              break;
-            case 'sevainfo':
+        switch (yatriServices.id.toLowerCase()) {
+          case 'bookstay':
+            FirebaseManager().logBookStayClicked();
+            context.push('/book-stay-home');
+            break;
+          case 'sevainfo':
+            context.push(
+              '/seva-info',
+              extra: {
+                'service': services,
+                'calendar': calender,
+                'webLogo': webLogo,
+                'showSevaInfoNote': yatriServices.showSevaInfoNote,
+                'sevaInfoNoteText': yatriServices.sevaInfoNoteText,
+              },
+            );
+            break;
+          case 'kumaraparvathatrek':
+            if (yatriServices.services != null &&
+                yatriServices.services!.isNotEmpty) {
               context.push(
-                '/seva-info',
+                '/service-details',
                 extra: {
-                  'service': services,
+                  'service': yatriServices.services![0],
                   'calendar': calender,
                   'webLogo': webLogo,
-                  'showSevaInfoNote': yatriServices.showSevaInfoNote,
-                  'sevaInfoNoteText': yatriServices.sevaInfoNoteText,
                 },
               );
-              break;
-            case 'kumaraparvathatrek':
-              if (yatriServices.services != null &&
-                  yatriServices.services!.isNotEmpty) {
-                context.push(
-                  '/service-details',
-                  extra: {
-                    'service': yatriServices.services![0],
-                    'calendar': calender,
-                    'webLogo': webLogo,
-                  },
-                );
-              }
-              break;
+            }
+            break;
 
-            default:
-              if (yatriServices.services != null &&
-                  yatriServices.services!.isNotEmpty) {
-                context.push(
-                  '/service-details',
-                  extra: {
-                    'service': yatriServices.services![0],
-                    'calendar': calender,
-                    'webLogo': webLogo,
-                  },
-                );
-              }
-         // }
+          default:
+            if (yatriServices.services != null &&
+                yatriServices.services!.isNotEmpty) {
+              context.push(
+                '/service-details',
+                extra: {
+                  'service': yatriServices.services![0],
+                  'calendar': calender,
+                  'webLogo': webLogo,
+                },
+              );
+            }
+          // }
         }
 
         FirebaseManager().logEvent(
@@ -293,23 +295,22 @@ class ServiceCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
 
-                // Title Section with ScaleDown to prevent cutoff
                 SizedBox(
-                  height: 36,
+                  height: itemCount > 2 ? 36: 26,
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: Text(
-                        titleText,
-                       // style: context.style.titleSmall!.copyWith(fontWeight: FontWeight.w700,),
-                        style: GoogleFonts.inter(
-                          color: fontcolor,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                          height: 1.15,
-                        ),
-                        maxLines: 3,
-                        textAlign: TextAlign.center,
+                      titleText,
+                      // style: context.style.titleSmall!.copyWith(fontWeight: FontWeight.w700,),
+                      style: GoogleFonts.inter(
+                        color: fontcolor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                        height: 1.15,
                       ),
+                      maxLines: 3,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
 
@@ -331,8 +332,6 @@ class ServiceCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                 ],
-
-                
               ],
             ),
           ),

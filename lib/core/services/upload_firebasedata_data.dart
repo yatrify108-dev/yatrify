@@ -316,6 +316,7 @@ Future<void> uploadTempleDataToFirebase(
                   },
                 )
                 .toList(),
+                'showYatriService': y.showYatriService,
           },
         )
         .toList(),

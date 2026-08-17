@@ -150,6 +150,7 @@ class YatriServices {
   final List<Services>? services;
   final bool? showSevaInfoNote;
   final Map<String, String>? sevaInfoNoteText;
+  final bool? showYatriService;
 
   YatriServices({
     required this.id,
@@ -159,6 +160,7 @@ class YatriServices {
     this.services,
     this.showSevaInfoNote,
     this.sevaInfoNoteText,
+    this.showYatriService,
   });
 
   Map<String, dynamic> toMap() {
@@ -170,6 +172,7 @@ class YatriServices {
       'services': services?.map((x) => x.toMap()).toList(),
       'showSevaInfoNote': showSevaInfoNote,
       'sevaInfoNoteText': sevaInfoNoteText,
+      'showYatriService': showYatriService
     };
   }
 
@@ -192,6 +195,7 @@ class YatriServices {
       sevaInfoNoteText: map['sevaInfoNoteText'] != null
           ? Map<String, String>.from(map['sevaInfoNoteText'] as Map)
           : null,
+      showYatriService: map['showYatriService']?.toString().toLowerCase() == 'true',
     );
   }
 }

@@ -458,61 +458,51 @@ $url
                                         final items =
                                             temple.yatriServices ?? [];
 
-                                        // Split items into pairs of 2
-                                        final List<List<YatriServices>> rows =
-                                            [];
-                                        for (var i = 0;
-                                            i < items.length;
-                                            i += 2) {
-                                          rows.add(
-                                            items.sublist(
-                                                i,
-                                                i + 2 > items.length
-                                                    ? items.length
-                                                    : i + 2),
-                                          );
+                                        // Filter items where showYatriService is explicitly true
+                                        final activeServices = items
+                                            .where((s) =>
+                                                s.showYatriService == true)
+                                            .take(4)
+                                            .toList();
+
+                                        if (activeServices.isEmpty) {
+                                          return const SizedBox.shrink();
                                         }
 
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 0, ),
-                                          child: IntrinsicHeight(
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children:
-                                                  (temple.yatriServices ?? [])
-                                                      .take(4)
-                                                      .map((item) {
-                                                return Expanded(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 3),
-                                                    child: ServiceCard(
-                                                      services:
-                                                          temple.services ?? [],
-                                                      calender: temple.calender,
-                                                      webLogo: temple.webLogo,
-                                                      yatriServices: item,
-                                                    ),
+                                        return IntrinsicHeight(
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children:
+                                                activeServices.map((item) {
+                                              return Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 3),
+                                                  child: ServiceCard(
+                                                    services:
+                                                        temple.services ?? [],
+                                                    calender: temple.calender,
+                                                    webLogo: temple.webLogo,
+                                                    yatriServices: item,
+                                                    itemCount: activeServices.length,
                                                   ),
-                                                );
-                                              }).toList(),
-                                            ),
+                                                ),
+                                              );
+                                            }).toList(),
                                           ),
                                         );
                                       },
                                     ),
                                   )
                                 ],
-                                if(temple.parkingModel![0].showParking)...[
+                                if (temple.parkingModel![0].showParking) ...[
                                   const SizedBox(height: 16),
-                                 ParkingBannerWidget(
-                                  parkingModel: temple.parkingModel![0],
-                                ),
+                                  ParkingBannerWidget(
+                                    parkingModel: temple.parkingModel![0],
+                                  ),
                                 ],
-                                
+
                                 // Padding(
                                 //   padding: const EdgeInsets.symmetric(
                                 //       horizontal: 16),
