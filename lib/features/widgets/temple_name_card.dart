@@ -1,5 +1,5 @@
 import 'package:yatrify/features/constant/const_string.dart';
-import 'package:yatrify/features/screens/temple_upload_screen.dart';
+import 'package:yatrify/features/screens/firabse_uploaddata_screen.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';

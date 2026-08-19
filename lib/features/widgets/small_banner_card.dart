@@ -40,9 +40,13 @@ class SmallBannerCard extends StatelessWidget {
                 ),
               ),
               if (details != null && details!.isNotEmpty)
-                Positioned.fill(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
+                Positioned(
+                  left: 8,
+                  right: 8,
+                  top: 8,
+                  bottom: 8,
+                  child: SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
                     child: HtmlWidget(
                       details!,
                       enableCaching: true,

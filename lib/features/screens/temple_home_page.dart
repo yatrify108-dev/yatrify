@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yatrify/core/models/base_banner.dart';
 import 'package:yatrify/core/models/temple.dart';
 import 'package:yatrify/core/services/bajana_audio_service.dart';
@@ -8,10 +9,12 @@ import 'package:yatrify/core/services/firebase_manager_service.dart';
 import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/app_update/app_update.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
+import 'package:yatrify/features/screens/parking_map_page.dart';
 import 'package:yatrify/features/screens/settings_page.dart';
 import 'package:yatrify/features/widgets/banner_carousel.dart';
 import 'package:yatrify/features/widgets/mini_player.dart';
 import 'package:yatrify/features/widgets/nearby_places.dart';
+import 'package:yatrify/features/widgets/parking_widget.dart';
 import 'package:yatrify/features/widgets/small_banner_card.dart';
 import 'package:yatrify/features/widgets/temple_timings_card.dart';
 import 'package:yatrify/features/widgets/wallpaper_card.dart';
@@ -47,6 +50,27 @@ class _TempleHomePageState extends State<TempleHomePage> {
     });
   }
 
+  // Future<void> openGoogleMap(double lat, double lng) async {
+  //   final url =
+  //       "https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving";
+
+  //   await launchUrl(
+  //     Uri.parse(url),
+  //     mode: LaunchMode.externalApplication,
+  //   );
+  // }
+
+  void preloadImages(Temple temple) {
+    for (var banner in temple.banner ?? []) {
+      if (banner.bannerImage != null && banner.bannerImage!.isNotEmpty) {
+        precacheImage(
+          NetworkImage(banner.bannerImage!),
+          context,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
@@ -56,8 +80,14 @@ class _TempleHomePageState extends State<TempleHomePage> {
             key: ValueKey(isDev),
             future: fetchTempleData(),
             builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  preloadImages(snapshot.data!);
+                });
+              }
               //final temple = snapshot.data!;
               return Scaffold(
+                extendBodyBehindAppBar: true,
                 backgroundColor: whiteColor,
                 extendBody: true,
                 bottomNavigationBar: ValueListenableBuilder<bool>(
@@ -91,7 +121,8 @@ class _TempleHomePageState extends State<TempleHomePage> {
                         preferredSize: const Size.fromHeight(42),
                         child: AppBar(
                           centerTitle: true,
-                          backgroundColor: whiteColor,
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
                           forceMaterialTransparency: true,
                           title: (snapshot.hasData &&
                                   snapshot.data!.logo != null &&
@@ -134,11 +165,19 @@ class _TempleHomePageState extends State<TempleHomePage> {
                                     ? 'https://play.google.com/store/apps/details?id=com.yatrify.store'
                                     : 'https://apps.apple.com/app/idYOUR_APP_ID';
 
-                                final text =
-                                    'Check out this app on ${Platform.isAndroid ? 'Play Store' : 'App Store'}!';
+                                final String shareMessage = '''
+*Yatrify* — Your complete guide for Kukke Shri Subrahmanya Temple 🛕
+
+Stay informed, spiritually connected, and plan your visit with ease.
+
+📥 *Download the app now:*
+$url
+''';
+
                                 final params = ShareParams(
-                                  text: url,
-                                  title: text,
+                                  text: shareMessage,
+                                  subject:
+                                      'Explore Kukke Subrahmanya Temple with Yatrify',
                                 );
                                 await SharePlus.instance.share(params);
                                 FirebaseManager().logEvent(
@@ -220,203 +259,395 @@ class _TempleHomePageState extends State<TempleHomePage> {
     final textBanners = temple.textBanner ?? [];
     const double miniPlayerHeight = 74;
     final bottomSafeArea = MediaQuery.of(context).padding.bottom;
+    const double bannerHeight = 0.45;
+    const double overlap = 78;
     return ValueListenableBuilder<bool>(
         valueListenable: BhajanAudioService.instance.showMiniPlayer,
         builder: (context, show, _) {
-          return SingleChildScrollView(
-            padding: EdgeInsets.only(
-              bottom: show
-                  ? miniPlayerHeight + bottomSafeArea + 16
-                  : bottomSafeArea + 16,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+          return Stack(
+            children: [
+              Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
                   child: BannerCarousel(
-                    borderRadius: 24,
+                    showMainBanner: true,
+                    // borderRadius: 24,
                     banners: (temple.banner ?? []).map((tb) {
                       return BaseBanner(
                         bannerImage: tb.bannerImage,
                         link: tb.link,
                       );
                     }).toList(),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // const  TempleNameCard(),
-                    if (temple.showTimings == true) ...[
-                      const SizedBox(height: 20),
-                      TempleTimingsCard(
-                        timings: todayTimings ??
-                            Timings(
-                              day: 'No timings today',
-                              slots: [],
-                              lunch: [],
-                            ),
-                      ),
-                    ],
-
-                    if (temple.isSmallBannerShow &&
-                        temple.smallBanner!.isNotEmpty) ...[
-                      const SizedBox(height: 20),
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          height: 120,
-                          viewportFraction: hasMultipleBanners ? 0.81 : 1,
-                          enableInfiniteScroll: hasMultipleBanners,
-                          autoPlayInterval: const Duration(seconds: 3),
+                  )),
+              SafeArea(
+                  top: true,
+                  child: NestedScrollView(
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      return [
+                        SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.45 -
+                                overlap,
+                          ),
                         ),
-                        items: temple.smallBanner?.map((b) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: hasMultipleBanners ? 6 : 16),
-                            child: SmallBannerCard(
-                              image: b.bannerImage!,
-                              url: b.link!,
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-
-                    if ((temple.isTextBanner ?? false) &&
-                        textBanners.isNotEmpty) ...[
-                      const SizedBox(height: 20),
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          height: 120,
-                          viewportFraction: hasMultipleBanners ? 0.81 : 1,
-                          enableInfiniteScroll: hasMultipleBanners,
-                          autoPlayInterval: const Duration(seconds: 3),
+                      ];
+                    },
+                    body: Container(
+                      decoration: const BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
                         ),
-                        items: temple.textBanner?.map((b) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: hasMultipleBanners ? 6 : 16),
-                            child: SmallBannerCard(
-                              image: b.bannerImage!,
-                              url: b.link!,
-                              details: b.details,
-                            ),
-                          );
-                        }).toList(),
                       ),
-                    ],
-
-                    if (temple.showYatriServices == true) ...[
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.only(
+                          bottom: show
+                              ? miniPlayerHeight + bottomSafeArea + 16
+                              : bottomSafeArea + 16,
+                        ),
+                        child: Column(
                           children: [
-                            Image.asset(
-                              'assets/icon/spark.png',
-                              height: 28,
-                              width: 28,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                // const  TempleNameCard(),
+                                if (temple.showTimings == true) ...[
+                                  const SizedBox(height: 20),
+                                  TempleTimingsCard(
+                                    timings: todayTimings ??
+                                        Timings(
+                                          day: 'No timings today',
+                                          slots: [],
+                                          lunch: [],
+                                        ),
+                                  ),
+                                ],
+
+                                if (temple.isSmallBannerShow &&
+                                    temple.smallBanner!.isNotEmpty) ...[
+                                  const SizedBox(height: 20),
+                                  CarouselSlider(
+                                    options: CarouselOptions(
+                                      height: 120,
+                                      viewportFraction:
+                                          hasMultipleBanners ? 0.81 : 1,
+                                      enableInfiniteScroll: hasMultipleBanners,
+                                      autoPlayInterval:
+                                          const Duration(seconds: 3),
+                                    ),
+                                    items: temple.smallBanner?.map((b) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                hasMultipleBanners ? 6 : 16),
+                                        child: SmallBannerCard(
+                                          image: b.bannerImage!,
+                                          url: b.link!,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+
+                                if ((temple.isTextBanner ?? false) &&
+                                    textBanners.isNotEmpty) ...[
+                                  const SizedBox(height: 20),
+                                  CarouselSlider(
+                                    options: CarouselOptions(
+                                      height: 120,
+                                      viewportFraction:
+                                          hasMultipleBanners ? 0.81 : 1,
+                                      enableInfiniteScroll: hasMultipleBanners,
+                                      autoPlayInterval:
+                                          const Duration(seconds: 3),
+                                    ),
+                                    items: temple.textBanner?.map((b) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                hasMultipleBanners ? 6 : 16),
+                                        child: SmallBannerCard(
+                                          image: b.bannerImage!,
+                                          url: b.link!,
+                                          details: b.details,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+
+                                if (temple.showYatriServices == true) ...[
+                                  const SizedBox(height: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Row(
+                                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset(
+                                          'assets/icon/spark.png',
+                                          height: 28,
+                                          width: 28,
+                                        ),
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
+                                        Text(
+                                          label.yatriServices,
+                                          style: context.style.titleMedium!
+                                              .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: fontcolor,
+                                          ),
+                                        ),
+                                        // const Spacer(),
+                                        // TextButton(
+                                        //   onPressed: () {
+                                        //     context.push('/view-all-services', extra: temple);
+                                        //   },
+                                        //   child: Text(
+                                        //     label.viewAll,
+                                        //     style: context.style.titleSmall!.copyWith(
+                                        //       fontWeight: FontWeight.bold,
+                                        //       color: viewAllFontColor,
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //       horizontal: 16),
+                                  //   child: GridView.builder(
+                                  //     padding: EdgeInsets.zero,
+                                  //     itemCount: temple.yatriServices?.length,
+                                  //     gridDelegate:
+                                  //         const SliverGridDelegateWithFixedCrossAxisCount(
+                                  //       crossAxisCount: 2,
+                                  //       crossAxisSpacing: 14,
+                                  //       mainAxisSpacing: 14,
+                                  //       childAspectRatio: 1.4,
+                                  //       //childAspectRatio: 1.0,
+                                  //     ),
+                                  //     shrinkWrap: true,
+                                  //     physics:
+                                  //         const NeverScrollableScrollPhysics(),
+                                  //     itemBuilder: (context, index) {
+                                  //       final yatriServices = temple.yatriServices?[index];
+                                  //       final service = temple.services;
+                                  //       return ServiceCard(
+                                  //         services: service,
+                                  //         calender: temple.calender,
+                                  //         webLogo: temple.webLogo,
+                                  //         yatriServices: yatriServices!,
+                                  //       );
+                                  //     },
+                                  //   ),
+                                  // ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Builder(
+                                      builder: (context) {
+                                        final items =
+                                            temple.yatriServices ?? [];
+
+                                        // Filter items where showYatriService is explicitly true
+                                        final activeServices = items
+                                            .where((s) =>
+                                                s.showYatriService == true)
+                                            .take(4)
+                                            .toList();
+
+                                        if (activeServices.isEmpty) {
+                                          return const SizedBox.shrink();
+                                        }
+
+                                        return IntrinsicHeight(
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children:
+                                                activeServices.map((item) {
+                                              return Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 3),
+                                                  child: ServiceCard(
+                                                    services:
+                                                        temple.services ?? [],
+                                                    calender: temple.calender,
+                                                    webLogo: temple.webLogo,
+                                                    yatriServices: item,
+                                                    itemCount: activeServices.length,
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                ],
+                                if (temple.parkingModel![0].showParking) ...[
+                                  const SizedBox(height: 16),
+                                  ParkingBannerWidget(
+                                    parkingModel: temple.parkingModel![0],
+                                  ),
+                                ],
+
+                                // Padding(
+                                //   padding: const EdgeInsets.symmetric(
+                                //       horizontal: 16),
+                                //   child: ValueListenableBuilder<bool>(
+                                //     valueListenable: ParkingController.isSaved,
+                                //     builder: (context, isSaved, _) {
+                                //       return Container(
+                                //         padding: const EdgeInsets.all(16),
+                                //         decoration: BoxDecoration(
+                                //           color: primaryColor.withOpacity(0.2),
+                                //           borderRadius:
+                                //               BorderRadius.circular(12),
+                                //         ),
+                                //         child: Row(
+                                //           children: [
+                                //             Icon(
+                                //               isSaved
+                                //                   ? Icons.location_on
+                                //                   : Icons.local_parking,
+                                //               color: primaryColor,
+                                //             ),
+                                //             const SizedBox(width: 10),
+
+                                //             /// MAIN ACTION
+                                //             Expanded(
+                                //               child: GestureDetector(
+                                //                 onTap: () async {
+                                //                   if (isSaved) {
+                                //                     // TRACK
+                                //                     final data =
+                                //                         await ParkingController
+                                //                             .get();
+                                //                     if (data != null) {
+                                //                       openGoogleMap(
+                                //                           data['lat']!,
+                                //                           data['lng']!);
+                                //                     }
+                                //                   } else {
+                                //                     // GO TO MAP TO SAVE
+                                //                     await context
+                                //                         .push('/parking-map');
+
+                                //                     /// AFTER RETURN → auto refresh (no setState needed)
+                                //                     await ParkingController
+                                //                         .init();
+                                //                   }
+                                //                 },
+                                //                 child: Text(
+                                //                   isSaved
+                                //                       ? "Track Location"
+                                //                       : "Park",
+                                //                   style: const TextStyle(
+                                //                       fontWeight:
+                                //                           FontWeight.bold),
+                                //                 ),
+                                //               ),
+                                //             ),
+
+                                //             /// CLEAR BUTTON
+                                //             if (isSaved)
+                                //               GestureDetector(
+                                //                 onTap: () async {
+                                //                   await ParkingController
+                                //                       .clear();
+                                //                 },
+                                //                 child: const Icon(Icons.close,
+                                //                     color: Colors.red),
+                                //               ),
+                                //           ],
+                                //         ),
+                                //       );
+                                //     },
+                                //   ),
+                                // ),
+
+                                if (temple.showBookStayBanner == true &&
+                                    temple.bookStayBanner != null &&
+                                    temple.bookStayBanner!.isNotEmpty) ...[
+                                  const SizedBox(height: 16),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.push('/book-stay-home');
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadiusGeometry.circular(12),
+                                        child: CachedNetworkImage(
+                                          imageUrl: temple.bookStayBanner!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ]
+                              ],
                             ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              label.yatriServices,
-                              style: context.style.titleMedium!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: fontcolor,
+                            if (temple.showNearByPlaces == true &&
+                                (temple.nearByPlaces?.isNotEmpty ?? false)) ...[
+                              const SizedBox(height: 16),
+                              NearByPlacesCard<NearByPlaces>(
+                                title: label.nearByPlaces,
+                                item: temple.nearByPlaces ?? [],
                               ),
-                            ),
-                            // const Spacer(),
-                            // TextButton(
-                            //   onPressed: () {
-                            //     context.push('/view-all-services', extra: temple);
-                            //   },
-                            //   child: Text(
-                            //     label.viewAll,
-                            //     style: context.style.titleSmall!.copyWith(
-                            //       fontWeight: FontWeight.bold,
-                            //       color: viewAllFontColor,
-                            //     ),
-                            //   ),
-                            // ),
+                            ],
+                            if (temple.showWallpapers == true &&
+                                (temple.wallpapers?.isNotEmpty ?? false)) ...[
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              WallpaperCard(
+                                wallpapers: temple.wallpapers ?? [],
+                                title: label.wallpapers,
+                              ),
+                            ],
+                            if (temple.showPoojaVideos == true &&
+                                (temple.videos?.isNotEmpty ?? false)) ...[
+                              const SizedBox(height: 16),
+                              TempleMediaWidget<PoojaVideos>(
+                                title: label.poojaVideos,
+                                item: temple.videos ?? [],
+                              ),
+                            ],
+                            if (temple.showBhajans == true &&
+                                (temple.bhajans?.isNotEmpty ?? false)) ...[
+                              SizedBox(
+                                  height: (temple.showPoojaVideos == true)
+                                      ? 0
+                                      : 16),
+                              TempleMediaWidget<Bhajans>(
+                                title: label.bhajans,
+                                item: temple.bhajans ?? [],
+                                showViewAll: true,
+                              ),
+                            ]
                           ],
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: GridView.builder(
-                          padding: EdgeInsets.zero,
-                          itemCount: temple.services.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 0.87,
-                            //childAspectRatio: 1.0,
-                          ),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final service = temple.services[index];
-                            return ServiceCard(
-                              services: service,
-                              calender: temple.calender,
-                              webLogo: temple.webLogo,
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-                if (temple.showNearByPlaces == true &&
-                    (temple.nearByPlaces?.isNotEmpty ?? false)) ...[
-                  const SizedBox(height: 16),
-                  NearByPlacesCard<NearByPlaces>(
-                    title: label.nearByPlaces,
-                    item: temple.nearByPlaces ?? [],
-                  ),
-                ],
+                    ),
+                  )),
 
-                if (temple.showWallpapers == true &&
-                    (temple.wallpapers?.isNotEmpty ?? false)) ...[
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  WallpaperCard(
-                    wallpapers: temple.wallpapers ?? [],
-                    title: label.wallpapers,
-                  ),
-                ],
-
-                if (temple.showPoojaVideos == true &&
-                    (temple.videos?.isNotEmpty ?? false)) ...[
-                  const SizedBox(height: 16),
-                  TempleMediaWidget<PoojaVideos>(
-                    title: label.poojaVideos,
-                    item: temple.videos ?? [],
-                  ),
-                ],
-
-                if (temple.showBhajans == true &&
-                    (temple.bhajans?.isNotEmpty ?? false)) ...[
-                  SizedBox(height: (temple.showPoojaVideos == true) ? 0 : 16),
-                  TempleMediaWidget<Bhajans>(
-                    title: label.bhajans,
-                    item: temple.bhajans ?? [],
-                    showViewAll: true,
-                  ),
-                ]
-
-                // const SizedBox(height: 40),
-              ],
-            ),
+              // const SizedBox(height: 40),
+            ],
           );
         });
   }

@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:yatrify/core/models/base_banner.dart';
 import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/firebase_manager/firebase_manager.dart';
 import 'package:yatrify/features/widgets/banner_carousel.dart';
 import 'package:yatrify/features/widgets/info_widget.dart';
+import 'package:yatrify/features/widgets/official_link_widget.dart';
 import 'package:yatrify/features/widgets/rathosthava_seva_widget.dart';
 import 'package:yatrify/features/widgets/service_detail_card.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
@@ -44,14 +46,41 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
   @override
   Widget build(BuildContext context) {
     final labels = context.labels;
+    // List<DateTime> parseDateList(List<String>? dateStrings) {
+    //   if (dateStrings == null) return [];
+    //   final dates = <DateTime>[];
+    //   for (final dateString in dateStrings) {
+    //     try {
+    //       final parts = dateString.split('-');
+    //       if (parts.length != 3) continue;
+    //       int day, month, year;
+    //       if (parts[0].length == 4) {
+    //         year = int.parse(parts[0]);
+    //         month = int.parse(parts[1]);
+    //         day = int.parse(parts[2]);
+    //       } else {
+    //         day = int.parse(parts[0]);
+    //         month = int.parse(parts[1]);
+    //         year = int.parse(parts[2]);
+    //       }
+    //       dates.add(DateTime(year, month, day));
+    //     } catch (_) {}
+    //   }
+    //   return dates;
+    // }
+
     List<DateTime> parseDateList(List<String>? dateStrings) {
       if (dateStrings == null) return [];
+
       final dates = <DateTime>[];
+
       for (final dateString in dateStrings) {
         try {
           final parts = dateString.split('-');
           if (parts.length != 3) continue;
+
           int day, month, year;
+
           if (parts[0].length == 4) {
             year = int.parse(parts[0]);
             month = int.parse(parts[1]);
@@ -61,9 +90,17 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
             month = int.parse(parts[1]);
             year = int.parse(parts[2]);
           }
-          dates.add(DateTime(year, month, day));
+
+          // Create date
+          final date = DateTime(year, month, day);
+
+          // Validate original Firebase date
+          if (date.year == year && date.month == month && date.day == day) {
+            dates.add(date);
+          }
         } catch (_) {}
       }
+
       return dates;
     }
 
@@ -104,17 +141,8 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
     final now = DateTime.now();
     final minDate = DateTime(now.year, now.month, 1);
     final maxDate = DateTime(now.year, now.month + 2, 0);
-    // final validVideos =
-    //     service.videos!.where((v) => v.link.isNotEmpty).toList();
+    final safeInitialDate = now.isAfter(maxDate) ? maxDate : now;
 
-    // bool isSameDay(DateTime date1, DateTime date2) {
-    //   return date1.year == date2.year &&
-    //       date1.month == date2.month &&
-    //       date1.day == date2.day;
-
-    // }
-
-    // final label = context.labels;
     final availableDates = parseDateList(
       widget.calendar?.values.expand((dates) => dates).toList(),
     );
@@ -128,11 +156,6 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
 
     final cleanedAvailableDates =
         cleanAvailableDates(availableDates, unavailableDates);
-    // final now = DateTime.now();
-    // final minDate = DateTime(now.year, now.month, 1);
-    // final maxDate = DateTime(now.year, now.month + 2, 0);
-    // final validVideos =
-    //     service.videos!.where((v) => v.link.isNotEmpty).toList();
 
     // Color palette
     const Color redBg = Colors.red;
@@ -141,10 +164,7 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
 
     final Color yellowBg = Colors.yellow.shade700;
     final Color greenlightBg = Colors.green.shade300;
-    // final Color greenTx =
-    //     Colors.green.shade800; // dark green text (your “dark green”)
 
-    // final Color grayBg = Colors.grey.shade200; // light gray
     final Color grayTx = Colors.grey;
 
     return Scaffold(
@@ -229,26 +249,6 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // ClipRRect(
-                      //   child: CachedNetworkImage(
-                      //     imageUrl: service.images.first,
-                      //     height: MediaQuery.of(context).size.height * 0.3,
-                      //     fit: BoxFit.cover,
-                      //     width: double.infinity,
-                      //     placeholder: (context, url) => const Center(
-                      //       child: CircularProgressIndicator(),
-                      //     ),
-                      //   ),
-                      // ),
-
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                      //   child: HtmlWidget(
-                      //     service.details,
-                      //     textStyle: context.style.titleMedium,
-                      //     enableCaching: true,
-                      //   ),
-                      // ),
                       if ((LocaleService.getLocalized(widget.service.details!))
                           .isNotEmpty) ...[
                         const SizedBox(height: 12),
@@ -274,11 +274,20 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
 
                                 return ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                    src ?? '',
+                                  child: CachedNetworkImage(
+                                    imageUrl: src ?? '',
+                                    fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: height,
-                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(
+                                          color: Colors.white),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(
+                                      Icons.error,
+                                      color: primaryColor,
+                                    ),
                                   ),
                                 );
                               }
@@ -312,100 +321,8 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                             enableCaching: true,
                           ),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                        //   child:
-                        //   Column(
-                        //     crossAxisAlignment: CrossAxisAlignment.start,
-                        //     children:
-                        //         widget.service.otherSevas!.map((category) {
-                        //       return Column(
-                        //         crossAxisAlignment: CrossAxisAlignment.start,
-                        //         children: [
-                        //           Text(
-                        //             LocaleService.getLocalized(category.categoryName),
-                        //             style: context.style.titleLarge!.copyWith(
-                        //               fontWeight: FontWeight.bold,
-                        //             ),
-                        //           ),
-                        //           const SizedBox(height: 6),
-                        //           ...category.sevas.map((seva) => Padding(
-                        //                 padding: const EdgeInsets.symmetric(
-                        //                     vertical: 2),
-                        //                 child: Text(
-                        //                   LocaleService.getLocalized(seva.title),
-                        //                   style: context.style.bodyMedium!
-                        //                       .copyWith(fontSize: 16),
-                        //                 ),
-                        //               )),
-                        //           const SizedBox(height: 12),
-                        //         ],
-                        //       );
-                        //     }).toList(),
-                        //   ),
-                        // ),
                         const SizedBox(height: 20),
                       ],
-
-                      // if (service.videos != null &&
-                      //     service.videos!.isNotEmpty &&
-                      //     validVideos.isNotEmpty) ...[
-                      //   //const SizedBox(height: 20),
-                      //   SizedBox(
-                      //     height: 180,
-                      //     child: ListView.builder(
-                      //       scrollDirection: Axis.horizontal,
-                      //       itemCount: validVideos.length,
-                      //       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      //       itemBuilder: (context, index) {
-                      //         final video = validVideos[index];
-                      //         if (video.link.isEmpty) return const SizedBox.shrink();
-
-                      //         final videoId = YoutubePlayer.convertUrlToId(video.link)!;
-                      //         final thumbnailUrl = YoutubePlayer.getThumbnail(
-                      //           videoId: videoId,
-                      //           quality: ThumbnailQuality.high,
-                      //         );
-
-                      //         return GestureDetector(
-                      //           onTap: () {
-                      //             context.push('/video-player', extra: video.link);
-                      //           },
-                      //           child: Container(
-                      //             margin: const EdgeInsets.only(right: 12, top: 20),
-                      //             child: ClipRRect(
-                      //               borderRadius: BorderRadius.circular(16),
-                      //               child: Stack(
-                      //                 alignment: Alignment.center,
-                      //                 children: [
-                      //                   CachedNetworkImage(
-                      //                     imageUrl: thumbnailUrl,
-                      //                     fit: BoxFit.cover,
-                      //                     height: 140,
-                      //                     width: 180,
-                      //                   ),
-                      //                   Container(
-                      //                     decoration: const BoxDecoration(
-                      //                       color: Colors.black54,
-                      //                       shape: BoxShape.circle,
-                      //                     ),
-                      //                     padding: const EdgeInsets.all(8),
-                      //                     child: const Icon(
-                      //                       Icons.play_arrow,
-                      //                       color: Colors.white,
-                      //                       size: 40,
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         );
-                      //       },
-                      //     ),
-                      //   ),
-                      // ],
-
                       if (widget.service.rituals != null &&
                           (LocaleService.getLocalized(widget.service.rituals!))
                               .isNotEmpty) ...[
@@ -430,6 +347,17 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                             details: LocaleService.getLocalized(
                                 widget.service.howToBook!),
                             icon: FontAwesomeIcons.calendarCheck)
+                      ],
+                      if (widget.service.bookingUrl != null &&
+                          widget.service.bookingUrl!.isNotEmpty) ...[
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        OfficialLinkWidget(
+                          bookingUrl: widget.service.bookingUrl!,
+                          bookingLinkTitle: widget.service.bookingLinkTitle != null ? LocaleService.getLocalized(
+                              widget.service.bookingLinkTitle!) : '',
+                        ),
                       ],
                       if (widget.service.fee != null &&
                           (LocaleService.getLocalized(widget.service.fee!))
@@ -545,7 +473,7 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                             physics: const NeverScrollableScrollPhysics(),
                             minDate: minDate,
                             maxDate: maxDate,
-                            initialDate: DateTime.now(),
+                            initialDate: safeInitialDate,
                             startWeekWithSunday: true,
                             onDayPressed: (date) {
                               if (availableDates
@@ -570,7 +498,7 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                               Color bgColor;
                               Color textColor;
 
-                             if (allDayAvailable) {
+                              if (allDayAvailable) {
                                 // both id lists empty → everything green
                                 bgColor = greenlightBg;
                                 textColor = blackTx;
@@ -602,6 +530,9 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                                       label.okay,
                                       null,
                                       widget.webLogo,
+                                      widget.service.bookNowButton &&
+                                          widget
+                                              .service.weblink.isNotNullOrEmpty,
                                     );
                                   } else if (bgColor == yellowBg) {
                                     showAlert(
@@ -613,6 +544,9 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                                       label.bookNow,
                                       widget.service.weblink,
                                       widget.webLogo,
+                                      widget.service.bookNowButton &&
+                                          widget
+                                              .service.weblink.isNotNullOrEmpty,
                                     );
                                   } else if (bgColor == greenlightBg) {
                                     showAlert(
@@ -624,6 +558,9 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                                       label.bookNow,
                                       widget.service.weblink,
                                       widget.webLogo,
+                                      widget.service.bookNowButton &&
+                                          widget
+                                              .service.weblink.isNotNullOrEmpty,
                                     );
                                   }
                                 },
@@ -655,31 +592,41 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                                   ),
                                 ),
                               );
-
-                              // return Container(
-                              //   margin: const EdgeInsets.all(4),
-                              //   decoration: BoxDecoration(
-                              //     color: bgColor,
-                              //     shape: BoxShape.circle,
-                              //   ),
-                              //   child: Center(
-                              //     child: Text(
-                              //       '${date.day}',
-                              //       style: TextStyle(
-                              //         color: textColor,
-                              //         fontWeight: FontWeight.bold,
-                              //       ),
-                              //     ),
-                              //   ),
-                              // );
                             },
                           ),
                         ),
                         Center(
                           child: TextButton(
                             onPressed: () {
+                              // List<String> parts =
+                              //     widget.service.calendarMaxDate.split('-');
+                              // DateTime parsedDate = DateTime.now();
+
+                              // if (parts.length == 3) {
+                              //   // int day = int.parse(parts[0]);
+                              //   // int month = int.parse(parts[1]);
+                              //   // int year = int.parse(parts[2]);
+
+                              //   // parsedDate = DateTime(year, month, day);
+                              //   int day = int.parse(parts[0]);
+                              //   int month = int.parse(parts[1]);
+                              //   int year = int.parse(parts[2]);
+
+                              //   final tempDate = DateTime(year, month, day);
+
+                              //   // Validate Firebase date
+                              //   if (tempDate.year == year &&
+                              //       tempDate.month == month &&
+                              //       tempDate.day == day) {
+                              //     parsedDate = tempDate;
+                              //   } else {
+                              //     debugPrint(
+                              //         "Invalid calendarMaxDate: ${widget.service.calendarMaxDate}");
+                              //   }
+                              // }
                               List<String> parts =
                                   widget.service.calendarMaxDate.split('-');
+
                               DateTime parsedDate = DateTime.now();
 
                               if (parts.length == 3) {
@@ -687,7 +634,20 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                                 int month = int.parse(parts[1]);
                                 int year = int.parse(parts[2]);
 
-                                parsedDate = DateTime(year, month, day);
+                                final lastDayOfMonth =
+                                    DateTime(year, month + 1, 0).day;
+
+                                if (day > lastDayOfMonth) {
+                                  // Invalid date like 31-09-2026
+                                  parsedDate =
+                                      DateTime(year, month, lastDayOfMonth);
+
+                                  debugPrint(
+                                    "Invalid date ${widget.service.calendarMaxDate}, using $parsedDate",
+                                  );
+                                } else {
+                                  parsedDate = DateTime(year, month, day);
+                                }
                               }
                               Navigator.push(
                                 context,
@@ -699,6 +659,9 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
                                     maxDate: parsedDate,
                                     url: widget.service.weblink,
                                     webLogo: widget.webLogo,
+                                    showBookButton: widget
+                                            .service.bookNowButton &&
+                                        widget.service.weblink.isNotNullOrEmpty,
                                   ),
                                 ),
                               );
@@ -740,19 +703,22 @@ class _ServicesDetailsViewState extends State<ServicesDetailsView> {
 }
 
 void showAlert(
-    QuickAlertType quickAlertType,
-    BuildContext context,
-    String title,
-    String subTitle,
-    int num,
-    String buttonText,
-    String? url,
-    String webLogo) {
+  QuickAlertType quickAlertType,
+  BuildContext context,
+  String title,
+  String subTitle,
+  int num,
+  String buttonText,
+  String? url,
+  String webLogo,
+  bool showBookButton,
+) {
   QuickAlert.show(
     context: context,
     confirmBtnColor: primaryColor,
     type: quickAlertType,
     confirmBtnText: buttonText,
+    showConfirmBtn: showBookButton,
     widget: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -780,22 +746,24 @@ void showAlert(
         ),
       ],
     ),
-    onConfirmBtnTap: () {
-      if (url != null && url.isNotEmpty) {
-        context.pop();
-        context.push(
-          '/redirect-page',
-          extra: {
-            'url': url,
-            'title': context.labels.openingTemplesOfficialPage,
-            'subTitle': context.labels.yourSpiritual,
-            'webLogo': webLogo,
-          },
-        );
-      } else {
-        context.pop();
-      }
-    },
+    onConfirmBtnTap: showBookButton
+        ? () {
+            if (url != null && url.isNotEmpty) {
+              context.pop();
+              context.push(
+                '/redirect-page',
+                extra: {
+                  'url': url,
+                  'title': context.labels.openingTemplesOfficialPage,
+                  'subTitle': context.labels.yourSpiritual,
+                  'webLogo': webLogo,
+                },
+              );
+            } else {
+              context.pop();
+            }
+          }
+        : null,
   );
 }
 
@@ -806,6 +774,7 @@ class FullCalendarPage extends StatelessWidget {
   final DateTime maxDate;
   final String url;
   final String webLogo;
+  final bool showBookButton;
 
   const FullCalendarPage({
     super.key,
@@ -815,6 +784,7 @@ class FullCalendarPage extends StatelessWidget {
     required this.maxDate,
     required this.url,
     required this.webLogo,
+    required this.showBookButton,
   });
 
   // Fast lookup key
@@ -833,11 +803,15 @@ class FullCalendarPage extends StatelessWidget {
 
     final Color yellowBg = Colors.yellow.shade700;
     final Color greenlightBg = Colors.green.shade300;
-    // final Color greenTx =
-    //     Colors.green.shade800; // dark green text (your “dark green”)
 
-    //  final Color grayBg = Colors.grey.shade200; // light gray
     final Color grayTx = Colors.grey;
+    final now = DateTime.now();
+
+    final today = DateTime(now.year, now.month, now.day);
+
+    final safeMaxDate = maxDate.isBefore(today) ? today : maxDate;
+
+    final safeInitialDate = today.isAfter(safeMaxDate) ? safeMaxDate : today;
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -895,9 +869,9 @@ class FullCalendarPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: PagedVerticalCalendar(
-                minDate: DateTime.now(),
-                maxDate: maxDate,
-                initialDate: DateTime.now(),
+                minDate: today,
+                maxDate: safeMaxDate,
+                initialDate: safeInitialDate,
                 startWeekWithSunday: true,
                 monthBuilder: (context, month, year) {
                   return Padding(
@@ -918,60 +892,60 @@ class FullCalendarPage extends StatelessWidget {
                   Color textColor;
 
                   if (allDayAvailable) {
-                                // both id lists empty → everything green
-                                bgColor = greenlightBg;
-                                textColor = blackTx;
-                              } else if (unavailableSet.contains(key)) {
-                                // Yekadashi → red (highest priority)
-                                bgColor = redBg;
-                                textColor = blackTx;
-                              } else if (availableSet.contains(key)) {
-                                // Ashlesha Nakshathra / Shudha Shasti (ids in available) → green
-                                bgColor = yellowBg;
+                    // both id lists empty → everything green
+                    bgColor = greenlightBg;
+                    textColor = blackTx;
+                  } else if (unavailableSet.contains(key)) {
+                    // Yekadashi → red (highest priority)
+                    bgColor = redBg;
+                    textColor = blackTx;
+                  } else if (availableSet.contains(key)) {
+                    // Ashlesha Nakshathra / Shudha Shasti (ids in available) → green
+                    bgColor = yellowBg;
 
-                                textColor = blackTx;
-                              } else {
-                                // Rest → light gray
-                                // bgColor = Colors.transparent;
-                                // textColor = grayTx;
-                                bgColor = greenlightBg;
-                                textColor = blackTx;
-                              }
+                    textColor = blackTx;
+                  } else {
+                    // Rest → light gray
+                    // bgColor = Colors.transparent;
+                    // textColor = grayTx;
+                    bgColor = greenlightBg;
+                    textColor = blackTx;
+                  }
                   return GestureDetector(
                     onTap: () {
                       if (bgColor == redBg) {
                         showAlert(
-                          QuickAlertType.custom,
-                          context,
-                          label.poojaNotAvailable,
-                          label.pleaseSelectAnotherDate,
-                          3,
-                          label.okay,
-                          null,
-                          webLogo,
-                        );
+                            QuickAlertType.custom,
+                            context,
+                            label.poojaNotAvailable,
+                            label.pleaseSelectAnotherDate,
+                            3,
+                            label.okay,
+                            null,
+                            webLogo,
+                            showBookButton);
                       } else if (bgColor == yellowBg) {
                         showAlert(
-                          QuickAlertType.custom,
-                          context,
-                          label.specialPoojaDay,
-                          label.ashleshaNakshatraSpecialPooja,
-                          2,
-                          label.bookNow,
-                          url,
-                          webLogo,
-                        );
+                            QuickAlertType.custom,
+                            context,
+                            label.specialPoojaDay,
+                            label.ashleshaNakshatraSpecialPooja,
+                            2,
+                            label.bookNow,
+                            url,
+                            webLogo,
+                            showBookButton);
                       } else if (bgColor == greenlightBg) {
                         showAlert(
-                          QuickAlertType.custom,
-                          context,
-                          label.poojaAvailable,
-                          label.youCanBookPooja,
-                          1,
-                          label.bookNow,
-                          url,
-                          webLogo,
-                        );
+                            QuickAlertType.custom,
+                            context,
+                            label.poojaAvailable,
+                            label.youCanBookPooja,
+                            1,
+                            label.bookNow,
+                            url,
+                            webLogo,
+                            showBookButton);
                       }
                     },
                     child: Container(

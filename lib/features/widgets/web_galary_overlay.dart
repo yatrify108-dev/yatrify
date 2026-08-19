@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +36,7 @@ class WebGalaryOverlay extends StatelessWidget {
                 valueListenable: selectedIndex,
                 builder: (context, index, _) {
                   return SizedBox(
-                   // width: 800,
+                    // width: 800,
                     height: 500,
                     child: Stack(
                       children: [
@@ -67,9 +68,25 @@ class WebGalaryOverlay extends StatelessWidget {
                                           child: Stack(
                                             fit: StackFit.expand,
                                             children: [
-                                              Image.network(
-                                                images[index],
+                                              // Image.network(
+                                              //   images[index],
+                                              //   fit: BoxFit.cover,
+                                              // ),
+                                              CachedNetworkImage(
+                                                imageUrl: images[index],
                                                 fit: BoxFit.cover,
+                                                placeholder: (context, url) =>
+                                                    const Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          color: Colors.white),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(
+                                                  Icons.error,
+                                                  color: primaryColor,
+                                                ),
                                               ),
                                               if (!isCenter)
                                                 Container(
@@ -203,11 +220,27 @@ class WebGalaryOverlay extends StatelessWidget {
                                         : Colors.grey,
                                     width: 2,
                                   )),
-                              child: Image.network(
-                                images[index],
+                              child:
+                                  // Image.network(
+                                  //   images[index],
+                                  //   width: 80,
+                                  //   height: 80,
+                                  //   fit: BoxFit.cover,
+                                  // ),
+                                  CachedNetworkImage(
+                                imageUrl: images[index],
+                                fit: BoxFit.cover,
                                 width: 80,
                                 height: 80,
-                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(
+                                      color: Colors.white),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(
+                                  Icons.error,
+                                  color: primaryColor,
+                                ),
                               ),
                             ),
                           );

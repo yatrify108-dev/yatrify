@@ -300,4 +300,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchBhajans => 'Search bhajans...';
+
+  @override
+  String get sevaInfo => 'Seva Info';
+
+  @override
+  String get availableSevas => 'Available Sevas';
+
+  @override
+  String get trackLocation => 'Track Location';
+
+  @override
+  String get clearSavedLocation => 'Clear Saved Location?';
+
+  @override
+  String get areYouSureYouWantToRemove =>
+      'Are you sure you want to remove your saved parking spot?';
+
+  @override
+  String get saveParking => 'Save Parking';
+
+  @override
+  String get selectParkingLocation => 'Select Parking Location';
+
+  @override
+  String get copy => 'Copy';
+
+  @override
+  String get now => 'Now';
+
+  @override
+  String get officialLink => 'Official Kukke Subrahmanya Temple Booking Link';
 }

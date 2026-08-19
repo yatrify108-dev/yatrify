@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:yatrify/utils/color.schemes.g.dart';
 
 class HoverZoomImage extends StatefulWidget {
   const HoverZoomImage({super.key, required this.imageUrl});
@@ -37,11 +39,25 @@ class _HoverZoomImageState extends State<HoverZoomImage> {
                 scale: isHovering ? 1.05 : 1.0,
                 duration: const Duration(microseconds: 200),
                 alignment: Alignment.bottomLeft,
-                child: Image.network(
-                  widget.imageUrl,
+                child:
+                    //  Image.network(
+                    //   widget.imageUrl,
+                    //   fit: BoxFit.cover,
+                    //   width: double.infinity,
+                    //   height: double.infinity,
+                    // ),
+                    CachedNetworkImage(
+                  imageUrl: widget.imageUrl,
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: double.infinity,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(color: Colors.white),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.error,
+                    color: primaryColor,
+                  ),
                 ),
               );
             },

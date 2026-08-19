@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
@@ -7,12 +8,12 @@ class FullScreenImageGallery extends StatefulWidget {
     super.key,
     required this.images,
     this.initialIndex = 0,
-    this.pgName = '',
+    this.homeStayName = '',
   });
 
   final List<String> images;
   final int initialIndex;
-  final String pgName;
+  final String homeStayName;
 
   @override
   State<FullScreenImageGallery> createState() => _FullScreenImageGalleryState();
@@ -28,7 +29,7 @@ class _FullScreenImageGalleryState extends State<FullScreenImageGallery> {
       appBar: AppBar(
         backgroundColor: whiteColor,
         title: Text(
-          widget.pgName,
+          widget.homeStayName,
         ),
       ),
       body: Column(
@@ -77,11 +78,26 @@ class _FullScreenImageGalleryState extends State<FullScreenImageGallery> {
                             width: 2,
                           ),
                         ),
-                        child: Image.network(
-                          widget.images[index],
+                        child:
+                            // Image.network(
+                            //   widget.images[index],
+                            //   width: 80,
+                            //   height: 80,
+                            //   fit: BoxFit.cover,
+                            // ),
+                            CachedNetworkImage(
+                          imageUrl: widget.images[index],
+                          fit: BoxFit.cover,
                           width: 80,
                           height: 80,
-                          fit: BoxFit.cover,
+                          placeholder: (context, url) => const Center(
+                            child:
+                                CircularProgressIndicator(color: Colors.white),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: primaryColor,
+                          ),
                         ),
                       );
                     },

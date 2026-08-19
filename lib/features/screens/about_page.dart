@@ -4,10 +4,10 @@ import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
 
 class AboutView extends StatelessWidget {
-  const AboutView({super.key, required this.about, required this.pgName});
+  const AboutView({super.key, required this.about, required this.homeStayName});
 
   final String about;
-  final String pgName;
+  final String homeStayName;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class AboutView extends StatelessWidget {
       appBar: AppBar(
         forceMaterialTransparency: true,
         centerTitle: false,
-        title: Text('${label.about} $pgName',style: context.style.titleMedium!.copyWith(fontSize: 20),),
+        title: Text('${label.about} $homeStayName',style: context.style.titleMedium!.copyWith(fontSize: 20),),
       ),
       body: SingleChildScrollView(
         child: Padding(

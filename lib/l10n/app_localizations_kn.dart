@@ -303,4 +303,35 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get searchBhajans => 'ಭಜನೆಗಳನ್ನು ಹುಡುಕಿ...';
+
+  @override
+  String get sevaInfo => 'ಸೇವಾ ವಿವರ';
+
+  @override
+  String get availableSevas => 'ಲಭ್ಯವಿರುವ ಸೇವೆಗಳು';
+
+  @override
+  String get trackLocation => 'ಸ್ಥಳ ಟ್ರ್ಯಾಕ್ ಮಾಡಿ';
+
+  @override
+  String get clearSavedLocation => 'ಸಂಗ್ರಹಿಸಿದ ಸ್ಥಳವನ್ನು ಅಳಿಸಬೇಕೇ?';
+
+  @override
+  String get areYouSureYouWantToRemove =>
+      'ನಿಮ್ಮ ಪಾರ್ಕಿಂಗ್ ಸ್ಥಳದ ಮಾಹಿತಿಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿದ್ದೀರಾ?';
+
+  @override
+  String get saveParking => 'ಪಾರ್ಕಿಂಗ್ ಸ್ಥಳ ಸೇವ್ ಮಾಡಿ';
+
+  @override
+  String get selectParkingLocation => 'ಪಾರ್ಕಿಂಗ್ ಸ್ಥಳವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ';
+
+  @override
+  String get copy => 'ಕಾಪಿ ಮಾಡಿ';
+
+  @override
+  String get now => 'ಈಗ';
+
+  @override
+  String get officialLink => 'ಅಧಿಕೃತ ಕುಕ್ಕೆ ಸುಬ್ರಹ್ಮಣ್ಯ ದೇವಾಲಯದ ಬುಕಿಂಗ್ ಲಿಂಕ್';
 }

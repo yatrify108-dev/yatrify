@@ -11,8 +11,6 @@ class GoogleDirectionBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = context.labels;
-
     void openMap() async{
       final Uri googleMapUrl = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$long');
       if(await canLaunchUrl(googleMapUrl)){
@@ -28,8 +26,8 @@ class GoogleDirectionBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
         decoration: BoxDecoration(
-          color: primaryColorL.withOpacity(0.3), 
-         border: Border.all(color: primaryColorM.withOpacity(0.4)),
+          color: primaryColor.withOpacity(0.1), 
+         border: Border.all(color: primaryColor),
           borderRadius: BorderRadius.circular(8)
         ),
         child: Row(
@@ -44,7 +42,7 @@ class GoogleDirectionBadge extends StatelessWidget {
               width: 4,
             ),
             Text(
-              label.directions,
+              "Directions",
               style: context.style.titleSmall!.copyWith(
                 color: primaryColor,
                 fontWeight: FontWeight.bold,

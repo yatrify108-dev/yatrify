@@ -1,4 +1,4 @@
-import 'package:yatrify/core/models/pg.dart';
+import 'package:yatrify/core/models/home_stay.dart';
 import 'package:yatrify/features/widgets/app_button.dart';
 import 'package:yatrify/features/widgets/facilities_badge.dart';
 import 'package:yatrify/features/widgets/gender_badge.dart';
@@ -10,16 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PgWebCard extends StatelessWidget {
-  const PgWebCard({super.key, required this.pgDetails});
+  const PgWebCard({super.key, required this.homeStayDetails});
 
-  final PgDetails pgDetails;
+  final HomeStayDetails homeStayDetails;
 
   @override
   Widget build(BuildContext context) {
     final label = context.labels;
 
     void openMap() async{
-      final Uri googleMapUrl = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=${pgDetails.address.first.lat},${pgDetails.address.first.long}');
+      final Uri googleMapUrl = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=${homeStayDetails.address.first.lat},${homeStayDetails.address.first.long}');
       if(await canLaunchUrl(googleMapUrl)){
         await launchUrl(googleMapUrl, mode: LaunchMode.externalApplication);
       }else{
@@ -51,14 +51,14 @@ class PgWebCard extends StatelessWidget {
                     context: context,
                     barrierColor: Colors.black.withOpacity(0.8),
                     builder: (context) => WebGalaryOverlay(
-                      images: pgDetails.roomImage,
+                      images: homeStayDetails.roomImage,
                       initialIndex: 0,
-                      pgName: pgDetails.address.first.pgName,
+                      pgName: homeStayDetails.address.first.homeStayName,
                     ),
                   );
                 },
                 child: HoverZoomImage(
-                  imageUrl: pgDetails.roomImage.first,
+                  imageUrl: homeStayDetails.roomImage.first,
                 ),
               ),
               // ClipRRect(
@@ -66,7 +66,7 @@ class PgWebCard extends StatelessWidget {
               //       topLeft: Radius.circular(12),
               //       bottomLeft: Radius.circular(12)),
               //   child: Image.network(
-              //     pgDetails.roomImage.first,
+              //     homeStayDetails.roomImage.first,
               //     fit: BoxFit.cover,
               //   ),
               // ),
@@ -82,14 +82,14 @@ class PgWebCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          pgDetails.address.first.pgName,
+                          homeStayDetails.address.first.homeStayName,
                           style: context.style.titleMedium!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
-                        GenderBadge(gender: pgDetails.gender)
+                       // GenderBadge(gender: homeStayDetails.gender)
                       ],
                     ),
-                    Text(pgDetails.address.first.roadName),
+                    Text(homeStayDetails.address.first.roadName),
                     const SizedBox(
                       height: 16,
                     ),
@@ -118,12 +118,12 @@ class PgWebCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (pgDetails.facilities != null &&
-                        pgDetails.facilities!.isNotEmpty) ...[
+                    if (homeStayDetails.facilities != null &&
+                        homeStayDetails.facilities!.isNotEmpty) ...[
                       const SizedBox(
                         height: 16,
                       ),
-                      FacilitiesBadge(facilities: pgDetails.facilities!),
+                      FacilitiesBadge(facilities: homeStayDetails.facilities!),
                     ],
                     const SizedBox(
                       height: 16,
@@ -137,14 +137,14 @@ class PgWebCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '₹${pgDetails.priceDetails.formatedLowestPrice}',
+                          '₹${homeStayDetails.priceDetails.formatedLowestPrice}',
                           style: context.style.titleMedium!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                         AppButton(
                             label: label.call,
                             onPressed: () {
-                              makePhoneCall(pgDetails.address.first.phoneNo);
+                              makePhoneCall(homeStayDetails.address.first.phoneNo);
                             },
                           ),
                       ],

@@ -1,22 +1,22 @@
-import 'package:yatrify/core/models/pg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:yatrify/core/models/home_stay.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 import 'package:yatrify/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
 class FacilitiesBadge extends StatelessWidget {
-  const FacilitiesBadge({
-    super.key,
-     this.facilities,
-     this.services
-  });
+  const FacilitiesBadge({super.key, this.facilities, this.services});
 
   final List<Facilities>? facilities;
   final List<Services>? services;
 
   @override
   Widget build(BuildContext context) {
-    final items = facilities != null && facilities!.isNotEmpty ?
-    facilities!.where((e)=>e.name.isNotEmpty).toList(): services != null && services!.isNotEmpty ? services!.where((e)=>e.name.isNotEmpty).toList():[];
+    final items = facilities != null && facilities!.isNotEmpty
+        ? facilities!.where((e) => e.name.isNotEmpty).toList()
+        : services != null && services!.isNotEmpty
+            ? services!.where((e) => e.name.isNotEmpty).toList()
+            : [];
 
     return Wrap(
       spacing: 8,
@@ -27,10 +27,11 @@ class FacilitiesBadge extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
               decoration: BoxDecoration(
                 //color: primaryColor.withOpacity(0.08),
-               // color: whiteColor,
+                // color: whiteColor,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                    color: context.scheme.outlineVariant.withOpacity(0.4),),
+                  color: context.scheme.outlineVariant.withOpacity(0.4),
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -42,17 +43,34 @@ class FacilitiesBadge extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: context.scheme.outlineVariant.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(4)),
-                    child: 
-                    Image.network(
-                    e.icon,
-                    fit: BoxFit.contain,
-                    height: 16,
-                    width: 16,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.close, size: 16,color: primaryColor,),
+                    child:
+                        // Image.network(
+                        //   e.icon,
+                        //   fit: BoxFit.contain,
+                        //   height: 16,
+                        //   width: 16,
+                        //   errorBuilder: (context, error, stackTrace) => const Icon(
+                        //     Icons.close,
+                        //     size: 16,
+                        //     color: primaryColor,
+                        //   ),
+                        // ),
+
+                        CachedNetworkImage(
+                      imageUrl: e.icon,
+                      fit: BoxFit.contain,
+                      width: 16,
+                      height: 16,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.close,
+                        size: 16,
+                        color: primaryColor,
+                      ),
+                    ),
                   ),
-                  ),
-                  
                   const SizedBox(
                     width: 6,
                   ),

@@ -7,6 +7,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:yatrify/core/services/firebase_manager_service.dart';
 import 'package:yatrify/core/services/locale_service.dart';
 import 'package:yatrify/features/providers/router_provider.dart';
+import 'package:yatrify/features/screens/parking_map_page.dart';
 import 'package:yatrify/l10n/app_localizations.dart';
 import 'package:yatrify/utils/color.schemes.g.dart';
 
@@ -20,6 +21,7 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+  await ParkingController.init();
   await JustAudioBackground.init(
   androidNotificationChannelId: 'com.yatrify.store.channel.audio',
   androidNotificationChannelName: 'Bhajan Player',
