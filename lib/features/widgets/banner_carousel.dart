@@ -51,19 +51,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
                 ? screenHeight * 0.5
                 : 200);
 
-    // Future<void> _launchUrl(String? url) async {
-    //   if (url == null || url.isEmpty) return;
-
-    //   final Uri uri = Uri.parse(url);
-    //   if (await canLaunchUrl(uri)) {
-    //     await launchUrl(
-    //       uri,
-    //       mode: LaunchMode.platformDefault,
-    //     );
-    //   } else {
-    //     debugPrint("could not lunch $url");
-    //   }
-    // }
+    
 
     return CarouselSlider(
       options: CarouselOptions(

@@ -52,7 +52,6 @@ class _WallpaperPageState extends State<WallpaperPage> {
 
         final Uint8List imageBytes = Uint8List.fromList(response.data);
 
-        /// ✅ Save image directly (Scoped Storage)
         await PhotoManager.editor.saveImage(
           imageBytes,
           filename: "${fileName.replaceAll(' ', '_')}.jpg",

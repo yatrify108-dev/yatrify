@@ -19,8 +19,6 @@ enum FirebaseEvent {
 }
 
 extension FirebaseEventExtension on FirebaseEvent {
-  /// Converts enum values into standardized Firebase Event names.
-  /// Automatically prefixes with 'dev_' if running in Development mode.
   String get eventName {
     final String prefix =
         FirebaseManagerService.isDevelopment.value ? 'dev_' : '';
@@ -60,13 +58,11 @@ class FirebaseManager {
     await _crashlytics.setCrashlyticsCollectionEnabled(true);
     await _analytics.setAnalyticsCollectionEnabled(true);
 
-    // Set user property tag for Dev vs Prod identification
     final String env =
         FirebaseManagerService.isDevelopment.value ? 'DEV' : 'PROD';
     await setUserProperty('app_environment', env);
   }
 
-  /// Base method to log custom events
   Future<void> logEvent(
     FirebaseEvent event, {
     Map<String, Object>? parameters,
@@ -85,9 +81,7 @@ class FirebaseManager {
     }
   }
 
-  // ============================================================
-  // ⭐ HOTEL & STAY TRACKING EVENT HELPER METHODS
-  // ============================================================
+  //  HOTEL & STAY TRACKING EVENT HELPER METHODS
 
   /// 1. Trigger when user clicks 'Book Stay'
   Future<void> logBookStayClicked() async {
@@ -131,9 +125,7 @@ class FirebaseManager {
     await logEvent(FirebaseEvent.stayCallClicked, parameters: params);
   }
 
-  // ============================================================
   // UTILITIES & CRASH REPORTING
-  // ============================================================
 
   Future<void> logException(Object error, StackTrace stackTrace) async {
     if (kDebugMode) {

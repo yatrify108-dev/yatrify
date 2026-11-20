@@ -50,10 +50,9 @@ class _ParkingMapPageState extends State<ParkingMapPage> {
         return;
       }
 
-      // 3. Get Current Position (with timeout to prevent hanging on Android)
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
-        timeLimit: const Duration(seconds: 10), // ✅ Prevents infinite waiting
+        timeLimit: const Duration(seconds: 10), 
       );
 
       LatLng userLocation = LatLng(
@@ -70,14 +69,11 @@ class _ParkingMapPageState extends State<ParkingMapPage> {
       debugPrint("Error fetching location: $e");
       _setFallbackLocation();
     } finally {
-      // ✅ ALWAYS stop loading, no matter what happens!
       isLoading.value = false;
     }
   }
 
-  // Fallback if user denies permissions or GPS is OFF
   void _setFallbackLocation() {
-    // Default fallback position (e.g., center position or last saved position)
     selectedLocation.value ??= const LatLng(13.3409, 74.7421); // Default location
   }
 
@@ -108,7 +104,7 @@ class _ParkingMapPageState extends State<ParkingMapPage> {
                 builder: (context, location, child) {
                   return GoogleMap(
                     initialCameraPosition: CameraPosition(
-                      target: location!, // ✅ direct current location
+                      target: location!, 
                       zoom: 16,
                     ),
                     myLocationEnabled: true,

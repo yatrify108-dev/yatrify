@@ -51,15 +51,7 @@ class AppButton extends StatelessWidget {
               context.style.titleMedium!
                   .copyWith(color: textColor, fontWeight: FontWeight.bold),
         ),
-      // FittedBox(
-      //   fit: BoxFit.scaleDown,
-      //   child: Text(
-      //     label,
-      //     style: textstyle ??
-      //         context.style.labelMedium!
-      //             .copyWith(color: textColor, fontWeight: FontWeight.bold),
-      //   ),
-      // ),
+      
     );
   }
 }

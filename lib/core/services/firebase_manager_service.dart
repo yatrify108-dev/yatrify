@@ -24,9 +24,7 @@ class FirebaseManagerService {
   static FirebaseFirestore get currentFirestore =>
       isDevelopment.value ? devFirestore : prodFirestore;
 
-  /// ============================================================
   /// INIT BOTH PROD + DEV ENVIRONMENTS
-  /// ============================================================
   static Future<void> init() async {
     await _loadDebugMode();
     /// Initialize PRODUCTION (default)
@@ -55,13 +53,9 @@ class FirebaseManagerService {
     await prefs.setBool(_debugKey, isDevelopment.value);
   }
 
-  /// ============================================================
   /// LOAD DEV FIREBASE OPTIONS (iOS + Android)
-  /// ============================================================
   static Future<FirebaseOptions> _loadDevFirebaseOptions() async {
-    // ------------------------------------------------------------
-    // ⭐ iOS → Load Dev plist from assets
-    // ------------------------------------------------------------
+    
     if (Platform.isIOS) {
       final xml = await rootBundle.loadString(
         'assets/firebase/GoogleService-Info-Dev.plist',
@@ -80,9 +74,7 @@ class FirebaseManagerService {
       );
     }
 
-    // ------------------------------------------------------------
-    // ⭐ Android → Load Dev JSON from assets
-    // ------------------------------------------------------------
+   
     final jsonString = await rootBundle.loadString(
       'assets/firebase/google-services-dev.json',
     );
@@ -102,9 +94,7 @@ class FirebaseManagerService {
     );
   }
 
-  /// ============================================================
-  /// HELPER → PARSE PLIST XML
-  /// ============================================================
+
   static Map<String, dynamic> _parsePlist(String xml) {
     final regexp =
         RegExp(r'<key>(.*?)<\/key>\s*<string>(.*?)<\/string>', multiLine: true);

@@ -43,20 +43,7 @@ class FacilitiesBadge extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: context.scheme.outlineVariant.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(4)),
-                    child:
-                        // Image.network(
-                        //   e.icon,
-                        //   fit: BoxFit.contain,
-                        //   height: 16,
-                        //   width: 16,
-                        //   errorBuilder: (context, error, stackTrace) => const Icon(
-                        //     Icons.close,
-                        //     size: 16,
-                        //     color: primaryColor,
-                        //   ),
-                        // ),
-
-                        CachedNetworkImage(
+                    child: CachedNetworkImage(
                       imageUrl: e.icon,
                       fit: BoxFit.contain,
                       width: 16,

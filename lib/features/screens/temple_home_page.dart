@@ -485,7 +485,8 @@ $url
                                                     calender: temple.calender,
                                                     webLogo: temple.webLogo,
                                                     yatriServices: item,
-                                                    itemCount: activeServices.length,
+                                                    itemCount:
+                                                        activeServices.length,
                                                   ),
                                                 ),
                                               );
@@ -503,80 +504,6 @@ $url
                                   ),
                                 ],
 
-                                // Padding(
-                                //   padding: const EdgeInsets.symmetric(
-                                //       horizontal: 16),
-                                //   child: ValueListenableBuilder<bool>(
-                                //     valueListenable: ParkingController.isSaved,
-                                //     builder: (context, isSaved, _) {
-                                //       return Container(
-                                //         padding: const EdgeInsets.all(16),
-                                //         decoration: BoxDecoration(
-                                //           color: primaryColor.withOpacity(0.2),
-                                //           borderRadius:
-                                //               BorderRadius.circular(12),
-                                //         ),
-                                //         child: Row(
-                                //           children: [
-                                //             Icon(
-                                //               isSaved
-                                //                   ? Icons.location_on
-                                //                   : Icons.local_parking,
-                                //               color: primaryColor,
-                                //             ),
-                                //             const SizedBox(width: 10),
-
-                                //             /// MAIN ACTION
-                                //             Expanded(
-                                //               child: GestureDetector(
-                                //                 onTap: () async {
-                                //                   if (isSaved) {
-                                //                     // TRACK
-                                //                     final data =
-                                //                         await ParkingController
-                                //                             .get();
-                                //                     if (data != null) {
-                                //                       openGoogleMap(
-                                //                           data['lat']!,
-                                //                           data['lng']!);
-                                //                     }
-                                //                   } else {
-                                //                     // GO TO MAP TO SAVE
-                                //                     await context
-                                //                         .push('/parking-map');
-
-                                //                     /// AFTER RETURN → auto refresh (no setState needed)
-                                //                     await ParkingController
-                                //                         .init();
-                                //                   }
-                                //                 },
-                                //                 child: Text(
-                                //                   isSaved
-                                //                       ? "Track Location"
-                                //                       : "Park",
-                                //                   style: const TextStyle(
-                                //                       fontWeight:
-                                //                           FontWeight.bold),
-                                //                 ),
-                                //               ),
-                                //             ),
-
-                                //             /// CLEAR BUTTON
-                                //             if (isSaved)
-                                //               GestureDetector(
-                                //                 onTap: () async {
-                                //                   await ParkingController
-                                //                       .clear();
-                                //                 },
-                                //                 child: const Icon(Icons.close,
-                                //                     color: Colors.red),
-                                //               ),
-                                //           ],
-                                //         ),
-                                //       );
-                                //     },
-                                //   ),
-                                // ),
 
                                 if (temple.showBookStayBanner == true &&
                                     temple.bookStayBanner != null &&
@@ -654,9 +581,7 @@ $url
 
   /// Shimmer Loader Widget
   Widget _buildShimmerPlaceholder(BuildContext context) {
-    // const backgroundColor = Color(0xFFffe99e);
-    // final baseShimmerColor = const Color(0xFFf9d97b);
-    // final highlightShimmerColor = const Color(0xFFfff7d1);
+    
     final baseShimmerColor = const Color(0xFFE0E0E0);
     final highlightShimmerColor = const Color(0xFFF5F5F5);
 
